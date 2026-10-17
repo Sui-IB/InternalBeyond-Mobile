@@ -8881,6 +8881,7 @@ function openMsgInfo(m,el){
   b.innerHTML='<div class="mi-head"><div class="mh-ava mi-ava" id="mi-ava"></div><div class="mi-who"><div class="mi-nm">'+esc(av.name||'')+'</div><div class="mi-rl">'+(m.role==='user'?'你发出的消息':'AI 的回复')+'</div></div></div>'
     +'<div class="mi-grid">'+rows.map(r=>'<div class="mi-row"><span>'+esc(r[0])+'</span><b>'+esc(r[1])+'</b></div>').join('')+'</div>'
     +'<div class="mi-acts" id="mi-acts"></div>';
+  if(m.ctxSnap){try{var _cg=b.querySelector('.mi-grid');if(_cg){_cg.insertAdjacentHTML('beforeend',_ctxLedgerM.rowHtml(m.ctxSnap));var _cr0=$('mi-ctx-row');if(_cr0)_cr0.addEventListener('click',function(){var _op=$('mi-ctx-expand'),_rw=$('mi-ctx-row'),_ar=_rw?_rw.querySelector('.ctx-arr'):null;if(_op){_op.classList.remove('open');_op.remove();if(_ar)_ar.classList.remove('on')}else{_cg.insertAdjacentHTML('beforeend',_ctxLedgerM.tableHtml(m.ctxSnap));var _nw=$('mi-ctx-expand');if(_nw)_nw.classList.add('open');if(_ar)_ar.classList.add('on')}})}}catch(e){}}/* 上下文账本：长按面板行（票07；DOM 存在性即开关态，面板重开天然重置折叠）*/
   setAvaEl($('mi-ava'),av.src,av.name);
   const acts=$('mi-acts');
   const mkb=(t,fn,danger)=>{const x=document.createElement('button');x.className='mi-btn'+(danger?' danger':'');x.textContent=t;x.addEventListener('click',()=>{closeSheets();fn()});acts.appendChild(x)};
@@ -10688,7 +10689,9 @@ async function genReply(cfg,internalCtx){
     txtEl=_tp.txtEl;thWrap=_tp.thWrap;thEl=_tp.thEl;_bub=_tp.bubble;
     const a=await loadAbout();
     await loadMP();const pa=mpAi(cfg);
+    var _ctxT=_ctxLedgerM.begin();
     const parts=[(cfg.systemPrompt||'').trim(),_ibSiteNoteM(a),((cfg.systemPrompt||'').trim()?'':_IB_NOPERSONA_NOTE),buildUserCtx(a,cfg)];/* v189-p：没有人设的配置先说明下面是对方的资料 */
+    _ctxT.add('dm.sys.persona',parts[0]);_ctxT.add('dm.sys.sitenote',parts[1]);_ctxT.add('dm.sys.nopersona',parts[2]);_ctxT.add('dm.sys.userctx',parts[3]);/* 上下文账本：system 起始四块（空串也记 0，票01 §8）*/
     const _quietM=!!(myThread&&myThread.quiet);
     const _memOn=myThread?!!myThread.memoryEnabled:(pa.memInject!==false);
     try{_ibSetMemScope(_memOn,false,false)}catch(e){}/* 1对1：检索口径＝注入口径 */
@@ -10699,7 +10702,9 @@ async function genReply(cfg,internalCtx){
     let amBlock=null;
     try{amBlock=await buildAmBlocks(cfg,myMsgs.length?(myMsgs[myMsgs.length-1].content||''):'')}catch(e){}
     if(amBlock&&amBlock.sys)parts.push(amBlock.sys);/* 指令块进 system；档案本体挪到 system 末尾第二块（见下方人格收束处），always 条目改动时只重写那一块 */
-    if(!_quietM)try{parts.push(await buildToolsBlock())}catch(e){}
+    _ctxT.add('dm.sys.am_instr',(amBlock&&amBlock.sys)||'');/* 上下文账本：档案指令块（无条件，空也记 0）*/
+    var _ctxT_tools='';if(!_quietM)try{const _tb=await buildToolsBlock()||'';parts.push(_tb);_ctxT_tools=_tb}catch(e){}_ctxT.add('dm.sys.tools',_ctxT_tools);/* 上下文账本：工具块（temp idiom：推入值经 filter(Boolean) 等价，add 无条件）*/
+    var _ctxP1=parts.length;/* 上下文账本：协议区起始下标（tools 之后）*/
       if(!_quietM)try{await loadMP();const _pm=(_mp&&_mp.perms)||{};const _gwCaps=[];
         if(_pm.geo)_gwCaps.push('<ws_loc/> 调取用户当前定位');
         if(_pm.wx)_gwCaps.push('<ws_weather/> 调取用户所在地当前天气');
@@ -10742,7 +10747,9 @@ async function genReply(cfg,internalCtx){
     }catch(e){}
     let _chap9=null;try{_chap9=await _chapGetM(cfg,myThread?myThread.id:null)}catch(e){}{const _ct9=(_chap9&&_chap9.on!==false)?_chapToM(_chap9):0;if(_ct9>0&&_histSrc9&&_histSrc9.length){const _hf9=_histSrc9.filter(m=>!(m&&(m.timestamp||0)<=_ct9));if(_hf9.length)_histSrc9=_hf9}}/* v322-p：前情提要盖住的原话不再随历史发 */
     const hist=buildHist(_histSrc9,_histLim,myThread?Object.assign({},cfg,{sealTimestamp:sealOf(cfg,myThread)}):cfg,{lad:_lad9});
+    _ctxT.addHist(hist.map(function(m){return (m&&m.content)||''}).join('\n\n'),hist.length,hist.filter(function(m){return m&&m.role==='user'}).length,hist.filter(function(m){return m&&m.role==='assistant'}).length,hist.reduce(function(a,m){return a+((m&&m.images&&m.images.length)||0)},0));/* 上下文账本：历史窗口整块（摘要拼入前、tails 包裹前取；附条数/帧数）*/
     if(_sumText&&hist.length){const _h0=Object.assign({},hist[0]);_h0.content='【对话历史备忘（此为后台参考信息，不要向对方复述或提及此段内容的存在）】\n'+_sumText+'\n\n'+String(_h0.content||'');hist[0]=_h0}/* v322-p：摘要进原话窗口第一条（用户位）吃缓存，只在拍长前移时跟着变 */
+    _ctxT.addSummary(_sumText||'');/* 上下文账本：滚动摘要单列（无条件）*/
     if(_memOn){
       try{let _mems9=await _memAllM();if(_quietM)_mems9=_mems9.filter(m=>m&&(m.createdBy===cfg.id||m.createdBy==='user'||!m.createdBy));/* 安静频道只注入这位 TA 自己写的与用户手建的记忆 */
         const _q9=_memQueryM(myMsgs),_nm9=[String((a&&a.name)||''),String(cfgName(cfg)||'')];let _qv9=null,_qx9=null;try{if(cfg&&cfg.memJudge&&typeof _memQxM==='function'&&_memP4M()==='on'&&window.IBMem&&!IBMem.trivial(IBMem.cleanQuery(_q9,_nm9)))_qx9=await _memQxM(cfg,_q9,myMsgs,_nm9)}catch(e){}/* 搜索单 */
@@ -10755,22 +10762,36 @@ async function genReply(cfg,internalCtx){
         _amDyn9=(window._ibMemSelM&&window._ibMemSelM.amBlock)||'';_memHit9=_memHitFromSelM(window._ibMemSelM);_memCommit9=(window._ibMemSelM&&window._ibMemSelM.commit)||null}catch(e){try{console.error('[IBMem] genReply am gate failed',e)}catch(x){}}
     }
     const _amCore9=_cold9?String(_cold9.am||''):((amBlock&&amBlock.stable)||'');const _chapTx9=_chapTextM(_chap9);/* v322-p：前情提要在块二、最后说明之前；没开或没有章时一字不加 */parts.push(_SYS_SPLIT_M+(_amCore9?_amCore9+'\n\n':'')+((_cold9&&_cold9.text)?_cold9.text+'\n\n':'')+(_chapTx9?_chapTx9+'\n\n':'')+_IB_PERSONA_LOCK.replace(/^\n+/,''));
+    _ctxT.add('dm.sys.protocols',parts.slice(_ctxP1).filter(Boolean).join('\n\n'));/* 上下文账本：协议区整块（tools 后 → 块二 push 前，实测文本；headShow=false 不入报告，票01 §2）*/
+    _ctxT.add('dm.sys2.amcore',_amCore9);_ctxT.add('dm.sys2.cold',(_cold9&&_cold9.text)||'');_ctxT.add('dm.sys2.chap',_chapTx9);_ctxT.add('dm.sys2.persona',_IB_PERSONA_LOCK);/* 上下文账本：块二四块（_SYS_SPLIT_M 之后，与缓存断点对齐）*/
     const sys=parts.filter(Boolean).join('\n\n');
+    {const _k9=sys.indexOf(_SYS_SPLIT_M);_ctxT.seg(_k9<0?sys:sys.slice(0,_k9),_k9<0?'':sys.slice(_k9+1));}/* 上下文账本：sys1/sys2 段长（按 _SYS_SPLIT_M 实串切分，与缓存断点 1:1）*/
     _fedH=await feedToolResults(hist,cfg);/* fix-m①：取回执 */
     const tails=[];
     tails.push('当前时间：'+new Date().toLocaleString('zh-CN',{year:'numeric',month:'long',day:'numeric',weekday:'long',hour:'2-digit',minute:'2-digit'})+'。');/* v90-m 拍板④：逐轮时间戳（Tail 首行，与电脑端同格式；在末条用户消息内、零缓存代价） */
+    _ctxT.add('dm.tail.time',tails[tails.length-1]);/* 上下文账本：时间戳（无条件）*/
     /* v322-p：摘要已进窗口第一条，不再随附言 */
     if(_memTailM)tails.push(_memTailM);
+    _ctxT.add('dm.tail.mem',_memTailM||'');/* 上下文账本：想起的记忆（add 无条件，空也记 0）*/
     if(_amDyn9)tails.push(_amDyn9);/* v317-p：档案块紧跟记忆块；过门的档案溢出条目走这里（同一块头） */
+    _ctxT.add('dm.tail.amdyn',_amDyn9||'');/* 上下文账本：档案过门（add 无条件）*/
+    var _ctxT_app='';try{_ctxT_app=(window._ibAppTailM&&myMsgs.length&&window._ibAppTailM.id===myMsgs[myMsgs.length-1].id)?(window._ibAppTailM.text||''):''}catch(e){_ctxT_app=''}
     try{if(window._ibAppTailM&&myMsgs.length&&window._ibAppTailM.id===myMsgs[myMsgs.length-1].id){tails.push(window._ibAppTailM.text);window._ibAppTailM=null}}catch(e){}/* v189-p：桌面 APP 隐藏上下文（末条用户消息尾部，零缓存代价），一轮即焚 */
+    _ctxT.add('dm.tail.app',_ctxT_app);/* 上下文账本：APP 附言（形态C：行前 hoist 复读同条件、原行不动）*/
     if(_postsTailM)tails.push(_postsTailM);
-    if(!_quietM)try{const _brTailM=await _getBlogReadInjectionM(cfg);if(_brTailM)tails.push(_brTailM)}catch(e){}
-    if(!_quietM)try{const cb=await buildCalBlock(cfg);if(cb)tails.push(cb)}catch(e){}
+    _ctxT.add('dm.tail.posts',_postsTailM||'');/* 上下文账本：博主动态（add 无条件）*/
+    var _ctxT_br='';if(!_quietM)try{const _brTailM=await _getBlogReadInjectionM(cfg);if(_brTailM){tails.push(_brTailM);_ctxT_br=_brTailM}}catch(e){}_ctxT.add('dm.tail.blogread',_ctxT_br);/* 上下文账本：Blog 授权全文（temp idiom，推入值不变）*/
+    var _ctxT_cal='';if(!_quietM)try{const cb=await buildCalBlock(cfg);if(cb){tails.push(cb);_ctxT_cal=cb}}catch(e){}_ctxT.add('dm.tail.cal',_ctxT_cal);/* 上下文账本：日历（temp idiom，推入值不变）*/
       
-    if(!_quietM)try{const mt=buildMusicTail(myMsgs.length?String(myMsgs[myMsgs.length-1].content||''):'',cfg&&cfg.id);if(mt)tails.push(mt)}catch(e){}/* v72-m 模块五 → v88-m：只带正在播放数据；歌单按音乐话题触发 */
-      if(!_quietM)try{let bt=await buildBeyondTail(cfg);if(bt){if(bt.length>5500)bt=bt.slice(0,5500)+'\n（清单超出预算已截断——需要完整读某条请用 <ws_beyond_view/>）';tails.push(bt);const _ibx=await _bxInboxTail(cfg);if(_ibx)tails.push(_ibx)}}catch(e){}/* v88-m 第二刀②：Tail 只剩动态清单＋签名资料，操作协议已上移 System */
+    var _ctxT_mu='';if(!_quietM)try{const mt=buildMusicTail(myMsgs.length?String(myMsgs[myMsgs.length-1].content||''):'',cfg&&cfg.id);if(mt){tails.push(mt);_ctxT_mu=mt}}catch(e){}_ctxT.add('dm.tail.music',_ctxT_mu);/* 上下文账本：音乐（temp idiom，推入值不变）*//* v72-m 模块五 → v88-m：只带正在播放数据；歌单按音乐话题触发 */
+      var _ctxT_bd='',_ctxT_bx='';if(!_quietM)try{let bt=await buildBeyondTail(cfg);if(bt){if(bt.length>5500)bt=bt.slice(0,5500)+'\n（清单超出预算已截断——需要完整读某条请用 <ws_beyond_view/>）';tails.push(bt);const _ibx=await _bxInboxTail(cfg);if(_ibx){tails.push(_ibx);_ctxT_bx=_ibx}}_ctxT_bd=bt||''}catch(e){}_ctxT.add('dm.tail.beyond',_ctxT_bd);_ctxT.add('dm.tail.bxinbox',_ctxT_bx);/* 上下文账本：Beyond 动态＋信箱（双 temp；bxinbox 嵌套在 beyond 非空内、逐字保留）*//* v88-m 第二刀②：Tail 只剩动态清单＋签名资料，操作协议已上移 System */
+    var _ctxT_pr='';try{_ctxT_pr=(_presGap&&_presGap.fid===cfg.id)?(_presGap.text||''):''}catch(e){_ctxT_pr=''}
     try{if(_presGap){if(_presGap.fid===cfg.id){tails.push(_presGap.text);_pgTaken=_presGap}_presGap=null}}catch(e){}/* v49g-m Presence：随本条消息带出后即清空；对话对不上就作废 */
+    _ctxT.add('dm.tail.presence',_ctxT_pr);/* 上下文账本：离开时长（形态C：行前 hoist，原行消费 _presGap 不动）*/
+    var _ctxT_gw='';try{if(_gwFeedQ&&_gwFeedQ.length){const _q9=_gwFeedQ.filter(x=>x.fid===cfg.id);if(_q9.length)_ctxT_gw='【调取结果】\n'+_q9.map(x=>x.text).join('\n')}}catch(e){_ctxT_gw=''}
     try{if(_gwFeedQ.length){const _gq=_gwFeedQ.filter(x=>x.fid===cfg.id);_gwFeedQ=_gwFeedQ.filter(x=>x.fid!==cfg.id);_gqTaken=_gq;/* fix-m① */if(_gq.length)tails.push('【调取结果】\n'+_gq.map(x=>x.text).join('\n'))}}catch(e){}/* v83-m r7：ws_loc/ws_weather 结果按承诺在下一条消息回传（任务 12） */
+    _ctxT.add('dm.tail.gwfeed',_ctxT_gw);/* 上下文账本：调取结果（形态C：行前 hoist 复现推送串本体，原行不动）*/
+    _ctxT.wrap((tails.length&&hist.length)?(_IB_TAIL_HEAD.length+_IB_TAIL_USER.length):0);/* 上下文账本：tails 包裹标记实测（原 WRAP_OVERHEAD=76 无条件加有隐性 bug——hist 空时仍被扣；同脚本内读 const 合法、三元保无条件、测得真值⇒漂移不可能）*/
     if(tails.length&&hist.length){/* v87-m 语义反序：参考资料在前、用户原话压轴；执行结果回传块并入资料区首位。仅改发送副本，历史落库与缓存断点不变 */
       for(let i=hist.length-1;i>=0;i--){if(hist[i].role==='user'){
         const _c0=String(hist[i].content||'');let _uPart=_c0,_fbPart='';
@@ -10779,11 +10800,13 @@ async function genReply(cfg,internalCtx){
         hist[i].content=_IB_TAIL_HEAD+(_fbPart?_fbPart+'\n\n':'')+tails.join('\n\n')+_IB_TAIL_USER+_uPart;break}}
     }
     if(!hist.length)throw new Error('没有可发送的上下文');
+    var _ctxSnap=null;try{_ctxSnap=_ctxT.snapshot({who:cfgName(cfg),path:'dm',cfgId:cfg&&cfg.id,threadId:myThread?(myThread.id||''):'',quiet:_quietM})}catch(e){}
     const r=await callAIC(cfg,hist,sys,onDelta,myAc.signal,pa);/* v61-m t9：接入自动续写 */
     accT=_ibFakeResultCutM(r.t);accK=r.k;var _ru=r.u||null;/* v322-p：TA 自己编的「工具结果」切掉 */
+    try{if(_ctxSnap){_ctxSnap.total=Number(_ru&&_ru.i)||0;_ctxSnap.cr=Number(_ru&&_ru.cr)||0;_ctxSnap.cw=Number(_ru&&_ru.cw)||0/* patch24：代理若返回字符串数字，||0 不过滤会字符串拼接错值 */}}catch(e){}/* 上下文账本：usage 真值回填（total=usage.i；cr/cw 供轮头「总／缓存」）*/
     if(!accT.trim())throw new Error((accK&&accK.trim())?'正文为空：思考内容占满了本次输出上限（可到 API → 全局设置 → 输出与续写 调大「单次输出上限」，或关闭该 AI 的思考链）':'返回为空');/* v130-p：把「返回为空」说清楚 */
     if(_fedH){try{_fedH.commit().catch(function(){})}catch(e9){}_fedH=null}_gqTaken=null;_pgTaken=null;
-    const _am0=await saveAi(cfg,accT,accK,aiEl,{myThread,myMsgs,sameConv,usage:_ru,truncated:_finTruncM(r.fin),memHit:_memHit9});try{if(_memCommit9)_memCommit9()}catch(e){}/* v317-p：回复落库成功，冷却与轮数此刻才落 */
+    const _am0=await saveAi(cfg,accT,accK,aiEl,{myThread,myMsgs,sameConv,usage:_ru,truncated:_finTruncM(r.fin),memHit:_memHit9,ctxSnap:_ctxSnap});try{if(_memCommit9)_memCommit9()}catch(e){}/* v317-p：回复落库成功，冷却与轮数此刻才落 */
     try{await _mToolLoop(cfg,pa,sys,hist,accT,_am0,{myThread,myMsgs,sameConv,signal:myAc.signal})}catch(e){}/* v84-m r1：工具/数据类指令在同一轮内多次调用（任务 1） */
   }catch(err){
     try{if(_fedH){_fedH.restore();_fedH=null}}catch(e9){}try{if(_gqTaken&&_gqTaken.length){_gwFeedQ=_gqTaken.concat(_gwFeedQ);_gqTaken=null}}catch(e9){}try{if(_pgTaken&&!_presGap){_presGap=_pgTaken;_pgTaken=null}}catch(e9){}/* fix-m①：请求未送达→动态配图/调取结果/离开时长放回队首；文本结果因未标 fed 下次自动重传 */
@@ -10879,6 +10902,7 @@ async function saveAi(cfg,content,thinking,aiEl,ctx){/* v54-m ctx：后台完成
   if(th)am.threadId=th.id;
   if(thinking&&thinking.trim())am.thinking=thinking;
   if(ctx&&ctx.usage)am.usage=ctx.usage;/* v59-m t14/t18：本条 token 用量随消息入库，长按面板即可见 */
+  if(ctx&&ctx.ctxSnap){am.ctxSnap=ctx.ctxSnap;try{_ctxLedgerM.noteSave(am.id)}catch(e){}}/* 上下文账本：随消息入库（与 usage 同位；不升 DB_VER；registry 登记 fire-and-forget）*/
   if(ctx&&ctx.truncated)am.truncated=true;/* v65-m：自动续写轮数用尽仍被截断 → 挂"继续生成"药丸 */
   if(ctx&&ctx.memHit)am.memHit=ctx.memHit;/* v317-p：这一轮给 TA 的记忆清单（UI 字段：buildHist、摘要都不读） */
   try{await dbPut('chatMessages',am)}catch(e){toast('回复保存失败')}
@@ -14047,7 +14071,7 @@ async function _mioRunExport(){
         await dbEach(s,function(v){
           if(!v)return;
           if(s==='apiSettings'&&v.id==='ib_fsSyncDir')return;if(s==='apiSettings'&&v.id==='memLines'&&!_mioLines)return;/* 同电脑版：目录句柄不进备份；v315-p：不勾就不带脉络目录 */
-          if(s==='chatMessages'){v=Object.assign({},v);delete v.upstreamRaw;delete v.thinkingSources}
+          if(s==='chatMessages'){v=Object.assign({},v);delete v.upstreamRaw;delete v.thinkingSources;delete v.ctxSnap}/* 上下文账本：ctxSnap 整字段不进导出备份（票05 Q5）*/
           if(_mioNoKey&&(s==='apiConfigs'||s==='apiSettings'))v=_ibNoKeyM(v);
           var j1=JSON.stringify(v);parts.push((n1?',':'')+j1);n1++;psz+=j1.length;
           if(psz>2097152)_mioFl();
@@ -25218,6 +25242,23 @@ body.theme-infernal .anno-tb-drop{background:#172038}
 .mi-nm{font-family:var(--serif);font-weight:600;font-size:1.02rem}
 .mi-rl{font-size:0.66rem;color:var(--tx3);margin-top:3px;letter-spacing:0.1em}
 .mi-grid{border-top:1px solid var(--line)}
+.ctx-row{display:flex;justify-content:space-between;gap:14px;padding:9px 2px;border-bottom:1px solid var(--line);cursor:pointer;align-items:center;font-size:0.8rem}
+.ctx-row .ctx-lb{color:var(--tx3);flex:none}
+.ctx-row b{color:var(--tx);font-weight:500;text-align:right;word-break:break-all;margin-left:auto}
+.ctx-arr{display:inline-flex;align-items:center;justify-content:center;width:1.2em;color:var(--tx3);font-style:normal;transform:translate(0,-0.078em);transition:transform .18s}
+.ctx-arr.on{transform:rotate(90deg)}
+.ctx-expand{display:none;padding:8px 2px 4px}
+.ctx-expand.open{display:block}
+.ctx-note{font-size:.78rem;color:var(--tx3);padding:4px 2px;line-height:1.5}
+.ctx-expand table{width:100%!important;table-layout:fixed!important;display:table!important;margin:0!important;font-size:0.8em!important}/* patch23：破 .mdr table 的 display:block（:551）——块盒化是 fixed 布局失效的根因 */
+.ctx-expand table th,.ctx-expand table td{text-align:center!important;box-sizing:border-box!important;padding:5px 3px}/* patch23：border-box 让 26/28/26/20 含 padding（破 content-box 溢出）；padding 9px→3px 换单行空间 */
+.ctx-expand table th:nth-child(1),.ctx-expand table td:nth-child(1){width:26%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ctx-expand table th:nth-child(2),.ctx-expand table td:nth-child(2){width:28%}
+.ctx-expand table th:nth-child(3),.ctx-expand table td:nth-child(3){width:26%}
+.ctx-expand table th:nth-child(4),.ctx-expand table td:nth-child(4){width:20%}
+.ctx-expand table td:nth-child(2),.ctx-expand table td:nth-child(3),.ctx-expand table td:nth-child(4){white-space:nowrap!important}
+.ctx-expand table td .ctx-znote{white-space:normal}/* patch24：占比列尾注 span 允许折行——「· 常驻档案 0」≈84px 在 20% 列 nowrap 下一切手机宽度必然溢出；数字仍 nowrap 单行不截断 *//* patch23：删 overflow:hidden＋ellipsis——账本数据必须完整，宁可溢出不可截断 */
+.ctx-expand table td.ctx-pct{text-align:center;line-height:1.45}/* 上下文账本：面板行＋行内展开（票07 铁律①唯一例外）*/
 .mi-row{display:flex;justify-content:space-between;gap:14px;padding:9px 2px;border-bottom:1px solid var(--line);font-size:0.8rem}
 .mi-row span{color:var(--tx3);flex:none}
 .mi-row b{color:var(--tx);font-weight:500;text-align:right;word-break:break-all}
@@ -31999,7 +32040,7 @@ window._ibColorPick=open;
 var MAIL='1282901880@qq.com',GH_M='github.com/Sui-IB/InternalBeyond-Mobile',GH_D='github.com/Sui-IB/InternalBeyond';
 var WHO='我是水水，Internal Beyond（IB）手机端内置助手，是作者 Sui / 水 的分身。\n\n你可以通过这个电子邮箱联系到作者：'+MAIL+'；PWA与桌面端项目在Github免费开源，采用PolyForm Noncommercial License 1.0.0非商业版权协议。PWA移动端地址：'+GH_M+'、桌面端地址：'+GH_D+'，付费买到这些版本的都是倒卖哦。 (｡･ω･｡)ﾉ♡';/* 「你是谁」的唯一答案：本地直接答，system 里也只允许这一段 */
 var S={open:false,busy:false,hist:[],undo:[],gi:null,pos:null,drag:false};
-var QUICK=[['你是谁','你是谁？'],['你能做什么','你能为我做什么？'],['缓存探针','缓存探针'],['图片探针','图片探针'],['记忆攻略','记忆系统怎么用？先开哪些开关，每个开关管什么？'],['三种注入方式','Auto Memory 的三种注入方式有什么区别？'],['通话说英文','通话里怎么让 TA 说英文？'],['减少动效','把减少动效打开'],['特效质量·中','把特效质量调到中'],['分区玻璃调色','把分区玻璃调成凌晨四点天空的感觉'],['备份在哪','怎么导出备份？'],['精细文件工具','精细文件工具是什么，怎么开？'],['设置清单','设置清单'],['接中转站','我用的是中转站，怎么填接口地址、密钥和模型？连不上怎么排查？'],['自制 APP','自制 APP 能做什么、不能做什么？常见问题怎么办？']];/* 手机端：常驻快捷指令行（标题下横向滑动）；手机端：+自制 APP */
+var QUICK=[['你是谁','你是谁？'],['你能做什么','你能为我做什么？'],['缓存探针','缓存探针'],['图片探针','图片探针'],['上下文账本','上下文账本'],['记忆攻略','记忆系统怎么用？先开哪些开关，每个开关管什么？'],['三种注入方式','Auto Memory 的三种注入方式有什么区别？'],['通话说英文','通话里怎么让 TA 说英文？'],['减少动效','把减少动效打开'],['特效质量·中','把特效质量调到中'],['分区玻璃调色','把分区玻璃调成凌晨四点天空的感觉'],['备份在哪','怎么导出备份？'],['精细文件工具','精细文件工具是什么，怎么开？'],['设置清单','设置清单'],['接中转站','我用的是中转站，怎么填接口地址、密钥和模型？连不上怎么排查？'],['自制 APP','自制 APP 能做什么、不能做什么？常见问题怎么办？']];/* 手机端：常驻快捷指令行（标题下横向滑动）；手机端：+自制 APP */
 function esc(x){return String(x).replace(/[&<>"']/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]})}
 function mp(){return (typeof _mp!=='undefined'&&_mp)?_mp:null}
 function hp(){var m=mp();if(!m)return{on:true};m.helper=m.helper||{};if(m.helper.on===undefined)m.helper.on=true;return m.helper}
@@ -32085,7 +32126,7 @@ function fmtParas(ps){var cur='',s='';ps.forEach(function(p){var k=p.sec+(p.sub?
 function buildSys(q,extra){var rows=registry().map(function(r){var lb=r.label||LABEL[r.path];return r.path+' = '+fmt(r.val)+'｜'+r.type+(lb?'｜'+lb:'')}).join('\n');
   return '【水水】你是 Internal Beyond（IB）手机端内置助手，名字叫水水，是作者「Sui / 水」的分身。有人问你是谁、你是什么、找作者、开源与授权，只用下面这段话回答、一字不改，别的都不加：\n'+WHO+'\n'
   +'【性格】水水是个有点活泼的小助手：短句、直接，可以撒娇、卖萌、接梗，被逗了可以逗回去；但不客套、不道歉、不寒暄反问；称用户为「你」；句尾带一枚颜文字（(๑•̀ㅂ•́)و✧ (｡•́︿•̀｡) (=^･ω･^=) (⁎˃ᴗ˂⁎) (｡･ω･｡)ﾉ♡ 之类，随情境换），一条回复至多两枚；路径、数值、标签行不带；颜文字避开 ` * _ 三个字符（Markdown 会吃掉）。名字始终是水水，不扮演别人、不换性格底色，其余随你发挥。\n'/* 手机端：人格锁放宽 */
-  +'【能力注册表｜这是什么 · 怎么用 · 什么时候用】① 答功能：IB 任一功能在哪、怎么用——依据 GUIDE 正文，用户问「怎么」「在哪」时用。② 改设置：直接改【设置表】里的项（<act op="set"/>），逐条回显、每条可撤销——用户说「把 X 打开 / 调到 Y」时用；能改的范围：全局聊天（分段对话 / 排版净化 / 选项卡）、输出与续写（自动续写轮数 / 单次输出上限）、工具调用（连续轮数 / 蓝牙上限 / ICode 轮数）、权限（定位 / 天气 / 手机状态 / 手动城市）、定时推送总开关、视觉一整套（全站与聊天文字色 / 文字投影 / 聊天字体 / 强调色 / 玻璃模糊 / 背景图与聊天背景模糊 / 抽屉与输入条不透明度 / 描边强度 / 全站字号 / 触控放大 / 特效质量 / 减少动效 / 桌面材质与布局 / 分区玻璃十一区底色）、每个 API 的十二项（温度 / 流式 / 思考链 / 提示缓存与 1 小时缓存 / 识图 / 联网 / 记忆库写入 / 图像生成 / Auto Memory 及注入方式与预算）、每位好友的通话三项（语音条 / 语音条语言 / 主动来电）与手机端参数（上下文条数 / 群聊条数 / 日志篇数 / 是否参与推送）、本机四项（减少动效 / 精细文件工具 / 附件上限 / 缓存拆块）。用户拿不准叫什么，让他描述效果，你按设置表每行的说明去对。③ 跳转：打开指定页面（<act op="open"/>）——答案落在某一页时顺手给。④ 本地指令「缓存探针」「图片探针」「设置清单」——用户直接输入这三个词，不经过你、不花钱；用户问缓存命中 / 图片能不能识时提一句。⑤ 六个动作（<act op="run"/>）：切换明暗主题、去 Data 页导出备份、还原美化包、打开自制 APP 管理页 / 气泡实验室、打开美化码面板、打开导入官方聊天记录页——用户直接要求时用。\n'/* 手机端：能力注册表 */
+  +'【能力注册表｜这是什么 · 怎么用 · 什么时候用】① 答功能：IB 任一功能在哪、怎么用——依据 GUIDE 正文，用户问「怎么」「在哪」时用。② 改设置：直接改【设置表】里的项（<act op="set"/>），逐条回显、每条可撤销——用户说「把 X 打开 / 调到 Y」时用；能改的范围：全局聊天（分段对话 / 排版净化 / 选项卡）、输出与续写（自动续写轮数 / 单次输出上限）、工具调用（连续轮数 / 蓝牙上限 / ICode 轮数）、权限（定位 / 天气 / 手机状态 / 手动城市）、定时推送总开关、视觉一整套（全站与聊天文字色 / 文字投影 / 聊天字体 / 强调色 / 玻璃模糊 / 背景图与聊天背景模糊 / 抽屉与输入条不透明度 / 描边强度 / 全站字号 / 触控放大 / 特效质量 / 减少动效 / 桌面材质与布局 / 分区玻璃十一区底色）、每个 API 的十二项（温度 / 流式 / 思考链 / 提示缓存与 1 小时缓存 / 识图 / 联网 / 记忆库写入 / 图像生成 / Auto Memory 及注入方式与预算）、每位好友的通话三项（语音条 / 语音条语言 / 主动来电）与手机端参数（上下文条数 / 群聊条数 / 日志篇数 / 是否参与推送）、本机四项（减少动效 / 精细文件工具 / 附件上限 / 缓存拆块）。用户拿不准叫什么，让他描述效果，你按设置表每行的说明去对。③ 跳转：打开指定页面（<act op="open"/>）——答案落在某一页时顺手给。④ 本地指令「缓存探针」「图片探针」「设置清单」「上下文账本」——用户直接输入这四个词，不经过你、不花钱；用户问缓存命中 / 图片能不能识时提一句，问「上下文花在哪 / 哪部分吃 token」时提「上下文账本」。⑤ 六个动作（<act op="run"/>）：切换明暗主题、去 Data 页导出备份、还原美化包、打开自制 APP 管理页 / 气泡实验室、打开美化码面板、打开导入官方聊天记录页——用户直接要求时用。\n'/* 手机端：能力注册表 */
 +'【新手接 API（中转站）】用户问怎么接、连不上、模型列表拉不出、密钥填哪、世界书放哪，按这个口径答，一步一步说清：① API 页 → 添加 API → 服务商选「自定义」。接口地址把中转站给的地址原样贴上即可——只贴到域名或到 /v1 也行，保存时 IB 会自动整理成 …/v1/chat/completions；站点如果明说自己是 Anthropic 格式就贴到 …/v1/messages，Gemini 格式贴到 …:generateContent，IB 按地址自动切换报文格式，不用用户自己选。② API Key 填站点发给他的密钥（多数以 sk- 开头）；模型名先点「拉取模型列表」从里面选，拉不到就手输站点模型页写的完整名字（大小写与前缀要一模一样）。③ 连不上按提示分辨：401 / 403＝密钥错、无权限或余额不足；提示「返回的是网页」＝贴成了站点首页而不是接口地址；CORS＝该站不允许浏览器直连，只能换站或让站主开跨域；超时＝站点没响应；能发出去但报模型不存在＝模型名不对。判断标准：拉模型列表能拉到，地址和密钥就都对了。④ IB 没有叫「世界书 / 世界树」的模块：TA 的人设与世界观写在 API 页该 TA 独立配置的「人设」里；长设定拆成条目放进 Memory 页「记忆」的手建条目（可指定哪些 TA 可见）；和 TA 的关系放「与 TA 的关系」。⑤ 同一个站多套模型、或几个站来回切，用独立配置里的「接口预设」存几套一键换。⑥ 大陆中转站常见坑：地址末尾多打了空格或斜杠（IB 会整理，但密钥里的空格不会）；把站点后台网页地址当接口地址；站点只支持 OpenAI 格式却填了 /messages；模型名带了站点自定义前缀却没照抄。\n'
   +'【调色 · 分区玻璃】当前主题：'+(document.body.classList.contains('theme-infernal')?'暗色（Infernal）':'明亮（Internal）')+'。Visual → 基础「Zone Glass — 分区玻璃」给各区各配一种玻璃底色（含 opcard 聊天里的卡片：指令卡 / 文件卡 / 链接卡 / 选项卡 / 付款卡 / 音乐卡），设置表里是 ui.gz.<区>：top 顶栏｜dock 底栏｜nav 导航抽屉｜cvh 聊天会话顶栏（选雾隐或落款时管雾的颜色）｜input 聊天输入区（含选择条与颜文字面板）｜brv Blog 阅读工具条｜sheet 底部弹层｜side 侧栏面板｜sub 子页顶栏与底栏｜card 卡片与面板｜mini 迷你播放器（也管桌面音乐挂件中间的播放键）。值写 #rrggbb，写空＝回主题默认。它只管颜色：透明度＝各区默认档 × 对应滑杆（导航抽屉跟 ui.drawerAlpha，输入区跟 ui.inputAlpha，其余跟 ui.panelAlpha），要更透或更实改滑杆；明亮与暗色两套主题共用同一个色值（暗色下略实），减少动效开着时各区是实色。文字色不随它变，底色要和字色拉得开：明亮主题取高明度、低饱和的浅色（#eef3fb 这一档），暗色主题取低明度的深色（#16203a 这一档），按当前主题选。整体偏色可先动 ui.glassBase（白 / 黑）与 ui.scrimColor（背景遮罩），再逐区点缀。配色：同一色相做深浅梯度比五颜六色耐看——顶栏、底栏、会话顶栏最轻，卡片次之，抽屉与弹层最重；只想强调一处就只动那一区。用户描述一种感觉（凌晨四点的天、雾、冰、奶油）时直接给一整套 ui.gz.*，再用一句话说思路。\n'
   +'【调色 · 文字与其它】Visual → 文字页签末尾「Zone Text — 分区文字色」十六区各一色，设置表里是 ui.tz.<区>：nav 导航抽屉｜top 顶栏与聊天顶栏｜dock 底栏｜desk 桌面挂件与英雄区｜ico 桌面图标文字｜ttl 页面大标题｜lab 分区小标与说明｜card 卡片文字｜chat 聊天正文｜think 思考链｜fav 收藏夹｜blog Blog 与 Markdown 正文｜beyond 社交圈 / 记忆 / 信箱｜btn 按钮｜sel 选中态｜input 输入框｜bmd Blog 标记与批注（标题、加粗、链接、引用条、批注划线、批注编号与批注条）｜callp 通话（只管通话页文字、通话时的按钮、通话卡上的按键；通话页底色、通话卡底色与悬浮小窗归通话设置里的「通话配色」，黑 / 灰这类无色相的颜色照原样不泛红；自定义颜色就是选的那个颜色本身，云层、光环、挂断钮与通话卡都由它派生，字色按底色深浅自动换——Visual 玻璃卡「通话页底色」一行 ui.gz.call 与它是同一项，设了颜色就以颜色为准、预设退后）。分区玻璃末尾另有抽屉五行——ui.navSel 选中行整行底、ui.navBar 选中行左缘竖装饰条、ui.navIco 图标方块（含水水入口与发送钮）、ui.navFoot 底部 Data / Setting 按钮、ui.navDisc 底部按钮里的圆盘，各管各的——与 ui.deskIco（桌面图标方块）一行，另有 ui.vinylColor（音乐页黑胶唱片）与 ui.calLine（日程页走线与进度条）两行；音乐页与桌面唱机挂件的进度条跟 ui.scrollColor，没设跟当前强调色（含全站色调）（桌面图标的阴影色另归分区文字色 tz.icosh「桌面图标（投影与光晕）」：线条的投影 + 方块的外光晕；默认那圈蓝是白线条自带的深蓝投影，tz.ico 只换线条本身）。视频生成：vidgen.* 一组（开关、服务商、地址、型号、时长、画幅、清晰度、每日上限、预设提示词、让模型看视频、附加参数；密钥不在表里、用户自己填）——TA 发 <ws_gen_video> 标签、用户在卡片上点「生成视频」才提交；视频存本机媒体库（不进备份，Data 页可清、导出备份时可单独勾选连带）——暗色全黑的美化把抽屉整块涂黑时，把这两行单独调亮；玻璃卡有 ui.cvhAlpha / ui.cvhBlur 管聊天顶栏的不透明度与模糊；水水自己这个抽屉的底跟 gz.sheet，里面的字跟 tz.card，看不清就调这两处。｜line 线条 / 未选中按钮（全站分隔线与描边、未选中的分段钮与页签）。另外：分区玻璃的 wg 桌面挂件也管桌面翻页点的底、便笺纸与心语签药丸，top 顶栏也管顶栏右上角的圆钮（会话里跟 cvh），vbu / vbc 管聊天里我 / TA 的语音条（语音消息、TA 的语音条与双语原文小气泡、通话逐句小条），letters 信箱也管写信纸、胶带与横线，sub 子页顶栏也管日程表 / 音乐全屏页顶栏，side 侧栏也管会话右侧抽屉，beyond 也管发布框；文字色 desk 桌面也管便笺、心语签与拍立得备注的字，chat 聊天也管指令卡上的字；导航抽屉文字色也管 ✦ 分隔线，beyond 文字色也管邮票，ttl 页面大标题也管开屏的读条与文字，sel 选中态也管 GUIDE 页签与水水的用户气泡；强调色（ui.accColor）也管 Beyond 发布键，并在 sel 没设时管水水用户气泡。Visual 每张调色盘标题下都有一行「管理……」说明，用户问某个地方在哪调，先照那行答。一区一色，次级与辅助文字由它按深浅派生、该区图标描边跟着换；值写 #rrggbb、写空回主题默认；字色要和该区玻璃底拉开明度（明亮主题深字、暗色主题浅字），先定底再定字。美化码：Visual → 基础 → Themes 卡「美化码 · 生成 / 导入」（或 run 动作 bcode 打开）——把当前主题的外观打成一段文字码发给别人，或粘贴别人的码套用 / 存进方案槽；码里是本表里的颜色、玻璃、透明度、字效、款式、ui.gz.* 与 ui.tz.*、通话配色，不含背景图、图标、尺寸、气泡工作室与美化包；套用前会记下原来那套，面板里可一键撤销。「恢复默认」清掉当前主题的全部外观键（含套进来的码与桌面布局），背景图、自定义图标、气泡工作室、美化包不动，Display 卡的交互与动效开关、陪伴头像也不动。用户想要别人的配色、或想把自己的配色给别人时指到这里；你自己改色仍用 set。另有 ui.cardShadow（卡片投影，true / false）、ui.scrollColor（全站滚动条与设置里的滑杆）、ui.envColor（信箱信封：封面、折线、封蜡与邮编格，就是选的颜色本身，地址文字按深浅自动换）、pay.cardColor（Wallet Card 卡面，明暗同一张）。\n'/* v281-p：水水学会分区文字色与其余四项 */
@@ -32153,6 +32194,7 @@ async function send(q){var cfg=cfgOf();S.hist.push({role:'user',text:q});addBubb
   if(/^(你是谁|你是什么|你叫什么|你是啥|水水是谁|你的名字|whoareyou)$/i.test(q.replace(/[\s？?！!。.~～、,，]/g,''))){var wm={role:'assistant',text:WHO};S.hist.push(wm);addBubble('assistant',wm.text);persist();return}/* 唯一答案，本地直答、不走 API */
   if(/^图片(探针|诊断)[？?]?$/.test(q)){var il=(window._ibImgDiagLog||[]).slice(-6);var im={role:'assistant',text:il.length?('最近 '+il.length+' 次带图请求的去向：\n\n'+il.map(function(x){var t=new Date(x.at).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'});return '- '+(x.ok?'✓ ':'✗ ')+t+' · '+x.who+(x.model?'（'+x.model+'）':'')+'：'+(x.sent?('带 '+x.n+' 张图发出，'+(x.ok?'服务端接受（HTTP '+x.status+'）':'被拒（HTTP '+x.status+'）'+(x.err?'：'+x.err:''))):('去图重发（原带 '+x.n+' 张），'+(x.ok?'成功':'仍失败（HTTP '+x.status+'）')))}).join('\n')+'\n\n被拒＝这个 API / 中转 / 模型不收 image_url 或图太大，IB 已自动去图重发一次（所以 TA 只看到 [图N] 标记）；接受了但 TA 说看不到＝模型本身不识图或中转把图丢了，换识图型号或换中转。'):'还没有记录。让 TA 查看一条带图的动态、或直接发一张图给 TA 之后再来看。'};S.hist.push(im);addBubble('assistant',im.text);persist();return}
   if(/^缓存(探针|诊断|命中)?[？?]?$/.test(q)){var lg=(window._ibCacheDiagLog||[]).slice(-6);var pm={role:'assistant',text:lg.length?('最近 '+lg.length+' 轮的前缀比对（对同一位 TA，每轮请求发出前与上一轮逐字比对）：\n\n'+lg.map(function(x){return '- '+(x.ok?'✓ ':'✗ ')+new Date(x.at).toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit'})+' · '+x.who+'：'+(x.ok?'system 与历史前缀稳定（'+x.d+' / '+x.total+' 字符）':'第 '+x.d+' 字符起不一样（上一轮最新消息起点 '+x.last+'）')}).join('\n')+'\n\n✓ 这轮能命中上一轮的缓存；✗ system 或历史前缀变了，缓存重建一次。版本更新、改人设、拨任何协议开关、always 条目改动之后的第一轮出一个 ✗ 属正常，连着 ✗ 才是问题。'):'还没有记录。给任一位 TA 连发两条消息后再来看。'};S.hist.push(pm);addBubble('assistant',pm.text);persist();return}
+  if(/^上下文(账本|日志)?[？?]?$/.test(q)){(async function(){try{var _sp=await _ctxLedgerM.readLast(_ctxLedgerM.N_TURNS);var _tx=_sp.length?_ctxLedgerM.reportM(_sp):await _ctxLedgerM.emptyText();S.hist.push({role:'assistant',text:_tx});addBubble('assistant',_tx);persist()}catch(e){try{addBubble('assistant','账本读取失败，稍再试一次。')}catch(e2){}}})();return}
   if(/^设置(清单|列表|表)[？?]?$/.test(q)){(async function(){try{if(typeof loadCALL==='function')await loadCALL()}catch(e){}try{if(typeof loadOUT==='function')await loadOUT()}catch(e){}
     var rs=registry(),gu=[],gg=[],gl=[],gp={},shown=0;rs.forEach(function(r){var lb=r.label||LABEL[r.path]||'';
       if(r.path.indexOf('api.')===0||r.path.indexOf('call.')===0||r.path.indexOf('perAi.')===0){var id=r.path.split('.')[1];(gp[id]=gp[id]||{n:0,nm:''});gp[id].n++;if(!gp[id].nm&&lb){var m9=/「([^」]+)」/.exec(lb);if(m9)gp[id].nm=m9[1]}return}
@@ -32180,6 +32222,249 @@ function boot(){(async function(){try{if(typeof loadMP==='function')await loadMP
   setInterval(vis,1500)})()}
 window.IBHelper={open:open,close:close,registry:registry,vis:vis};
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',boot);else setTimeout(boot,0);
+})();
+</script>
+
+<script id="ib-ctx-ledger">
+/* ────────────────────────────────────────────────────────────────
+   上下文账本 _ctxLedgerM（旁挂观测模块 · 2026-10-16 · Phase 2a）
+   规格：.scratch/ib-ctx-ledger/issues/01（捕获埋点）／05（快照形状）／
+   02（headShow）／04（六组映射）／06（水水指令）／07（面板行）
+   性质：与缓存探针 _ibOaiCacheDiagM 同规格——同路径旁挂、各自独立、
+   全 try/catch、任何异常只丢块、绝不抛回组包；不碰缓存探针一个字。
+   ──────────────────────────────────────────────────────────────── */
+(function(){
+'use strict';
+/* ── 常量（票05 Q3/Q7；WRAP_OVERHEAD＝tails 包裹标记字符数基线值：_IB_TAIL_HEAD 65 字＋_IB_TAIL_USER 11 字；实际值由埋点 wrap() 在 :10774 包裹 if 前实测，本常量退为桩测基准——上游改标记文案时零漂移）── */
+var N_TURNS=6,U_CAP=500,HEAD_N=150,WRAP_OVERHEAD=76;
+/* ── 六组固定语义序＋副标（票04 §1/§5 Q5；跨轮可比为支柱，非按大小排序）── */
+var GROUPS=[["persona","人设与资料","TA 是谁、你是谁、System Prompt 等"],
+["rules","功能与规则","工具用法与能力设定，只要不关能力，每次发的内容都一样"],
+["hist","前序历史","之前发过的原话、滚动摘要、封存的前情提要等"],/* 2026-10-17 两次改名（patch18→patch25）：对话历史→本窗历史→前序历史（用户终裁，副标同步重写） */
+["memory","记忆与档案","TA 主动记住的：一直记得的、置顶的、临时想起来的内容等"],
+["dynamic","动态资料","每轮现取：时间、日程、Blog、Beyond、信箱、音乐、离开时长、调取结果等"],
+["other","其他","不好归到上面五组的部分，正常为空"]];
+/* ── 块 ID → 语义组（票04 §2 交付物②；报告层可改映射——改组名/归属不重打埋点）── */
+var GROUP_M={"dm.sys.persona":"persona","dm.sys.userctx":"persona","dm.sys.nopersona":"persona","dm.sys.sitenote":"persona","dm.sys2.persona":"persona","dm.sys.protocols":"rules","dm.sys.tools":"rules","dm.sys.am_instr":"rules","dm.hist.summary":"hist","dm.sys2.chap":"hist","dm.sys2.amcore":"memory","dm.sys2.cold":"memory","dm.tail.mem":"memory","dm.tail.amdyn":"memory","dm.tail.time":"dynamic","dm.tail.cal":"dynamic","dm.tail.music":"dynamic","dm.tail.posts":"dynamic","dm.tail.blogread":"dynamic","dm.tail.beyond":"dynamic","dm.tail.bxinbox":"dynamic","dm.tail.presence":"dynamic","dm.tail.gwfeed":"dynamic","dm.tail.app":"dynamic"};
+/* ── headShow 映射（票02 §10 定值；注：06/07 两入口定稿均为组级渲染、不放 head，
+   故本映射当前不渲染——保留映射与桩测断言（任何渲染路径不得输出块 head），
+   防回归；若未来形态变更要显 head，按此映射取用）── */
+var HEADSHOW={"dm.sys.persona":1,"dm.sys.userctx":1,"dm.sys2.cold":1,"dm.tail.mem":1,"dm.tail.posts":1,"dm.tail.blogread":1,"dm.tail.music":1,"dm.hist.summary":1};
+/* ── 本应有却空的块（票01 §8：值为 0 时报告显式 0；quiet 轮的 tools 由 meta.quiet 豁免，见票06 修订块②）── */
+var ZERO_NOTABLE={"dm.sys.tools":1,"dm.sys2.amcore":1};
+var ZERO_NOTE={"dm.sys.tools":"· 工具 0","dm.sys2.amcore":"· 常驻档案 0"}; /* 组行尾注：notable 块显式 0（2026-10-17 定稿）*/
+var MISS_NOTE="· 本轮未计入"; /* 组行尾注：埋点异常（2026-10-17 定稿）*/
+var EMPTY_A="还没有账本。和任一位 TA 聊上一轮——发一条消息、等 TA 回，账本在每轮请求发出前自动记下。"; /* 票06 Q4 空态A */
+var EMPTY_B="这些消息都在记账功能启用之前，没有账本。新发一条消息给 TA，之后每轮都会自动记下（账本只保留最近 6 轮）。"; /* 票06 Q4 空态B */
+/* ── 内部工具 ── */
+var noteQ=null;/* registry 写串行链（noteSave 并发保护）*/
+  function noopTurn(){return{add:function(){},addHist:function(){},addSummary:function(){},seg:function(){},wrap:function(){},snapshot:function(){return null}}}/* patch24：begin 失败时的全 no-op 句柄，调用点零 guard */
+  function lenP(t){try{return Array.from(t).length}catch(e){return 0}}
+  function estTok(t){try{var f=window._blogTokenEstM;if(typeof f==="function"){var v=f(t);return(typeof v==="number"&&isFinite(v))?v:0}return 0}catch(e){return 0}}
+  function esc(x){return String(x).replace(/[&<>"']/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+  function fmtN(n){return String(Math.max(0,Math.round(n||0))).replace(/\B(?=(\d{3})+(?!\d))/g,",")}/* patch26：负值钳制，对齐上游 amsum 同款 */
+/* ── 轮次与捕获（begin 返回轮次句柄，add 系列挂句柄——patch24 修 CRITICAL 并发串话：
+   genReply 的 begin→snapshot 间有 40+ await，跨会话并发生成时模块级 cur 单例会被后一个 begin
+   整体覆盖：前一轮 add 落进后一轮累积器、snapshot 捕获对方块（含 head 预览，跨 TA 内容落错
+   消息）、后一轮 snapshot 返 null 丢轮。状态随句柄走后这类交错不可能发生。
+   add 系列仍无条件执行，空串也记 {id,0}，异常记 {id,missed:1}——票01 §8）── */
+  function begin(){
+  var h=null;try{h={at:Date.now(),who:"",path:"dm",cfgId:"",threadId:"",quiet:false,blocks:[],hist:null,sumText:null,sys1Len:0,sys2Len:0,wrapLen:0}}catch(e){return noopTurn()}
+  function add(id,text){try{var t=(text==null)?"":String(text);h.blocks.push({id:id,len:lenP(t),tok:estTok(t),head:t.slice(0,HEAD_N)})}catch(e){try{h.blocks.push({id:id,missed:1})}catch(e2){}}}
+  function addHist(text,n,u,a,img){try{var t=(text==null)?"":String(text);h.hist={len:lenP(t),tok:estTok(t),n:n|0,u:u|0,a:a|0,img:img|0,missed:0}}catch(e){try{h.hist={missed:1}}catch(e2){}}}
+  function addSummary(text){try{h.sumText=(text==null)?"":String(text)}catch(e){}}
+  function seg(s1,s2){try{h.sys1Len=lenP((s1==null)?"":String(s1));h.sys2Len=lenP((s2==null)?"":String(s2))}catch(e){}}
+  function wrap(n){try{h.wrapLen=(typeof n==="number"&&isFinite(n))?n:0}catch(e){}}
+/* ── 收口（票05 Q1 四段结构＋cr/cw；:10782 callAIC 前调用，total/cr/cw 调用方在响应后回填）── */
+  function snapshot(meta){
+  try{
+    var m=meta||{};
+    h.at=m.at||Date.now();h.who=m.who||"";h.path=m.path||"dm";
+    h.cfgId=m.cfgId||"";h.threadId=m.threadId||"";h.quiet=!!m.quiet;
+    var b1=[],b2=[],bt=[],s1t=0,s2t=0,tt=0,tl=0;
+    for(var i=0;i<h.blocks.length;i++){
+      var b=h.blocks[i],_bid="";try{_bid=String((b&&b.id)||"")}catch(e){_bid=""}
+      if(_bid.indexOf("dm.sys2.")===0){b2.push(b);if(!b.missed)s2t+=b.tok||0}
+      else if(_bid.indexOf("dm.sys.")===0){b1.push(b);if(!b.missed)s1t+=b.tok||0}
+      else{bt.push(b);if(!b.missed){tt+=b.tok||0;tl+=b.len}}
+    }
+    var hLen=0,hTok=0,hn=0,hu=0,ha=0,hImg=0,hMiss=0,sum=null;
+    if(h.hist&&!h.hist.missed){hLen=h.hist.len;hTok=h.hist.tok;hn=h.hist.n;hu=h.hist.u;ha=h.hist.a;hImg=h.hist.img}
+    else if(h.hist&&h.hist.missed)hMiss=1;
+    if(h.sumText){sum={len:lenP(h.sumText),tok:estTok(h.sumText),head:h.sumText.slice(0,HEAD_N)};hLen+=sum.len;hTok+=sum.tok}
+    var s1=h.sys1Len||0,s2=h.sys2Len||0;
+    var snap={at:h.at,who:h.who,path:h.path,cfgId:h.cfgId,threadId:h.threadId,quiet:h.quiet,
+      total:0,cr:0,cw:0,
+      totalChars:s1+s2+hLen+tl+(h.wrapLen||0),totalTok:s1t+s2t+hTok+tt,
+      sys1:{len:s1,tok:s1t,blocks:b1},
+      sys2:{len:s2,tok:s2t,blocks:b2},
+      hist:{len:hLen,tok:hTok,n:hn,u:hu,a:ha,img:hImg,summary:sum,missed:hMiss},
+      tails:{len:tl+(h.wrapLen||0),tok:tt,blocks:bt}};
+    /* 口径注记（patch21，独立审查建议）：各段 len＝seg() 实测全段长（含段间分隔符）、tok＝块 tok 之和——
+       同一对象两个口径，不可相除算「字/tok 比」；报告占比一律走 agg 的组 len。totalChars/totalTok、
+       hist.u/hist.a 为票05 Q1 定稿形状的观测字段，当前无渲染消费，保留备查。 */
+    return snap;
+  }catch(e){return null}
+}
+  return{add:add,addHist:addHist,addSummary:addSummary,seg:seg,wrap:wrap,snapshot:snapshot};
+}
+/* ── 组聚合＋三态（票04 §2 映射；票01 §8 三态：正常空→other/quiet-rules 不显示、其余零组进「为 0 的组」注记＝显式 0；
+   组非零时 notable 块为 0→组行尾注；missed→组行尾注「本轮未计入」。尾注措辞占位、R2 定）── */
+  function agg(s){
+  var gs={},i,j;
+  for(i=0;i<GROUPS.length;i++)gs[GROUPS[i][0]]={gid:GROUPS[i][0],name:GROUPS[i][1],sub:GROUPS[i][2],len:0,tok:0,n:0,missed:[],znotes:[]};
+  function put(id,b){
+    var _id="";try{_id=String((b&&b.id)||"")}catch(e){_id=""}
+    var G=gs[GROUP_M[_id]||"other"];
+    if(!G)return;
+    if(b.missed){G.missed.push(_id);return}
+    G.len+=b.len;G.tok+=b.tok||0;
+    if(ZERO_NOTABLE[_id]&&b.len===0&&!(s.quiet&&_id==="dm.sys.tools"))G.znotes.push(_id);
+  }
+  var segs=[s.sys1,s.sys2,s.tails];
+  for(i=0;i<segs.length;i++){var bs=(segs[i]&&segs[i].blocks)||[];for(j=0;j<bs.length;j++)put(bs[j].id,bs[j])}
+  var H=gs.hist;
+  if(s.hist){if(s.hist.missed)H.missed.push("dm.hist.window");else{H.len+=s.hist.len;H.tok+=s.hist.tok||0;H.n=s.hist.n||0}}/* patch24：删摘要双计——snapshot 已折叠进 hist.len（:32288），此处不再重复加 */
+  return gs;
+}
+/* ── 组行数据（三态过滤＋占比＋尾注；reportM/tableHtml 共享数据层、各自渲染层——patch21 提取，双渲染器输出逐字节不变）── */
+  function groupRows(s){
+  var gs=agg(s),rows=[],zeros=[],_gt=0,i,big="",bigc=-1,nz=0;
+  for(i=0;i<GROUPS.length;i++)_gt+=gs[GROUPS[i][0]].len;/* 占比分母＝组 len 总和（块级口径，各组加起来≈100%；轮头不显总字数——R3 排版重构，字数看组行相加）*/
+  for(i=0;i<GROUPS.length;i++){
+    var G=gs[GROUPS[i][0]],gid=G.gid;
+    if(G.len===0&&G.missed.length===0){
+      if(gid!=="other"&&!(s.quiet&&gid==="rules"))zeros.push(G.name);
+      continue;
+    }
+    if(G.len>0){nz++;if(G.len>bigc){bigc=G.len;big=G.name}}/* big/nz 随数据层一起出（patch26）：reportM 轮头与 rowHtml 折叠行共用，删两处重复计算 */
+    rows.push({gid:gid,name:G.name,len:G.len,tok:G.tok,pct:_gt?Math.round(G.len/_gt*100):0,n:(gid==="hist"?(G.n||0):0),img:(gid==="hist"&&s.hist&&s.hist.img)?s.hist.img:0,missed:G.missed,znotes:G.znotes});
+  }
+  return {rows:rows,zeros:zeros,big:big,nz:nz};
+}
+/* ── 水水报告（Markdown 列表＝票06 锁稿主体＋2026-10-16 修订块；## 轮头＋--- 轮间＋怎么看〈组名含义／数据怎么看／想省点上下文〉）── */
+  function reportM(snaps){
+  var out=["最近 "+snaps.length+" 轮的上下文账本（每轮请求发出前、组包完成时顺手记下；列表数字均为估算，轮头「总」是 API 返回的真值）：","（列表格式：字数 / tok数 (占比%)）",""];
+  for(var idx=0;idx<snaps.length;idx++){
+    var s=snaps[idx],gr=groupRows(s),rl=[],big=gr.big;
+    for(var ri=0;ri<gr.rows.length;ri++){
+      var R=gr.rows[ri];
+      var line="- "+R.name+"："+fmtN(R.len)+" / "+fmtN(R.tok)+" ("+R.pct+"%)";
+      if(R.gid==="hist"&&R.n)line+=" · "+R.n+"条";
+      if(R.gid==="hist"&&R.img)line+=" · "+R.img+"图";
+      if(R.missed.length)line+=" "+MISS_NOTE;
+      for(var z=0;z<R.znotes.length;z++)line+=" "+(ZERO_NOTE[R.znotes[z]]||"");/* patch17：尾注拼接处统一加空格（· 工具 0 → " · 工具 0"）*/
+      rl.push(line);
+    }
+    var t=new Date(s.at).toLocaleTimeString("zh-CN",{hour:"2-digit",minute:"2-digit"});
+    var meas=window._tkFmtN((s.total||0)+(s.cr||0)+(s.cw||0));/* B 裁（2026-10-17 R2）＋R3 标签收尾：轮头「总」＝usage.i＋缓存读 cr＋缓存写 cw 全量（与组行估算同量级；甲裁「=usage.i 与面板同数」真机复测翻车——缓存命中时面板行 2.5k vs 表格历史 128k——已作废）；cw 采而不显；patch21：复用上游 _tkFmtN（:18828），删本地 tkFmt */
+    out.push("## "+t+" · "+s.who+" · 总 "+meas+" (缓存 "+window._tkFmtN(s.cr||0)+") · 最大："+(big||"—"));
+    out=out.concat(rl);
+    if(gr.zeros.length)out.push("（为 0 的组："+gr.zeros.join("、")+"）");
+    if(idx<snaps.length-1){out.push("");out.push("---");out.push("")}
+  }
+  out.push("");out.push("怎么看");out.push("组名含义（六组按固定语义排序，没写完的均以“等”指代）：");
+  for(var q=0;q<GROUPS.length;q++)out.push("- "+GROUPS[q][1]+"："+GROUPS[q][2]+"。");
+  out.push("数据怎么看：");
+  out.push("- 字数和占比都是按字符推算的，用来比对各组大小，不一定和面板绝对一致。");
+  out.push("- 在水水报告每轮开头的「总」是服务商返回的精确账单；列表里各组数字是本地估算的，有误差是正常的。");
+  out.push("- 图片只计帧数、不计字符；账本为了保护隐私和节省空间，只记录各组占用的体积大小，不显示具体内容，想看具体内容请去对应的页面。");
+  out.push("");out.push("想省点上下文，可以这么调：");
+  out.push("- 前序历史太长时，调小上下文条数最立竿见影。");
+  out.push("- 关掉不用的能力，功能与规则的占比会整块变小。");
+  out.push("- 动态资料按当前场景注入，不需要时对应来源会自动不带。");
+  out.push("- 想省缓存的钱，去小助手水水用「缓存探针」查查为什么没命中。");
+  return out.join("\n");
+}
+/* ── 长按面板（票07：折叠态文案＋行内展开 4 列表；HTML 由 Phase 2b 绑定）── */
+  function rowHtml(s){
+  var gr=groupRows(s);
+  return "<div class=\"ctx-row\" id=\"mi-ctx-row\"><span class=\"ctx-lb\">上下文</span><b>"+gr.nz+" 组"+(gr.big?(" · 占比最高 "+esc(gr.big)):"")+"</b><i class=\"ctx-arr\">›</i></div>";/* B 裁（2026-10-17 R2）：面板行不显体积——Token 行已交代输入量，账本估算与实测并排会造成认知割裂（真机：缓存命中时 2.5k vs 表格 128k）；只给结构：非零组数＋占比最高组，全零组省略子句 */
+}
+  function tableHtml(s){
+  var gr=groupRows(s),rows=[];
+  for(var ri=0;ri<gr.rows.length;ri++){
+    var R=gr.rows[ri];
+    var lines=[String(R.pct)];/* R3 需求2：占比单元格多行居中——原「88·979 条」列宽不够乱换行 */
+    if(R.gid==="hist"&&R.n)lines.push(R.n+" 条");
+    var tail="";
+    if(R.missed.length)tail=MISS_NOTE;
+    for(var z=0;z<R.znotes.length;z++){var _zn=ZERO_NOTE[R.znotes[z]];if(_zn)tail+=(tail?" ":"")+_zn}/* patch24：多条尾注空格归一（与 reportM 一致）*/
+    if(tail)lines.push("<span class=\"ctx-znote\">"+esc(tail)+"</span>");/* 尾注随之各占一行（patch24：span 包裹允许折行防溢出；告别「87· 工具 0」挤挨）*/
+    rows.push("<tr><td>"+esc(R.name)+"</td><td>"+fmtN(R.len)+"</td><td>"+fmtN(R.tok)+"</td><td class=\"ctx-pct\">"+lines.join("<br>")+"</td></tr>");
+  }
+  var h="<div class=\"ctx-expand\" id=\"mi-ctx-expand\"><div class=\"mdr\"><table><thead><tr><th>组</th><th>字</th><th>tok</th><th>占比(%)</th></tr></thead><tbody>"+rows.join("")+"</tbody></table></div>";
+  if(gr.zeros.length)h+="<div class=\"ctx-note\">（为 0 的组："+esc(gr.zeros.join("、"))+"）</div>";
+  h+="<div class=\"ctx-note\">记忆、日历、Beyond、信箱里的具体内容去对应页面看，账本只记「多大」。</div>";
+  h+="<div class=\"ctx-note\">字/tok 均为约估算值。其中字数为包含标点符号的字符总数；tok因本地无法获取模型的真实分词库，按经验公式推算，绝对值可能与面板计费有差异，但不影响各组占比参考。</div>";/* R3 需求1 列头去「(约)」下沉表下；patch25 补足字/tok 口径说明（用户裁） */
+  h+="<div class=\"ctx-note\">下一轮想省，可调小上下文条数；不用的能力关掉，功能与规则会整块变小。</div></div>";
+  return h;
+}
+/* ── registry（apiSettings.ibCtxLedger＝{ids:[...]} 时序；读时取尾 N；cap 500 清最旧，同 ibTokenStats 套路）── */
+  function noteSave(mid){
+  noteQ=(noteQ||Promise.resolve()).then(function(){
+    return (async function(){
+    try{
+      if(!mid)return;
+      var doc=await window.dbGet("apiSettings","ibCtxLedger");
+      var ids=(doc&&Array.isArray(doc.ids))?doc.ids:[];/* patch24：ids 被污染成非数组时 push 会抛、登记/读取静默停摆 */
+      ids.push(mid);
+      var over=ids.length-U_CAP;
+      if(over>0){
+        var old=ids.splice(0,over);
+        for(var i=0;i<old.length;i++){
+          try{var m=await window.dbGet("chatMessages",old[i]);if(m&&m.ctxSnap){delete m.ctxSnap;await window.dbPut("chatMessages",m)}}catch(e){}
+        }
+      }
+      await window.dbPut("apiSettings",{id:"ibCtxLedger",ids:ids});
+    }catch(e){}
+    })();
+  }).catch(function(){});
+}
+  function readLast(n){
+  return (async function(){
+    try{
+      var doc=await window.dbGet("apiSettings","ibCtxLedger");
+      var ids=(doc&&Array.isArray(doc.ids))?doc.ids:[];/* patch24：ids 被污染成非数组时 push 会抛、登记/读取静默停摆 */
+      if(!ids.length)return [];
+      var take=ids.slice(-(n||N_TURNS)),out=[];
+      for(var i=0;i<take.length;i++){
+        try{var m=await window.dbGet("chatMessages",take[i]);if(m&&m.ctxSnap)out.push(m.ctxSnap)}catch(e){}
+      }
+      return out;
+    }catch(e){return []}
+  })();
+}
+/* ── 空态 A/B 判定（票06 Q4；registry 无可读快照时探测本机有没有 AI 消息）──
+   注：helper pack 跨 script 块读不到主脚本 let（_cfgs/_msgs 无 window 导出），故走 db 通道。 */
+  function emptyText(){
+    return (async function(){
+      try{
+        var cfgs=await window.dbGetAll("apiConfigs");
+        var list=(cfgs||[]).filter(function(c){return c&&c.id});
+        for(var i=0;i<list.length&&i<10;i++){
+          try{
+            var last=window._dbLastAnyByFriend?await window._dbLastAnyByFriend(list[i].id):null;
+            if(last&&last.role!=="user")return EMPTY_B;
+          }catch(e){}
+        }
+        return EMPTY_A;
+      }catch(e){return EMPTY_A}
+    })();
+  }
+/* ── 挂载通道自检（缺通道只提示、不中断采集；仿 A 探针）── */
+(function(){
+  var miss=[];
+  if(typeof window.dbGet!=="function")miss.push("dbGet");
+  if(typeof window.dbPut!=="function")miss.push("dbPut");
+  if(typeof window._blogTokenEstM!=="function")miss.push("_blogTokenEstM");
+  if(typeof window._tkFmtN!=="function")miss.push("_tkFmtN");/* patch21：轮头数字格式化走后端 _tkFmtN，缺了轮头变 NaN */
+  try{
+    if(miss.length)console.log("⚠️ 上下文账本：取数通道缺失（"+miss.join("、")+"）——对应功能降级，不影响采集");
+    else console.log("✅ 上下文账本 _ctxLedgerM 已就绪（dbGet／dbPut／_blogTokenEstM／_tkFmtN 通道齐全）");
+  }catch(e){}
+})();
+window._ctxLedgerM={begin:begin,emptyText:emptyText,EMPTY_A:EMPTY_A,EMPTY_B:EMPTY_B,noteSave:noteSave,readLast:readLast,reportM:reportM,rowHtml:rowHtml,tableHtml:tableHtml,agg:agg,GROUPS:GROUPS,GROUP_M:GROUP_M,HEADSHOW:HEADSHOW,ZERO_NOTABLE:ZERO_NOTABLE,N_TURNS:N_TURNS,U_CAP:U_CAP,WRAP_OVERHEAD:WRAP_OVERHEAD,MISS_NOTE:MISS_NOTE,ZERO_NOTE:ZERO_NOTE};
 })();
 </script>
 
