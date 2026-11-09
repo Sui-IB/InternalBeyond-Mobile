@@ -1,25 +1,15 @@
 {
-  "id": "./",
-  "name": "Internal Beyond",
-  "short_name": "IB",
-  "start_url": "./",
+  "name": "水色物语 · MIZU-IRO",
+  "short_name": "水色物语",
+  "description": "一台只属于你们两个的小手机",
+  "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#eef3fb",
-  "theme_color": "#dfe9f6",
+  "background_color": "#E8F7FB",
+  "theme_color": "#C9EDF7",
+  "lang": "zh-CN",
   "icons": [
-    {
-      "src": "./icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "./icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    }
+    { "src": "assets/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
   ]
 }
