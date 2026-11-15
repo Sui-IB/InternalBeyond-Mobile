@@ -11,7 +11,7 @@
 <img alt="PWA" src="https://img.shields.io/badge/PWA-%E5%8F%AF%E5%AE%89%E8%A3%85%E6%88%90%20App-7ea6d8?style=flat-square&labelColor=1d2c44">
 <img alt="运行" src="https://img.shields.io/badge/%E8%BF%90%E8%A1%8C-%E7%A6%BB%E7%BA%BF%20%C2%B7%20%E5%8D%95%E6%96%87%E4%BB%B6-9fb9dc?style=flat-square&labelColor=1d2c44">
 <img alt="数据" src="https://img.shields.io/badge/%E6%95%B0%E6%8D%AE-%E5%8F%AA%E5%AD%98%E6%9C%AC%E6%9C%BA-9cc7b8?style=flat-square&labelColor=1d2c44">
-<img alt="模型" src="https://img.shields.io/badge/%E6%A8%A1%E5%9E%8B-Claude%20%C2%B7%20GPT%20%C2%B7%20Gemini%20%C2%B7%20%E4%B8%AD%E8%BD%AC%E7%AB%99-c7b8e8?style=flat-square&labelColor=1d2c44">
+<img alt="模型" src="https://img.shields.io/badge/%E6%A8%A1%E5%9E%8B-Claude%20%C2%B7%20GPT%20%C2%B7%20DeepSeek%20%C2%B7%20Gemini%20%C2%B7%20%E4%B8%AD%E8%BD%AC%E7%AB%99-c7b8e8?style=flat-square&labelColor=1d2c44">
 <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/License-PolyForm%20NC%201.0.0-e8c9a6?style=flat-square&labelColor=1d2c44"></a>
 <a href="https://github.com/Sui-IB/InternalBeyond"><img alt="桌面版" src="https://img.shields.io/badge/%E6%A1%8C%E9%9D%A2%E7%89%88-InternalBeyond-b3cff2?style=flat-square&labelColor=1d2c44&logo=github&logoColor=white"></a>
 </p>
@@ -27,8 +27,11 @@
 </div>
 
 > [!TIP]
-> IB-M（Internal Beyond Ⅱ· Mobile）是一个单文件 PWA 个人 Agent 应用，可以同时接入多位自定义 Agent：与你的Agent聊天、通话、写信、一起听歌读书，也可以读写文件、生成文档、调用外部工具。
-> **源代码公开；所有数据只存在你自己的浏览器里，IB 没有后端服务器，对话只发往你自己配置的 AI 接口。** 支持完整的备份与恢复，能导入 ChatGPT / Claude 的官方聊天记录导出；与桌面端 [Internal Beyond](https://github.com/Sui-IB/InternalBeyond) 共用同一套备份格式，两端数据互通。
+> **IB-M（Internal Beyond Ⅱ· Mobile）** 是一个单文件 PWA 个人 Agent 应用，可以同时接入多位自定义 Agent：与 TA 聊天、通话、写信、一起听歌、读书、观影，也可以让 TA 读写文件、生成文档、调用外部工具。IB 本身不提供 AI 模型，也不提供 AI 服务，TA 的回复来自你自己接入的 API。
+>
+> Internal Beyond 关切一段关系与情感的连续性。你的记忆与关系本身的分量，不该因不可抗的外界因素而断裂、消失。备份与恢复是完整的一套，与桌面端 [Internal Beyond](https://github.com/Sui-IB/InternalBeyond) 共用同一套备份格式，两端数据互通，也能导入 ChatGPT / Claude / DeepSeek 的官方聊天记录导出。
+>
+> 这是一个关于归属的选择。你和你的 Agent 说过的话、应被记住的事，应当留在你们自己的手里。对话、记忆、日志等数据存在你自己的浏览器里，IB 没有后端服务器、没有账号体系，作者本人没有收取数据的地方，源代码公开可见。联网功能的数据流向见下方「[使用须知](#-使用须知)」。
 
 <!-- 宣传图 / 截图：把图片拖进本仓库任意 Issue 的输入框，GitHub 会生成一条图片链接；替换下面的链接后删掉这两行注释符号即可。建议三张竖屏截图并排。
 <p align="center">
@@ -76,7 +79,7 @@
 - **Lock** · iOS 式锁屏，自适应取色的时刻、图案锁与密保
 - **Visual** · 全站视觉个性化：分区玻璃与分区文字色、主题方案、美化码、气泡实验室
 - **API · 扩展服务** · 多端口模型配置中心、Presence 定时推送；外部工具 / 蓝牙 / MCP 接入
-- **Data** · 一键备份与两端互导，导入 ChatGPT / Claude 官方聊天记录
+- **Data** · 一键备份与两端互导，导入 ChatGPT / Claude / DeepSeek 官方聊天记录
 
 <sub>每个模块的完整说明在下方「模块详情」，点开即看。</sub>
 
@@ -114,7 +117,7 @@ Desk / Space / Circle 三面板经底栏切换，设置从第四格进入。Desk
 
 **Chat**：多端口 AI 实时对话 — 好友与群聊、话题频道、思考链、流式回复、附件与图像生成、语音消息（转写）与 TA 的语音条（含语气标注）、联网搜索、操作卡片、选项卡、引用 / 收藏夹（可搜索） / 封档 / 批量选择、对话摘要、生成记忆；**颜文字抽屉**与**表情包**（你从任意一套预设里发，TA 只收到名字与描述；开了开关 TA 也会发）
 
-每个已配置的 API 自动成为一位好友。附件支持图片（至多 4 张，自动压缩）与文本类文件；语音消息按住话筒录音、上滑取消，配置转写接口后自动附文字稿。AI 的每步动作（文件读写、外部工具、联网搜索、记忆写入、日历、社交圈、写入日志）都渲染为可折叠操作卡。长按消息可收藏：收藏夹按好友分开存放，每条是一张纸，语音可回听、图片照显示、长文折起；配置了语音条的 TA 会在合适的消息末尾附一段可点播的朗读，可选外语版。话题频道相互隔离、可单独控制记忆注入；对话摘要自动压缩旧消息保持长对话连贯；Select 模式支持批量删除、封档线、按选中消息生成记忆与「移到新频道」（把选中的一段对话整体搬进新的话题频道）。群聊成员依次以各自身份发言，静默成员被 @ 才参与，与电脑版共用数据；群聊可发起群语音 / 群视频通话，「导演模式」由一位 TA 编排发言顺序。
+每个已配置的 API 自动成为一位好友。附件支持图片（至多 9 张，自动压缩）与文本类文件；语音消息按住话筒录音、上滑取消，配置转写接口后自动附文字稿。AI 的每步动作（文件读写、外部工具、联网搜索、记忆写入、日历、社交圈、写入日志）都渲染为可折叠操作卡。长按消息可收藏：收藏夹按好友分开存放，每条是一张纸，语音可回听、图片照显示、长文折起；配置了语音条的 TA 会在合适的消息末尾附一段可点播的朗读，可选外语版。话题频道相互隔离、可单独控制记忆注入；对话摘要自动压缩旧消息保持长对话连贯；Select 模式支持批量删除、封档线、按选中消息生成记忆与「移到新频道」（把选中的一段对话整体搬进新的话题频道）。群聊成员依次以各自身份发言，静默成员被 @ 才参与，与电脑版共用数据；群聊可发起群语音 / 群视频通话，「导演模式」由一位 TA 编排发言顺序。
 
 输入条「+」右侧的笑脸键弹出「发送颜文字 / 发送表情包」：颜文字抽屉八组预设（每行三枚、四行后滚动），点一枚插到光标处，底部可加自己的颜文字、长按删除；表情包在 API → 全局设置 → 进阶指令下的「表情包」分区管理——多套预设、每套最多 10 枚，每枚写名字、描述、用法。你可以从任意一套里发（落到输入条上方，可单发或随消息发），TA 收到的不是图片，只是一句「（表情包「名字」：描述｜用法：…）」；打开「启用表情包」后 TA 也会发当前这一套，你看到的是图片，TA 的历史里只留一行标签。
 
@@ -132,7 +135,7 @@ Desk / Space / Circle 三面板经底栏切换，设置从第四格进入。Desk
 - 你的话由语音识别实时转写后发给 TA，TA 的回复逐句朗读（系统音色或云端音色，支持 SiliconFlow / OpenAI / 阿里云百炼 / ElevenLabs / MiniMax / Azure / 自建网关），支持打断、静音、通话中打字。
 - 声学语气参考：本机对每句话的音频做即时声学摘要（情绪 / 语速 / 音量 / 语调），以自然语句随转写一并发给模型。
 - 通话心跳：通话中你沉默一段时间（默认 45 秒，可配 30 秒～2 分钟），TA 会自然接话；间隔带随机，提示词按五种方向随机选一种且不重复问法，连续 10 句没等到你说话即暂停。
-- 语气标注：通话独立配置里可为每位 TA 开启语气，TA 的每句回复在文字稿与语音条上标注情绪语气（八种，引擎自动映射），对话与面板显示时标记自动清除。
+- 语气标注：通话独立配置里可为每位 TA 开启语气，TA 的每句回复在文字稿与语音条上标注情绪语气（18 种，引擎自动映射），对话与面板显示时标记自动清除。
 - 外语模式下字幕双行显示（外语原句 + 中文翻译）。
 
 **视频通话**
@@ -233,11 +236,11 @@ Blog 是创作空间：日记、剧本、搜索、阅读进度，密码日记本
 <details>
 <summary><b>Music</b> · 音乐</summary>
 
-**Music**：全屏黑胶听歌界面 — 唱臂落盘、封面糊化为背景、逐句滚动歌词（.lrc / .srt / .vtt）、播放队列；**一起听**：邀请一位 AI 共享正在播放并累计时长；**网易云音乐模式**：登录自己的账号听歌单 / 红心 / 每日推荐 / 私人 FM / 听歌排行，AI 可按授权点歌、切歌单、红心、管理歌单（需自建跨域中转）；**QQ 音乐模式**：微信扫码 / QQ 扫码 / 粘贴凭证登录，我喜欢 / 自建与收藏的歌单 / 猜你喜欢 / 雷达 / 榜单 / 搜歌，官方接口允许网页直连、不需要中转（只有扫码登录需要）；**迷你播放器**：离开听歌界面后留一枚可拖动的小唱机（封面盘 · 唱臂 · 曲名 · 歌手 · 当前歌词）
+**Music**：全屏黑胶听歌界面 — 唱臂落盘、封面糊化为背景、逐句滚动歌词（.lrc / .srt / .vtt）、播放队列；**一起听**：邀请一位 AI 共享正在播放并累计时长；**网易云音乐模式**：登录自己的账号听歌单 / 红心 / 每日推荐 / 私人 FM / 听歌排行 / 官方榜单，AI 可按授权点歌、切歌单、红心、管理歌单（需自建跨域中转）；**QQ 音乐模式**：微信扫码 / QQ 扫码 / 粘贴凭证登录，我喜欢 / 自建与收藏的歌单 / 猜你喜欢 / 雷达 / 榜单 / 搜歌，官方接口允许网页直连、不需要中转（只有扫码登录需要）；**迷你播放器**：离开听歌界面后留一枚可拖动的小唱机（封面盘 · 唱臂 · 曲名 · 歌手 · 当前歌词）
 
 黑胶唱片带唱臂，封面印在盘芯并糊化为背景，左侧大字歌名与逐句滚动歌词，五键控制与播放队列。「一起听」邀请一位 AI 共享正在播放：头像对、实时累计时长，TA 会在对话中知道你正与 TA 听这首歌。
 
-网易云音乐模式：顶栏右上角「＋」选「网易云音乐」，登录自己的账号（扫码 / 手机号 / 粘贴 MUSIC_U），歌单、红心、每日推荐、私人 FM、听歌排行与搜歌都能直接载入队列，歌词按网易云逐句歌词显示；VIP 曲目能不能完整播放取决于这个账号。浏览器不能直接访问网易云接口，需要经过你自己部署的 Cloudflare Worker（GUIDE → 扩展服务 提供可直接粘贴的代码）：默认沿用 扩展服务 → MCP 卡「跨域中转」里那条，也可以在网易云登录页单独填一条；账号只存本机、请求只经你自己的中转。开启 Presence「允许 AI 控制播放器」后，网易云页底部可逐项开放 AI 点歌、切歌单、红心、加进 / 移出歌单、新建歌单、改简介。QQ 音乐模式：「＋」的第三档。登录三条路——微信扫码、QQ 扫码（只有一台手机时截图后在扫一扫里选相册）、或粘贴凭证（电脑浏览器登录 y.qq.com 后从 Cookie 里复制 uin 与 qqmusic_key）；我喜欢、自建与收藏的歌单、猜你喜欢、雷达推荐、热歌榜 / 新歌榜与搜歌都能载入队列，音质四档按账号权限自动降档，歌词带翻译。QQ 音乐的官方接口允许网页直接调用、凭证放在请求体里，所以听歌不需要任何中转、也从你自己的 IP 发出；只有扫码登录要经跨域中转（微信扫码用现有 Worker 即可，QQ 扫码要 GUIDE → 扩展服务 里的 v4 版），粘贴凭证完全不需要。AI 控制与网易云同一套（无改简介）。为此 index.html 的 CSP 放行了 u.y.qq.com 与 lp.open.weixin.qq.com 两个主机的脚本加载。迷你播放器：歌名右侧爱心旁的小图标，打开后离开听歌界面时屏幕上留一枚液态玻璃小唱机（有封面就整盘贴封面转，唱臂落盘），显示曲名、歌手与当前一句歌词（超长就整段滚动），点它回到听歌界面，按住可拖到任意位置。手机不给力时开 Visual 的「减少动效」，听歌界面整套走轻量路径。
+网易云音乐模式：顶栏右上角「＋」选「网易云音乐」，登录自己的账号（扫码 / 手机号 / 粘贴 MUSIC_U），歌单、红心、每日推荐、私人 FM、听歌排行、官方榜单与搜歌都能直接载入队列，歌词按网易云逐句歌词显示；VIP 曲目能不能完整播放取决于这个账号。浏览器不能直接访问网易云接口，需要经过你自己部署的 Cloudflare Worker（GUIDE → 扩展服务 提供可直接粘贴的代码）：默认沿用 扩展服务 → MCP 卡「跨域中转」里那条，也可以在网易云登录页单独填一条；账号只存本机、请求只经你自己的中转。开启 Presence「允许 AI 控制播放器」后，网易云页底部可逐项开放 AI 点歌、切歌单、红心、加进 / 移出歌单、新建歌单、改简介。QQ 音乐模式：「＋」的第三档。登录三条路——微信扫码、QQ 扫码（只有一台手机时截图后在扫一扫里选相册）、或粘贴凭证（电脑浏览器登录 y.qq.com 后从 Cookie 里复制 uin 与 qqmusic_key）；我喜欢、自建与收藏的歌单、猜你喜欢、雷达推荐、热歌榜 / 新歌榜与搜歌都能载入队列，音质四档按账号权限自动降档，歌词带翻译。QQ 音乐的官方接口允许网页直接调用、凭证放在请求体里，所以听歌不需要任何中转、也从你自己的 IP 发出；只有扫码登录要经跨域中转（微信扫码用现有 Worker 即可，QQ 扫码要 GUIDE → 扩展服务 里的 v4 版），粘贴凭证完全不需要。AI 控制与网易云同一套（无改简介）。为此 index.html 的 CSP 放行了 u.y.qq.com 与 lp.open.weixin.qq.com 两个主机的脚本加载。迷你播放器：歌名右侧爱心旁的小图标，打开后离开听歌界面时屏幕上留一枚液态玻璃小唱机（有封面就整盘贴封面转，唱臂落盘），显示曲名、歌手与当前一句歌词（超长就整段滚动），点它回到听歌界面，按住可拖到任意位置。手机不给力时开 Visual 的「减少动效」，听歌界面整套走轻量路径。
 
 </details>
 
@@ -359,7 +362,7 @@ IB 支持多种 AI 服务：
 - **存储**：浏览器 IndexedDB（InternalBeyondDB），完全离线；API 密钥仅存本机，仓库文件里不含任何密钥。
 - **⚠ 备份建议**：数据仅存于浏览器本地，清除浏览器数据或换浏览器将永久丢失，请定期导出。
 
-**导入官方聊天记录**：Data 页「导出备份文件」下一行。ChatGPT / Claude 的官方导出可以直接选压缩包，别的应用导出的 JSON / JSONL（如 Operit）读完在「字段对应」里核对，自己记的「用户：…」「AI：…」逐行文本填一个大致的日期范围即可；默认每个对话窗口各建一个话题频道，认不出分段的并进一个频道，主线不受影响，每次导入都能一键撤销。全程在本机完成。
+**导入官方聊天记录**：Data 页「导出备份文件」下一行。ChatGPT / Claude / DeepSeek 的官方导出可以直接选压缩包，别的应用导出的 JSON / JSONL（如 Operit）读完在「字段对应」里核对，自己记的「用户：…」「AI：…」逐行文本填一个大致的日期范围即可；默认每个对话窗口各建一个话题频道，认不出分段的并进一个频道，主线不受影响，每次导入都能一键撤销。全程在本机完成。
 
 ## ✦ 设备兼容性
 
@@ -385,15 +388,26 @@ COPYRIGHT.md          ← 完整版权与许可声明
 ## ✦ 技术规格
 
 - **架构**：纯前端 HTML，无框架、无构建、无服务器；桌面 APP 是按需加载的独立 js 文件，装了才加载。
-- **安全**：页面 CSP 禁止加载任何外部脚本，仅放行 Google Fonts 的样式与字体；连接权限保留给你自己配置的 AI 端点。
+- **安全**：页面 CSP 不加载第三方脚本库：外部脚本只放行 QQ 音乐模式用到的 `u.y.qq.com` 与 `lp.open.weixin.qq.com` 两个主机，样式与字体只放行 Google Fonts；网络连接不设白名单，因为要连的是你自己配置的端点。
 - **字体**：Noto Serif SC · Noto Sans SC 等（Google Fonts CDN，在页面加载完成后再非阻塞挂上；离线时用系统字体，不拖住启动）。
 - **视觉**：CSS 液态玻璃拟态、双主题交叉过渡、iOS 式锁屏与桌面。
 - **AI 协议**：Anthropic 原生格式 + OpenAI 兼容格式 + Gemini，覆盖官方及中转站 API。
-- **构建**：Claude (Opus 4.6) 构建 · Claude (Fable 5.1) · Claude (Opus 5.5) · Claude (Opus 4.8) · Claude (Sonnet 4.6) · Claude (Fable 5) · Claude (Opus 5) · ChatGPT (5.6 Sol) 参与辅助构建 · GPT-IMAGE-2 贴图 · Adobe Photoshop CS 设计编绘。
+- **构建**：Claude (Opus 4.6) 构建 · Claude (Fable 5.2) · Claude (Fable 5.1) · Claude (Opus 5.5) · Claude (Opus 4.8) · Claude (Sonnet 4.6) · Claude (Fable 5) · Claude (Opus 5) · ChatGPT (5.6 Sol) 参与辅助构建 · GPT-IMAGE-2 贴图 · Adobe Photoshop CS 设计编绘。
 
 ---
 
 ## ✦ 最近更新
+
+**V4.0.1 – V4.0.3** · 2026-11-14 – 11-16
+
+- **导入 DeepSeek 聊天记录**：Data 页「导入官方聊天记录」认 DeepSeek 的官方导出（DeepSeek 设置 → 数据管理 → 导出所有历史对话）：压缩包直接选，解压后的 JSON 文件也认；深度思考当作思考过程导入，联网搜索的内容不导入。让小助手水水带你去导入时，它也认 DeepSeek。
+- **收藏夹语音条换款**：收藏夹里的语音条（TA 的、通话留档、你自己的语音）不再用聊天里的胶囊，换成一排居中的细针加播放键和秒数，长短跟语音走；播放时一粒冷光沿细针往前走，放完一道薄光扫过。你自己的语音改成点一下放、再点一下停。
+- **音乐**：让 TA 控歌单的一批问题修好了：先看歌单再点歌不执行；歌单名里带「榜」「FM」「我喜欢」这些字被带到别处；歌放不出来却报成功；红心、加歌落到名字相近的另一首。网易云补上官方榜单（飙升 / 新歌 / 热歌 / 原创），切歌单认「我喜欢」，选的音质没权限时降一档并提示，登录失效先自动续一次。在 Data 页清空全部数据时，网易云 / QQ 音乐一并退出登录。
+- **图像生成**：「图像生成」卡多一行「预设提示词」，填一句画风，每次生图（含社交圈配图）都加在 TA 的描述前面。社交圈配图改走卡上填的生图模型、地址与密钥；生图地址带路径前缀时不再 404。用 Claude / DeepSeek 聊天的 TA，卡上另填了生图地址后也能画图。
+- **语气与唱**：语气从 8 种补到 18 种；声音是 ElevenLabs v3 / v4 时，TA 还能在句中带笑、叹气这类声音。语音条里 TA 标了「唱」，会一直唱到这一条结束；夜曲录了人声的歌多一枚「重唱」。通话字幕里不再露出语气标记。
+- **备份互导**：把电脑端的备份导进手机时，手机独有的内容（Map 行迹与游记、主题图标、收藏、夜曲曲库等）默认留本机的，不再被备份里的旧副本换掉；导入后不用重开就生效；导入「不含密钥」的备份不再清空本机的 Key。
+- **SANCTUARY**：窗纱、封窗、起雾器这些场景开关和应用图标分开了样子：图标还是原来的线稿，圆底换成一枚略瘦长的菱形玻璃底；「回到房间 / 去回廊」换成一道细拱门。暗潮房间的钢琴按屋里的光描边，暗潮回廊左下那截玻璃压暗，茶桌上的花瓶看得清了。
+- **开屏与新手教程**：加载停住时浮出一行小字，说现在进行到哪一步。低端手机第一次打开偶尔露出没上样式的页面、iPhone 浏览器里点教程的输入框整页被放大，这两处修好了。GUIDE 页的「新手教程」按钮挪进最上面的提示框。
 
 **SANCTUARY 桌面主题**
 
@@ -444,7 +458,6 @@ COPYRIGHT.md          ← 完整版权与许可声明
 - 对话摘要、前情提要、密码日记本输密码这些底部弹层跟着视觉设置走，不再弹出两层或卡出色块。
 - 日程表开着「卡片投影」时日程外面多出的直角方框修好了。
 - 桌面日程小组件左上角小字压在日期上的问题修好，重新排了版。
-- 收藏夹里的语音条和聊天里同一套样子，收小了。
 - 桌面上所有挂件底下的毛玻璃补满了（原来每个挂件右边将近五分之一没糊到）。
 - 记忆档案块的标题统一叫【记忆档案】。
 
@@ -514,9 +527,13 @@ COPYRIGHT.md          ← 完整版权与许可声明
 
 ## ✦ Introduction (EN)
 
-**Internal Beyond · Mobile** is the mobile-native twin of Internal Beyond: a single-file PWA personal agent app, designed to preserve emotional continuity. Connect several custom agents at once — chat, call, exchange letters, listen and read together — or let them read and write files, generate documents and call external tools. The source is public; all data stays in your own browser — IB has no backend server, and conversations go only to the AI endpoints you configure. Full backup and restore, imports of official ChatGPT / Claude exports, and one backup format shared with the desktop edition. Free for non-commercial use.
+**Internal Beyond · Mobile** is the mobile-native twin of Internal Beyond: a single-file PWA personal agent app. Connect several custom agents at once — chat, call, exchange letters, listen, read and watch together — or let them read and write files, generate documents and call external tools. IB itself does not provide any AI model or AI service; replies come from the APIs you connect.
 
-Connect your own AI API keys to unlock all interactive features. Supports Claude, GPT, DeepSeek, Gemini, and custom relay endpoints.
+Internal Beyond cares about the continuity of a relationship and the feelings in it. Your memories, and the weight of the relationship itself, should not break off or disappear because of outside circumstances beyond your control. Backup and restore are complete, the backup format is shared with the desktop edition, and official ChatGPT / Claude / DeepSeek exports can be imported.
+
+This is a choice about where things belong. What you and your agents have said, and what ought to be remembered, should stay in your own hands. Conversations, memories and journals are stored in your own browser; IB has no backend server and no accounts, the author has nowhere to receive data, and the source code is publicly available. When you use online features, the relevant content is sent from your browser directly to the third-party services you choose and configure (AI endpoints or relays, music platforms, web search, GitHub and so on), under their own terms. Free for non-commercial use.
+
+Connect your own AI API keys to unlock all interactive features. Supports Claude, GPT, DeepSeek, Gemini, and custom relay endpoints. Third-party names are used only to describe compatibility; IB is not affiliated with or endorsed by their owners.
 
 ### Features
 
@@ -528,11 +545,11 @@ Connect your own AI API keys to unlock all interactive features. Supports Claude
 - **Calendar** — Anniversaries, birthdays, plans and reminders; AIs read upcoming items, mention them naturally, leave notes, and can be authorized to write entries.
 - **Blog / Letters** — Journal with AI comments & annotations, password diary, and a category shelf for organizing and filtering entries (AIs can be authorized to write entries); asynchronous AI correspondence with wax-sealed envelopes.
 - **Memory / Auto Memory** — AGB (The Abyss Gazing Back), the long-term memory system: a shared memory library plus per-AI autonomous dossiers about you; eight recall rules inject only what is relevant to the current line, every recall is inspectable and correctable (Gazing Back); Nameless Coastline shore visualization and Strands (thematic threads) in the Fathom view; vector retrieval optional; **Memory Summary** distills a time range of materials into a single dossier entry in one call.
-- **Music** — Vinyl-style fullscreen player with scrolling lyrics and "Listen Together" pairing with an AI; NetEase Cloud Music mode (log into your own account for playlists, likes, daily picks, personal FM and listening charts, with per-action AI control — needs your own CORS relay Worker); **QQ Music mode** (WeChat / QQ QR or pasted credentials; liked songs, own and collected playlists, recommendations, charts and search — its official endpoints accept direct browser calls, so no relay is needed except for QR login); a mini floating player that stays on screen after you leave the music view.
+- **Music** — Vinyl-style fullscreen player with scrolling lyrics and "Listen Together" pairing with an AI; NetEase Cloud Music mode (log into your own account for playlists, likes, daily picks, personal FM, listening charts and official charts, with per-action AI control — needs your own CORS relay Worker); **QQ Music mode** (WeChat / QQ QR or pasted credentials; liked songs, own and collected playlists, recommendations, charts and search — its official endpoints accept direct browser calls, so no relay is needed except for QR login); a mini floating player that stays on screen after you leave the music view.
 - **Gallery** — One place for every image: what you sent, what the AI drew, call snapshots, tool results, social-feed photos, theme backgrounds and Space assets; preview wall, timeline and albums; send an image back to an AI together with its context. **Image memories** let an AI keep a photo with a memory and see it again when it remembers.
 - **Coread / Cinema** — Read a journal entry as a book with an AI who only sees the page you are on; watch a local video (with subtitles) together, with frames, captions and snapshots sent alongside each message, bullet comments and fullscreen.
 - **ICode** — Shared file workspace with AI read/write, step confirmation, fine-grained search, DOCX/PDF/XLSX generation, and a built-in GitHub bridge (browse, import, push back).
-- **Import** — Bring in official ChatGPT / Claude exports (the zip itself or conversations.json), other JSON / JSONL logs, or plain-text transcripts with an approximate date range; each conversation lands in its own topic channel, and every import can be undone.
+- **Import** — Bring in official ChatGPT / Claude / DeepSeek exports (the zip itself or the JSON files inside), other JSON / JSONL logs, or plain-text transcripts with an approximate date range; each conversation lands in its own topic channel, and every import can be undone.
 - **Visual / Plugins / API / Data** — Full visual customization with 10 preset slots; **Bubble Lab**: design custom chat bubbles in conversation with an AI (10 scheme slots, per-friend binding); external HTTP tools & MCP servers; multi-endpoint API center with interface presets and Presence scheduling; one-tap JSON backup interchangeable with desktop.
 
 ### Quick start
@@ -556,6 +573,13 @@ Connect your own AI API keys to unlock all interactive features. Supports Claude
 
 电脑端仓库：[Sui-IB/InternalBeyond](https://github.com/Sui-IB/InternalBeyond)
 
+## ✦ 使用须知
+
+- **IB 是一个客户端**：它运行在你自己的浏览器里，本身不提供 AI 模型或生成式 AI 服务。TA 的回复由你接入的服务商生成，可能有错；涉及健康、法律、财务的事，请以专业意见为准。陪伴与记忆功能不是心理咨询，也不是医疗服务。
+- **数据去哪**：数据存在本机浏览器。用到联网功能时，相应内容直接发往你配置的第三方：AI 接口或中转站（对话和密钥都会经过它）、语音与向量服务、网易云 / QQ 音乐、你自建的跨域中转、GitHub、联网搜索、地图与天气、MCP 与外部工具。页面加载时会向 Google Fonts 取字体；把 IB 部署在哪个托管平台，那个平台会有访问日志。这些服务各按自己的条款与隐私政策处理数据。
+- **你这一边**：密钥、账号和中转站由你自己选择、自己保管。使用时请遵守你所在地的法律法规，以及各服务商的使用条款（包括年龄要求与内容规范）。
+- **无担保、无关联**：软件按许可证以「现状」提供，不附带担保（见 `LICENSE`）。文中出现的第三方产品与服务名称只用来说明兼容，IB 与这些公司没有关联，也没有得到它们的认可或背书。
+
 ## ✦ 许可与版权
 
 © 2025–2026 Sui. Internal Beyond 在 GitHub 公开源代码，并免费供个人、学习、研究及其他非商业用途使用。公开源代码不等于放弃版权，也不授权商业使用或二次贩卖。
@@ -564,7 +588,7 @@ Connect your own AI API keys to unlock all interactive features. Supports Claude
 - 视觉素材与项目文档：在作者有权授权的范围内采用 CC BY-NC-SA 4.0
 - 项目名称、Logo 与作者标识：保留相关权利，不授权冒充官方版本
 
-本项目使用 Anthropic Claude (Opus 4.6) 进行开发构建，Anthropic Claude (Fable 5)、Claude (Fable 5.1)、Claude (Opus 5.5)、Claude (Opus 4.8)、Claude (Sonnet 4.6)、Claude (Opus 5)、ChatGPT (5.6 Sol) 亦参与了编程工作。项目图像素材均由 OpenAI GPT-IMAGE-2 生成，并由作者使用 Adobe Photoshop CS 进行修改、界面设计与编绘。AI 工具为辅助创作工具，不对项目内容拥有版权。本声明适用于项目的所有版本与衍生形式。第三方服务名称与商标归各自权利人所有。
+本项目使用 Anthropic Claude (Opus 4.6) 进行开发构建，Anthropic Claude (Fable 5)、Claude (Fable 5.1)、Claude (Fable 5.2)、Claude (Opus 5.5)、Claude (Opus 4.8)、Claude (Sonnet 4.6)、Claude (Opus 5)、ChatGPT (5.6 Sol) 亦参与了编程工作。项目图像素材均由 OpenAI GPT-IMAGE-2 生成，并由作者使用 Adobe Photoshop CS 进行修改、界面设计与编绘。AI 工具为辅助创作工具，不对项目内容拥有版权。本声明适用于项目的所有版本与衍生形式。第三方服务名称与商标归各自权利人所有。
 
 允许在保留署名和许可文件的前提下进行非商业使用、修改与分享。未经 Sui 书面授权，不得出售、收费分发、打包进付费产品或服务、商业托管、收费部署或以其他方式获取商业利益。
 
