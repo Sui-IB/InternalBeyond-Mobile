@@ -12680,7 +12680,7 @@ function _chatMaxTokensRawM(cfg,pa){
   if(_dfl&&!(pa&&pa._chat))return Math.max(256,parseInt(pa.maxTokens)||256);
   return _PROVIDER_MAX_OUT_M[cfg&&cfg.provider]||16384;
 }
-function _apdOnM(cfg){try{if(!cfg||cfg.promptCache===false)return false;var f=null;try{f=localStorage.getItem('ib_sentHist')}catch(e){}if(f==='0')return false;if(_cfgFmtM(cfg)!=='openai')return false;if(f==='1')return true;var ep=String(cfg.endpoint||'');if(_dsThinkOffM(cfg,ep,cfg.model))return true;if(cfg.provider==='openai')return true;return /(^|\/\/|\.)api\.openai\.com(\/|:|$)/i.test(ep)}catch(e){return false}}
+function _apdOnM(cfg){try{if(!cfg||cfg.promptCache===false)return false;var f=null;try{f=localStorage.getItem('ib_sentHist')}catch(e){}if(f==='0')return false;if(_cfgFmtM(cfg)!=='openai')return false;if(f==='1')return true;var ep=String(cfg.endpoint||'');if(_dsThinkOffM(cfg,ep,cfg.model))return true;if(cfg.provider==='openai')return true;if(/(^|\/\/|\.)api\.x\.ai(\/|:|$)/i.test(ep))return true;return /(^|\/\/|\.)api\.openai\.com(\/|:|$)/i.test(ep)}catch(e){return false}}
 /* v384-p：主题方案的导出段：{slots:[10 个槽], icons:{槽号:图标快照}} */
 async function _ibThemesPackM(){try{await loadMP();var sl=(Array.isArray(_mp.themes)?_mp.themes:[]).slice(0,10);if(!sl.filter(Boolean).length)return null;var ic={};for(var i=0;i<sl.length;i++){if(sl[i]&&sl[i].icons){try{var r=await dbGet('apiSettings','uvicons:'+i);if(r)ic[i]={light:r.light||{},dark:r.dark||{},split:!!r.split}}catch(e){}}}return {v:1,slots:sl,icons:ic}}catch(e){return null}}
 async function _ibThemesUnpackM(tm){var n=0;try{await loadMP();var cur=Array.isArray(_mp.themes)?_mp.themes.slice():[];while(cur.length<10)cur.push(null);var inc=(tm&&Array.isArray(tm.slots))?tm.slots:[];for(var i=0;i<inc.length&&i<10;i++){var t=inc[i];if(!t)continue;var j=-1;if(t.name){for(var k=0;k<10;k++){if(cur[k]&&cur[k].name&&cur[k].name===t.name){j=k;break}}}if(j<0){if(!cur[i])j=i;else{for(var k2=0;k2<10;k2++){if(!cur[k2]){j=k2;break}}}}if(j<0)continue;cur[j]=JSON.parse(JSON.stringify(t));var ic=tm.icons&&tm.icons[i];if(ic){try{await dbPut('apiSettings',{id:'uvicons:'+j,v:1,light:ic.light||{},dark:ic.dark||{},split:!!ic.split});cur[j].icons=1}catch(e){}}else cur[j].icons=0;n++}_mp.themes=cur;await saveMP();try{if(typeof _uvThemesDraw==='function')_uvThemesDraw()}catch(e){}}catch(e){}return n}
@@ -12847,10 +12847,12 @@ async function callAI(cfg,hist,sys,onDelta,signal,pa){
     try{var _ef=_effPickM(cfg,pa,fmt,ep,model);if(_ef){b.generationConfig.thinkingConfig={thinkingLevel:_ef};_effSent=_ef}}catch(e){}
     if(sys)b.systemInstruction={parts:[{text:sys}]};
     if(useWS)b.tools=(b.tools||[]).concat([{google_search:{}}]);
+    if(cfg.promptCache!==false){try{_ibOaiCacheDiagM(cfg,[{role:'system',content:String(sys||'')}].concat(b.contents.map(function(x){return{role:x.role,content:x.parts}})))}catch(e){}}
     body=JSON.stringify(b);
   }else{
     url=_zpM(cfg,ep)?_oaiUrlM(ep):ep;/* v372-p：地址补全只给智谱，别家照旧原样发（用户定：GLM 的改动不辐射到别家） */
     headers['Authorization']='Bearer '+cfg.apiKey;
+    if(cfg.promptCache!==false&&/(^|\/\/|\.)api\.x\.ai(\/|:|$)/i.test(ep))headers['x-grok-conv-id']='ib_'+String(cfg.id||'');
     const msgs=(sys?[{role:'system',content:sys}]:[]).concat(_histFor('openai',hist));
     try{if(pa&&pa._chat&&_apdOnM(cfg)){var _lm9=msgs[msgs.length-1],_lh9=hist[hist.length-1];if(_lm9&&_lm9.role==='user'&&_lh9&&_lh9.id){var _st9=(typeof _lm9.content==='string')?_lm9.content:((Array.isArray(_lm9.content)&&!_lh9._eph)?((_lm9.content.filter(function(p){return p&&p.type==='text'}).pop()||{}).text):null);if(typeof _st9==='string'){window._ibSentPendM=window._ibSentPendM||{};window._ibSentPendM[String(cfg.id)]={id:_lh9.id,content:_st9,at:Date.now()}}}}}catch(e){}
     const b={model:model,messages:msgs,stream:stream};
@@ -17010,7 +17012,7 @@ function _orientApply(){try{
   setTimeout(function(){try{if(window.IBNative&&window.IBNative.available){var _bg=$('pres-bg');var _row=_bg&&_bg.closest('.tog');if(_row)_row.style.display=''}}catch(e){}},1200);/* v116-p：壳内显露「后台 Presence（系统级）」开关（桥在文末激活，故延时探测；浏览器 / PWA 保持隐藏） */
 })();
 function _vidQNormM(v){v=String(v==null?'m':v);if(v==='384')return 'l';if(v==='768')return 'h';if(v==='512')return 'm';return (v==='l'||v==='h')?v:'m'}/* 画质档位兼容电脑端备份里的 384/512/768 写法 */
-var IB_VER='v510-p',IB_VER_DATE='2026-11-17';
+var IB_VER='v511-p',IB_VER_DATE='2026-11-18';
 (function _appVerDraw(){var e=document.getElementById('app-ver');if(e)e.textContent='InternalBeyond Mobile '+IB_VER+'（'+IB_VER_DATE+'）'})();
 function _ibVeilHeal(){try{setTimeout(function(){try{var v=document.getElementById('lk-preveil');if(!v||v.classList.contains('off'))return;var lk=document.getElementById('lockscr');if(lk){_lkVeilOff();return}if(localStorage.getItem('ib_lockOn')==='1')return;_lkVeilOff()}catch(e){}},1600)}catch(e){}}/* v246-p：启动完成后仍盖幕的静默自愈 */
 function _lkVeilOff(){try{window._ibVeilOff=true;var v=document.getElementById('lk-preveil');if(v){v.classList.add('off');setTimeout(function(){try{v.remove()}catch(e){}},420)}}catch(e){}}/* fix-r4：预遮罩揭幕（任务 8） */
@@ -18799,7 +18801,7 @@ function _ibCacheHintM(cfg,inTok,crTok){
     else if(/bigmodel\.cn/i.test(ep))tip='智谱隐式缓存为自动开启，命中写在 usage.prompt_tokens_details.cached_tokens；官方支持列表以 GLM-5 系列为主，旧的 flash 免费档命中可能极低。当前模型：'+mdl;
     else if(/dashscope|aliyuncs/i.test(ep))tip='百炼隐式缓存自动开启（约 256 tok 起，Qwen3.7 系列约 2000 tok 起），命中概率由服务端判定、官方注明不保证 100%。';
     else if(/googleapis/i.test(ep))tip='Gemini 隐式缓存自 2.5 系列起才有；2.0-flash 等旧型号没有隐式缓存。命中字段为 usageMetadata.cachedContentTokenCount。当前模型：'+mdl;
-    else if(/x\.ai/i.test(ep))tip='xAI 提示缓存为服务端自动、无开关；短对话或未达门槛时命中为 0 属正常。';
+    else if(/x\.ai/i.test(ep))tip='xAI 的缓存按服务器分别存放：官方地址 api.x.ai 已带 x-grok-conv-id（每位 TA 一个）把请求送到同一台；连着几轮仍为 0，先确认走的是官方地址（中转未必转发这个请求头）、两轮之间没改过早先的消息；服务器负载高或重启时缓存也会被清掉。';
     if(tip)console.info('[IB手机缓存诊断] 命中为 0 的可能原因（'+(cfg.provider||'该服务商')+'）：'+tip);
   }catch(e){}
 }
