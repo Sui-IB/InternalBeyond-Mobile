@@ -4277,7 +4277,7 @@ window._ibSplashRun();
           <p><strong>消息操作</strong>：长按气泡可引用、复制、收藏、修改、删除；最后一条 AI 回复可重新生成。「修改消息」只改这条的正文，时间、卡片与附件不动；改过的消息进历史，下一条消息重建一次提示缓存。TA 的回复面板里有「输入构成」一行，点开看这一轮发给 TA 的内容由哪几部分组成、各占多少。</p>
           <p><strong>收藏夹</strong>：长按消息选「收藏」，入口在 Chat 底栏的星星或 Desk 图标。按好友与原消息的月份归档，可搜索；每条是一张纸，语音可回听，长文点折角展开，× 移除。</p>
           <p><strong>引用消息</strong>：长按气泡选择「引用」，引用随下一条消息发出；点 ✕ 取消。</p>
-          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响，改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
+          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响；群聊整群一条封档线，右上角菜单里也能解除；改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
           <p><strong>生成记忆</strong>：右上角菜单 Save Memory，AI 根据近期对话内容总结生成一条记忆，存入记忆库。</p>
           <p><strong>话题频道</strong>：同一位好友下可开多个互相隔离的对话，每个频道可单独选择是否注入记忆；长按频道标签可编辑或删除，编辑里的「带回主窗口」把这个频道整理成一章前情提要带回主线。共读间与观影室的聊天也各落在自己的频道里。</p>
           <p><strong>分段对话（气泡分段）</strong>：API 页 → 全局 的聊天卡里开启。把 AI 的长回复按空行拆成多个气泡连续发出，读起来像连发消息；含代码块、表格或指令的回复不拆。这只是显示方式，与话题频道无关。</p>
@@ -4387,7 +4387,7 @@ window._ibSplashRun();
           <p><strong>记忆卡片</strong>：点开看全文，可编辑、置顶、删除；点「+ 新记忆」手写一条。</p>
           <p><strong>可见性</strong>：每条记忆可设为公开、仅指定、排除指定或完全私密（任何 TA 都读不到）。置顶的排在最前。</p>
           <p><strong>记忆库写入</strong>：在 API 页 → 该 AI 独立配置 → Memory 卡开启后，TA 会把值得记住的时刻写进记忆库，默认只有它自己看得到，你可以在本页改或删。它写的条目带「待审核」小签。说的事不成立了，就在详情里「标为过时」，平时不再被想起，你说「以前」时才会。</p>
-          <p><strong>图片记忆</strong>：API 页 → 该 AI 独立配置 → Memory 卡，「记忆库写入」下面打开（记忆库写入关着时它也关）。TA 看得见图的那一轮写记忆时，可以把其中一张图一起写进回忆录并给它起名——这个名字就是它在相册里的名字，你改过名的不动。一张图可以连着几位 TA 的记忆，每位只连一条。之后想起这条记忆时，TA 会看到这张图的名字、日期和来处，照片也会挂在 TA 那条回复下面（只给你看）；「想起带图的记忆时」选「带图」，会像你发的图一样把它放进对话。你从相册把这张图发给某位 TA 时，它连着这张图的那条记忆会一起带过去。只对能识图的模型、单聊有效；电脑端把它当普通记忆。</p>
+          <p><strong>图片记忆</strong>：API 页 → 该 AI 独立配置 → Memory 卡，「记忆库写入」下面打开（记忆库写入关着时它也关）。TA 看得见图的那一轮写记忆时，可以把其中一张图一起写进回忆录并给它起名——这个名字就是它在相册里的名字，你改过名的不动。一张图可以连着几位 TA 的记忆，每位只连一条。之后想起这条记忆时，TA 会看到这张图的名字、日期和来处，照片也会挂在 TA 那条回复下面（只给你看）；「想起带图的记忆时」选「带图」，会像你发的图一样把它放进对话。你从相册把这张图发给某位 TA 时，它连着这张图的那条记忆整条带过去（标为过时的也带，会注明；设为完全私密或对该 TA 不可见的不带），不管带不带当时的对话。只对能识图的模型、单聊有效；电脑端把它当普通记忆。</p>
           <p><strong>想起</strong>：置顶的记忆每轮都在；其余的聊到才想起，每轮最多 1～3 条（每位 TA 在 Memory 卡里选），没有合适的就不给。Memory 卡最上面的「想起记忆」可以整个关掉。</p>
           <p><strong>Gazing Back</strong>：TA 回话时间后面的「Gazing Back 2」是这一轮想起了几条，点时间看是哪几条、凭什么想起；没想起时不显示，原因长按那条消息看。</p>
           <p><strong>透视区</strong>：本页底栏第三格。最上面是 Nameless Coastline，每条记忆是岸边的一粒光；下面看脉络（反复露面的事串成一条，你点「同意」才算）、最近几轮想起了什么、整理标签、跑测评。最底下的「脉络文件」可以把脉络导出成文件，或从文件导回来。</p>
@@ -4818,7 +4818,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
           <p><strong>消息操作</strong>：长按气泡可引用、复制、收藏、修改、删除；最后一条 AI 回复可重新生成。有用量记录的回复，面板里有「缓存命中率」一行：缓存读 ÷ 这一轮的全部输入（未走缓存的、缓存读、缓存写相加）；Token 仪表盘的命中率同一算法。下面还有「上下文」一条，显示这一轮输入占模型上下文上限的比例，只在使用官方 API 地址时显示。TA 的回复还有「输入构成」一行（一对一含安静频道、共读间与观影室，群聊每位发言成员各记一轮，主动消息记在连发的第一条上）：这一轮发给 TA 的内容按来源拆成六部分，折起时写哪部分最多，点一下就地展开，每部分一行字符数、token 与占比。六部分是人设与资料、功能说明、对话历史、记忆与档案、实时资料、其他。字符数与 token 为本地估算，用于比较占比，实际用量以 Token 一行为准。只记大小、不保存内容，不进备份，本机留最近 500 轮。停止或断线保留下来的回复与工具续答的那一条没有这一行。群聊回复与主动消息也存用量，面板同样有 Token 一行；主动开口不走提示缓存，命中率是 0。「修改消息」只改这条的正文，时间、卡片与附件不动；改过的消息进历史，下一条消息重建一次提示缓存。</p>
           <p><strong>收藏夹</strong>：长按消息选「收藏」；入口在 Chat 底部分区栏的星星或 Desk 的星星图标。按好友分开存放：页顶名片点 ‹ 或左右滑换好友，右侧选年份，下面 ALL + 十二个月按<strong>原消息的时间</strong>归到哪一月，纸墙也按原消息时间从新到旧排，有收藏的月份带小点；顶栏放大镜按正文、语音文字稿、署名、频道名搜索，不分年月。每条收藏是一张纸：语音可回听、图片照显示、正文按 Markdown 渲染，长文折起、点折角摊开；收藏 TA 的回答会连带记下它回答的那条你的消息（只显示第一段），带思考链的一并收下（折着时署名旁提示「· Thought process」）；收藏自己的消息署名写 Me；× 移除。只存引用与文字，语音和图片按原消息回读，原消息删了就只剩文字稿；随备份往返。</p>
           <p><strong>引用消息</strong>：长按气泡选择「引用」，引用随下一条消息发出；点 ✕ 取消。</p>
-          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响，改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
+          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响；群聊整群一条封档线，右上角菜单里也能解除；改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
           <p><strong>生成记忆</strong>：右上角菜单 Save Memory，AI 根据近期对话内容总结生成一条记忆，存入记忆库。不勾选时读封档线之后最近一段（按上下文条数，最多 50 条）。在「选择消息」里勾选后点「生成记忆」，读的是勾中的那几条全文，勾 1 条也可以，封档线之前的、按日期查看或搜索出来的历史消息也能勾。一次最多读 8 万字：勾选超了会提示少选几条，不勾选超了从最旧的让出。存下的是 TA 提炼的一条记忆（正文 100～250 字），不是原话。信件和日志生成记忆同样读全文。</p>
           <p><strong>话题频道</strong>：同一位好友下可开多个相互隔离的对话上下文。频道消息不与主线互通；每个频道可单独选择是否注入记忆库。长按频道标签可编辑或删除；编辑里的「带回主窗口」把这个频道整理成一章前情提要：存进记忆库（只本 TA 可见），同时在主窗口此刻贴一张卡，把这段提要带进主线的上下文；频道里的原话不动。频道内顶栏显示「昵称 · 频道名」。共读间与观影室的聊天各落在一条「共读 · 书名」「观影室 · 片名」频道里：这类频道不注入工具与协议、记忆只注入这位 TA 自己写的与你手建的；Auto Memory 与「记忆库写入」在这类频道里保留（TA 在房间里照样能写记忆），开了语音条的 TA 也照常发语音条；删掉它会一并清掉那本书的进度或那部片的记录。</p>
           <p><strong>分段对话（气泡分段）</strong>：API 页 → 全局 的聊天卡里开启。把 AI 的长回复按空行拆成多个气泡连续发出，读起来像连发消息；含代码块、表格或指令的回复不拆。这只是显示方式，与话题频道无关。</p>
@@ -4943,7 +4943,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
           <p><strong>创建</strong>：手动点「+ 新记忆」。每条记忆需设置标题、内容、领域、情感坐标（Valence 积极/消极、Arousal 炽烈/平静）、重要性（1–10）等参数。</p>
           <p><strong>可见性</strong>：每条记忆可设为全部公开、仅指定可见或排除指定。列表顶部「按 AI 可见」筛选的首项是「全部记忆」；置顶的记忆在任何排序下都排在最前。</p>
           <p><strong>记忆库写入</strong>：在 API 页 → 该 AI 独立配置 → Memory 卡开启后，TA 可在对话中把值得记住的时刻写入记忆库（每条回复最多 3 条）。写入的条目默认仅 TA 自己可见，你可在本页查看、编辑可见范围或删除；能力给 AI，开关在你。与 Auto Memory 档案相互独立。TA 写入的条目带「待审核」小签，点开详情选「标为已审」，状态筛选里可以只看待审核。说的事已经不成立了，就在详情里「标为过时」：平时不再被想起，说到「以前」「当时」时才会，随时能取消。Memory 卡最上面的「想起记忆」管主窗口要不要自动想起记忆库（关掉后检索也一并关）；另有三个写入检查开关（查重与并入默认关，回执提醒默认开）：「记忆库查重」挡掉重复的记忆，「回执提醒」在 TA 写得太薄时提醒它下次怎么写，「档案并入」把相近的档案条目并成一条（核心 always 条目照旧先问你）。</p>
-          <p><strong>图片记忆</strong>：API 页 → 该 AI 独立配置 → Memory 卡，「记忆库写入」下面打开（记忆库写入关着时它也关）。TA 看得见图的那一轮写记忆时，可以把其中一张图一起写进回忆录并给它起名——这个名字就是它在相册里的名字，你改过名的不动。一张图可以连着几位 TA 的记忆，每位只连一条。之后想起这条记忆时，TA 会看到这张图的名字、日期和来处，照片也会挂在 TA 那条回复下面（只给你看）；「想起带图的记忆时」选「带图」，会像你发的图一样把它放进对话。你从相册把这张图发给某位 TA 时，它连着这张图的那条记忆会一起带过去。只对能识图的模型、单聊有效；电脑端把它当普通记忆。</p>
+          <p><strong>图片记忆</strong>：API 页 → 该 AI 独立配置 → Memory 卡，「记忆库写入」下面打开（记忆库写入关着时它也关）。TA 看得见图的那一轮写记忆时，可以把其中一张图一起写进回忆录并给它起名——这个名字就是它在相册里的名字，你改过名的不动。一张图可以连着几位 TA 的记忆，每位只连一条。之后想起这条记忆时，TA 会看到这张图的名字、日期和来处，照片也会挂在 TA 那条回复下面（只给你看）；「想起带图的记忆时」选「带图」，会像你发的图一样把它放进对话。你从相册把这张图发给某位 TA 时，它连着这张图的那条记忆整条带过去（标为过时的也带，会注明；设为完全私密或对该 TA 不可见的不带），不管带不带当时的对话。只对能识图的模型、单聊有效；电脑端把它当普通记忆。</p>
           <p><strong>注入</strong>：置顶的记忆每轮常驻；其余先过门再排名，每轮最多想起 1～3 条全文（每位 TA 在 Memory 卡里选，默认 3），没关的就不给。回望有开关，另算；档案里聊到的条目每轮最多 2 条，不占这个数；问到「你还记得」这类话时最多 4 条。</p>
           <p><strong>Gazing Back</strong>：TA 回话时间后面的「Gazing Back N」，N 是这一轮想起的条数——记忆库、档案、回想（TA 自己翻记忆库翻到的）都算，置顶与「刚想起过」不算；0 条什么都不显示，原因和「差一点」长按那条消息看。点时间展开清单：顶部「记忆库 N 条 · 档案 M 条」，每条记忆旁「有用 / 叉」（有用＝记一次，叉＝记进错题本），下面列「差一点」的几条和原因，档案条目标 [档案]。向量检索没连上或管线出错时，数字后面一个红点，原因（超时、限流、Key 不对、网络）长按那条消息看。TA 回想时，检索那条照常显示，标记挂在接着回话的那条上。</p>
           <p><strong>完全私密</strong>：像锁进带密码的日记本——注入、回想、向量检索都不给任何 TA；在记忆详情里改回「仅某 TA / 公开 / 排除」就回来了，下一轮起能被想起。旧版的「休眠」已并进这里。</p>
@@ -10097,7 +10097,7 @@ function _msgPreview(last,fallback){/* v327-p：预览给到 160 字交给样式
   _t9=(_pre.join(' ')+' '+_t9).trim().slice(0,160);
   return (last.role==='user'?'你：':(last.senderName?_msgNmM(last,last.senderName)+'：':''))+_t9;
 }
-function groupAsCfg(g){return{id:g.id,nickname:g.name,provider:'group',_group:g}}
+function groupAsCfg(g){return{id:g.id,nickname:g.name,provider:'group',_group:g,get sealTimestamp(){return Number((g&&g.sealTimestamp)||0)},set sealTimestamp(v){if(g)g.sealTimestamp=v}}}
 var _fbT=0;function _friendsBump(){
   try{if(currentPage!=='chat')return;if(document.body.classList.contains('on-conv'))return;
     clearTimeout(_fbT);_fbT=setTimeout(function(){try{renderFriends()}catch(e){}},60);
@@ -14564,8 +14564,7 @@ $('sel-del').addEventListener('click',async()=>{
 });
 $('sel-seal').addEventListener('click',async()=>{
   const cfg=_activeCfg;if(!cfg)return;
-  if(cfg._group){toast('群聊暂不支持封档线');return}
-  const thr=_activeThread,tgt=thr||cfg,store=thr?'chatThreads':'apiConfigs',sumKey='sum_'+(thr?thr.id:cfg.id);
+  const thr=_activeThread,tgt=thr||cfg._group||cfg,store=thr?'chatThreads':(cfg._group?'groups':'apiConfigs'),sumKey='sum_'+(thr?thr.id:cfg.id);
   if(_sendKeys.has(_keyOf(cfg.id,thr?thr.id:''))){toast('等这轮回复结束再调整封档线');return}
   if(_selIds.size===0){
     if(!sealTs()){toast('选中一条消息作为封档截止点');return}
@@ -14638,12 +14637,12 @@ function openCvDrawer(){
   mki(ops,'<svg viewBox="0 0 24 24"><rect x="3" y="6.5" width="13" height="11" rx="2.4"/><path d="M16 10.6l5-2.9v8.6l-5-2.9z"/></svg>','Video Call 视频通话',()=>{closeCvDrawer();try{window._IBCALL?window._IBCALL.open({video:true}):toast('通话模块未加载')}catch(e){}});/* 手机端：视频通话入口；手机端：群聊开放（群视频） */
   mki(ops,_CSI.call,'Voice Call 语音通话',()=>{closeCvDrawer();try{window._IBCALL?window._IBCALL.open():toast('通话模块未就绪')}catch(e){}});/* 手机端：Call 一期入口；手机端：群聊开放（群语音） */
   mki(ops,_CSI.ic,'ICode 工作区',()=>{tpClose();convEl('conv').classList.remove('open');document.body.classList.remove('on-conv');navTo('icode')});
-  if(!cfg._group)mki(ops,_CSI.seal,sealTs()?(_activeThread?'解除本频道封档线':'解除封档线'):'封档线说明',async()=>{/* v174：⑧频道独立封档线 */
+  mki(ops,_CSI.seal,sealTs()?(_activeThread?'解除本频道封档线':'解除封档线'):'封档线说明',async()=>{/* v174：⑧频道独立封档线 */
     if(!sealTs()){toast('进入选择消息，选中一条消息后点「封档到此处」'+(_activeThread?'；频道的封档线独立于主线':''));return}
     if(!await confirmDlg(_activeThread?'解除本频道的封档线？':'解除封档线？','解除'))return;
-    const thr=_activeThread,tgt=thr||cfg;
+    const thr=_activeThread,tgt=thr||cfg._group||cfg;
     delete tgt.sealTimestamp;
-    try{await dbPut(thr?'chatThreads':'apiConfigs',tgt)}catch(e){toast('保存失败');return}
+    try{await dbPut(thr?'chatThreads':(cfg._group?'groups':'apiConfigs'),tgt)}/* 手机端 v750：群聊解除写回群记录 */catch(e){toast('保存失败');return}
     try{await _sumDropM(String(thr?thr.id:cfg.id),'封档线变了')}catch(e){}/* v322-p */
     ensureSealLine();toast('已解除封档');
   });
@@ -14872,7 +14871,7 @@ async function genReplyGroup(pcfg,opt){
         try{const _gh9=await _apiHistSrcM(pcfg.id,myThread?myThread.id:null,keep,{B:_gB9,need:_gNeed9,cov:_gCov9});/* v323-p 33：群的拍长；摘要开着时窗口等摘要跟上再前移（同 1对1） */
           if(_gh9&&_gh9.length&&_msgs.length&&_gh9[_gh9.length-1].id===_msgs[_msgs.length-1].id){_gSrc9=_gh9;_gLad9=true}
         }catch(e){}
-        let _gL9=_gSrc9.filter(m=>!(m&&m.callFold));if(_gCt9>0){const _gf9=_gL9.filter(m=>!(m&&(m.timestamp||0)<=_gCt9));if(_gf9.length)_gL9=_gf9}/* v323-p 33：前情提要盖住的原话不再随历史发 */
+        const _gSeal9=sealOf(pcfg,myThread);let _gL9=_gSrc9.filter(m=>!(m&&m.callFold)&&!(_gSeal9&&(m.timestamp||0)<=_gSeal9));if(_gCt9>0){const _gf9=_gL9.filter(m=>!(m&&(m.timestamp||0)<=_gCt9));if(_gf9.length)_gL9=_gf9}/* v323-p 33：前情提要盖住的原话不再随历史发 */
         const history=_gLad9?_gL9:_cacheStableSliceM(_gL9,keep,_gB9);/* v323-p：窗口由库内阶梯给出时不再按条数二次截 */
         const _hIds9=new Set(history.map(m=>m&&m.id));const _hLast9=history.length?(history[history.length-1].timestamp||0):0;
         const combined=history.concat(roundExtras.filter(m=>m&&!_hIds9.has(m.id)&&(m.timestamp||0)>=_hLast9));
@@ -15007,7 +15006,7 @@ async function genReplyGroup(pcfg,opt){
     try{_gAutoAfter(pcfg,g,members,sil,opt,myAc)}catch(e){}/* v323-p：一轮收尾后安排下一轮自动发言 */
     setTimeout(()=>{
       const util=pickGroupUtilCfg(g);
-      if(util)maybeSummarizeM(Object.assign({},util,{id:g.id,sealTimestamp:0,_sumMember:util.id,_grp:g}),null).catch(()=>{});/* v323-p 33：带上群，条数与拍长按群算 *//* 本轮：带上执笔成员 id，ctx 模式按其群聊上下文条数取保留数 */
+      if(util)maybeSummarizeM(Object.assign({},util,{id:g.id,sealTimestamp:Number(g.sealTimestamp||0),_sumMember:util.id,_grp:g}),null).catch(()=>{});/* v323-p 33：带上群，条数与拍长按群算 *//* 本轮：带上执笔成员 id，ctx 模式按其群聊上下文条数取保留数 */
     },800);
   }
 }
@@ -15041,7 +15040,7 @@ $('sum-save').addEventListener('click',async()=>{/* 手机端 v375：改写现�
 });
 $('sum-now').addEventListener('click',async()=>{
   const cfg=_activeCfg;if(!cfg)return;
-  let _tg9=cfg;if(cfg._group){const _u9=pickGroupUtilCfg(cfg._group);if(!_u9){toast('群里没有可用的 API Key');return}_tg9=Object.assign({},_u9,{id:cfg._group.id,sealTimestamp:0,_sumMember:_u9.id,_grp:cfg._group})}/* 手机端 v378：群聊也能「立即更新」（执笔同自动那次：管家模型，没有就用群里第一位可用成员） */
+  let _tg9=cfg;if(cfg._group){const _u9=pickGroupUtilCfg(cfg._group);if(!_u9){toast('群里没有可用的 API Key');return}_tg9=Object.assign({},_u9,{id:cfg._group.id,sealTimestamp:Number(cfg._group.sealTimestamp||0),_sumMember:_u9.id,_grp:cfg._group})}/* 手机端 v378：群聊也能「立即更新」（执笔同自动那次：管家模型，没有就用群里第一位可用成员） */
   const tid=_activeThread?_activeThread.id:null;
   toast('正在整理对话记录…');$('sum-meta').textContent='正在整理对话记录…';
   const rec=await maybeSummarizeM(_tg9,tid,{force:true}).catch(()=>null);
@@ -15159,7 +15158,7 @@ async function saveMemoryFrom(list,hooks){
   const pa=mpAi(cfg);
   
   const cap=Math.max(2,Math.min(50,parseInt(isGroup?(cfg0._group?_grpKeepM(cfg0._group):30):pa.histLimit,10)||(isGroup?30:40)));
-  const seal=isGroup?0:sealOf(cfg0,_activeThread);
+  const seal=sealOf(cfg0,_activeThread);/* 手机端 v750：群聊也只取群封档线之后（原来写死 0） */
   let src=list?list.filter(m=>m&&!m.seeStep):(await _cvLatestM(cfg0)).filter(m=>(m.timestamp||0)>seal&&!m.mark&&!m.callFold&&!m.seeStep).slice(-cap);
   src=src.slice().sort((a,b)=>(a.timestamp||0)-(b.timestamp||0));
   const userName=(_about&&_about.name)||'用户';
@@ -17028,7 +17027,7 @@ function _orientApply(){try{
   setTimeout(function(){try{if(window.IBNative&&window.IBNative.available){var _bg=$('pres-bg');var _row=_bg&&_bg.closest('.tog');if(_row)_row.style.display=''}}catch(e){}},1200);/* v116-p：壳内显露「后台 Presence（系统级）」开关（桥在文末激活，故延时探测；浏览器 / PWA 保持隐藏） */
 })();
 function _vidQNormM(v){v=String(v==null?'m':v);if(v==='384')return 'l';if(v==='768')return 'h';if(v==='512')return 'm';return (v==='l'||v==='h')?v:'m'}/* 画质档位兼容电脑端备份里的 384/512/768 写法 */
-var IB_VER='v515-p',IB_VER_DATE='2026-11-19';
+var IB_VER='v516-p',IB_VER_DATE='2026-11-19';
 (function _appVerDraw(){var e=document.getElementById('app-ver');if(e)e.textContent='InternalBeyond Mobile '+IB_VER+'（'+IB_VER_DATE+'）'})();
 function _ibVeilHeal(){try{setTimeout(function(){try{var v=document.getElementById('lk-preveil');if(!v||v.classList.contains('off'))return;var lk=document.getElementById('lockscr');if(lk){_lkVeilOff();return}if(localStorage.getItem('ib_lockOn')==='1')return;_lkVeilOff()}catch(e){}},1600)}catch(e){}}/* v246-p：启动完成后仍盖幕的静默自愈 */
 function _lkVeilOff(){try{window._ibVeilOff=true;var v=document.getElementById('lk-preveil');if(v){v.classList.add('off');setTimeout(function(){try{v.remove()}catch(e){}},420)}}catch(e){}}/* fix-r4：预遮罩揭幕（任务 8） */
@@ -39120,7 +39119,7 @@ function refTxt(it,fid,ctx,meta,mem){var U=uName(),g=!!S.grp[fid],L0=['{H}','名
   if(!g){var sn=seenBy(it,fid,meta),d=sn?new Date(sn.at):null;L0.push('你第一次看到它：'+(sn?ymd(d)+' '+hm(d)+(sn.how==='chat'?'，在你们的对话里':'，'+U+' 从 Gallery 发给你的'):'没见过，这是第一次给你看'))}
   L0.push('从 Gallery 发'+(g?'到这个群':'给你')+'：第 '+(((meta&&meta.sent&&meta.sent[fid])||[]).length+1)+' 次');
   if(it.f==='gen'){var m=S.msg[it.mid],p=m?promptOf(m,it.i):'';if(p)L0.push('画它用的提示词：'+p)}
-  if(mem){L0.push('你回忆录里连着这张图的那一条：「'+String(mem.title||'')+'」');var mc=String(mem.content||'').trim();if(mc)L0.push(mc.slice(0,600))}
+  if(mem){L0.push('你回忆录里连着这张图的那一条：「'+String(mem.title||'')+'」'+(mem.supersededBy?' [已过时]':''));var mc=String(mem.content||'').trim()||String(mem.summary||'').trim();if(mc)L0.push(mc)}/* 手机端 v750：正文全文（原来只带前 600 字）；没有正文时给概述；过时的标 [已过时]（同想起时那行的记号） */
   if(ctx){var cl=ctxLines(it,fid);if(cl.length){L0.push('当时的对话（'+cl.length+' 条）：');cl.forEach(function(x){L0.push(x)})}}
   return L0.join('\n')}
 function pq(it){var n=(it.sent&&PK&&it.sent[PK.fid])?it.sent[PK.fid].length:0;return '<button type="button" class="pq" data-id="'+esc(it.id)+'"><img src="'+src(it)+'" alt="" loading="lazy" decoding="async" draggable="false">'+(n?'<span class="snt">×'+n+'</span>':'')+'<i></i></button>'}
@@ -39146,11 +39145,14 @@ async function pick(opt){opt=opt||{};var one=!!opt.one,cfg=null;if(!one){cfg=(ty
   if(!PK||PK.fid!==fid||PK.one!==one)return;await load();
   PK.its=S.items.filter(function(x){return !x._gone&&x.k!=='video'}).sort(function(a,b){return (b.ts-a.ts)||(a.id<b.id?1:-1)});PK.days=daysOf(PK.its);
   body.innerHTML=PK.its.length?'<div class="more-s" id="gl-pk-more"></div>':'<div class="pk-e">Gallery 里还没有图片。</div>';var k=0;while(k++<6&&!PK.done&&pkMore(90)&&body.scrollHeight<=body.clientHeight+700){}}
+function memOfPic(mems,g,fid){
+  var L=(mems||[]).filter(function(m){return m&&m.img&&m.img.g===g&&m.createdBy===fid&&(typeof memVisibleTo!=='function'||memVisibleTo(m,fid,false,false))});
+  return L.find(function(m){return !m.supersededBy})||L[0]||null}
 async function pkGo(){if(!PK||PK.busy||!PK.sel.length)return;PK.busy=true;var g=L('gl-pk-go');if(g){g.disabled=true;g.textContent=PK.one?'正在取…':'正在添加…'}
   if(PK.one){var it1=byId(PK.sel[0]),b1=null;try{b1=it1?await GAL.fullBlob(it1.r):null}catch(e){b1=null}if(b1&&it1){try{b1._galSrc={id:it1.id,k:it1.k,f:it1.f,mid:it1.mid}}catch(e){}}/* v594：见 wrapCI */var res1=PK.res;PK.res=null;PK.busy=false;try{if(res1)res1(b1||null)}catch(e){}try{closeSheets()}catch(e){}if(!b1)toast('这张图取不到');return}var fid=PK.fid,ctx=PK.ctx,ids=PK.sel.slice(),ok=0,meta={};try{meta=await GAL.metaAll()}catch(e){}var mems=[];if(!S.grp[fid]){try{mems=(await memsAll())||[]}catch(e){}}
   for(var i=0;i<ids.length;i++){var it=byId(ids[i]);if(!it)continue;try{if(typeof _pendImgs==='undefined'||_pendImgs.length>=_IB_IMG_MAX)break;
       var b=await GAL.fullBlob(it.r);if(!b)continue;var du=await compressImg(b,1280,0.82);if(!du)continue;await textP(it);
-      var c1=!!(ctx&&it.f!=='media');_pendImgs.push(du);var mm=mems.find(function(m){return m&&m.img&&m.img.g===it.id&&m.createdBy===fid&&!m.supersededBy})||null;PEND.push({u:du,id:it.id,fid:fid,nm:plain(title(it)),at:it.ts.getTime(),ctx:c1,memT:mm?String(mm.title||''):'',txt:refTxt(it,fid,c1,meta[it.id],mm)});ok++}catch(e){}}
+      var c1=!!(ctx&&it.f!=='media');_pendImgs.push(du);var mm=memOfPic(mems,it.id,fid);PEND.push({u:du,id:it.id,fid:fid,nm:plain(title(it)),at:it.ts.getTime(),ctx:c1,memT:mm?String(mm.title||''):'',txt:refTxt(it,fid,c1,meta[it.id],mm)});ok++}catch(e){}}
   if(PK)PK.busy=false;try{closeSheets()}catch(e){}try{drawAttach()}catch(e){}toast(ok?'已添加 '+ok+' 张，发出去时名字和入库时间一起带上':'没添加上')}
 function take(um){if(!um||!Array.isArray(um.images)||!PEND.length)return;var refs=[];
   um.images.forEach(function(im,i){for(var k=0;k<PEND.length;k++){var p=PEND[k];if(im&&p.u===im.dataUrl&&p.fid===um.friendId){refs.push({i:i,id:p.id,nm:p.nm,at:p.at,ctx:p.ctx,memT:p.memT||'',txt:p.txt});break}}});
