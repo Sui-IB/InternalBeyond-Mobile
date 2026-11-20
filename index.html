@@ -862,7 +862,7 @@ body.theme-infernal #fw-pick .fw-sb{background:rgba(165,188,230,.12)}
 .fw-card .fw-ct{font-size:.86rem;color:var(--tx);font-weight:500;letter-spacing:.02em;margin-bottom:4px}
 .fw-card .fw-cl{font-size:.78rem;color:var(--tx2);line-height:1.72;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .fw-card .fw-cl b{font-weight:400;color:var(--tx3)}
-.fw-card .fw-cf{margin-top:7px;padding-top:6px;border-top:1px solid var(--line);font-size:.68rem;color:var(--tx3);letter-spacing:.04em}
+.m-file .mf-cut{font-style:normal;margin-left:7px;opacity:.62;font-size:.92em;letter-spacing:.02em;white-space:nowrap}/* 手机端 v754：附件小签上的「已截断 上限 / 全文」 */
 .m .fw-card+.m-text:not(:empty){margin-top:9px;padding-top:9px;border-top:1px solid var(--line)}
 #sheet-fwdrec .fw-sub{margin:-4px 0 10px;font-size:.7rem;color:var(--tx3);letter-spacing:.06em;text-align:center}
 #sheet-fwdrec .fw-list{border-top:1px solid var(--line)}
@@ -4341,8 +4341,8 @@ window._ibSplashRun();
           <p><strong>消息操作</strong>：长按气泡可引用、复制、收藏、修改、删除；最后一条 AI 回复可重新生成。「修改消息」只改这条的正文，时间、卡片与附件不动；改过的消息进历史，下一条消息重建一次提示缓存。TA 的回复面板里有「输入构成」一行，点开看这一轮发给 TA 的内容由哪几部分组成、各占多少。</p>
           <p><strong>收藏夹</strong>：长按消息选「收藏」，入口在 Chat 底栏的星星或 Desk 图标。按好友与原消息的月份归档，可搜索；每条是一张纸，语音可回听，长文点折角展开，× 移除。</p>
           <p><strong>引用消息</strong>：长按气泡选择「引用」，引用随下一条消息发出；点 ✕ 取消。</p>
-          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「转发」转给其他好友、「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响；群聊整群一条封档线，右上角菜单里也能解除；改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
-          <p><strong>转发聊天记录</strong>：Select 选好消息后点「转发」，弹出小窗列出其他好友（按最近聊天排，多了可以上下滑），点一位就跳到和 TA 的对话。记录和引用一样挂在输入框上方，点 ✕ 撤回；可以在输入框里再写几句一起发出。只能从一对一的对话转给一位好友，群聊里没有转发。发出去是一张聊天记录卡：标题写双方昵称，下面三行预览，底行是日期和条数；点卡片看完整记录。TA 收到的是全文，每条带年月日和时刻、带说话人的昵称，这段记录跟着这条消息留在 TA 的上下文里，对话摘要、前情提要、生成记忆 都读得到。转出去的是当时的一份副本，原对话之后再删改不影响副本。语音转成文字稿，表情包写名字，只有图片的写「（图片）」，只有文件的写文件名。「选择到这里」：选中一条后往上或往下滑，选中的那条离开屏幕时顶上或底下会浮出一枚小签，箭头指向已选的那条。点一下，从它旁边那条到已选的那条之间全部选上，上下都能一直接着选。</p>
+          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「转发」转给好友（含当前 TA）、「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响；群聊整群一条封档线，右上角菜单里也能解除；改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
+          <p><strong>转发聊天记录</strong>：Select 选好消息后点「转发」，弹出小窗列出好友（按最近聊天排，多了可以上下滑；当前这位 TA 也在列表里），点一位就跳到和 TA 的对话，选当前 TA 则留在原对话。记录和引用一样挂在输入框上方，点 ✕ 撤回；可以在输入框里再写几句一起发出。只能从一对一的对话转给一位好友，群聊里没有转发。发出去是一张聊天记录卡：标题写双方昵称，下面三行预览；点卡片看完整记录（里面有日期和条数）。TA 收到的是全文，每条带年月日和时刻、带说话人的昵称，这段记录跟着这条消息留在 TA 的上下文里，对话摘要、前情提要、生成记忆都读得到。转出去的是当时的一份副本，原对话之后再删改不影响副本。语音转成文字稿，表情包写名字，只有图片的写「（图片）」，只有文件的写文件名。「选择到这里」：选中一条后往上或往下滑，选中的那条离开屏幕时顶上或底下会浮出一枚小签，箭头指向已选的那条。点一下，从它旁边那条到已选的那条之间全部选上，上下都能一直接着选。</p>
           <p><strong>生成记忆</strong>：右上角菜单 Save Memory，AI 根据近期对话内容总结生成一条记忆，存入记忆库。</p>
           <p><strong>话题频道</strong>：同一位好友下可开多个互相隔离的对话，每个频道可单独选择是否注入记忆；长按频道标签可编辑或删除，编辑里的「带回主窗口」把这个频道整理成一章前情提要带回主线。共读间与观影室的聊天也各落在自己的频道里。</p>
           <p><strong>分段对话（气泡分段）</strong>：API 页 → 全局 的聊天卡里开启。把 AI 的长回复按空行拆成多个气泡连续发出，读起来像连发消息；含代码块、表格或指令的回复不拆。这只是显示方式，与话题频道无关。</p>
@@ -4555,7 +4555,7 @@ window._ibSplashRun();
           <p><strong>Script 开关（自动 / 确认）</strong>：ICode 页顶部配置卡第一行。开启为自动模式：教程自动读取、文件操作直接执行，AI 可以在同一个回复气泡里连续多步推进；关闭为确认模式：教程与每一步操作都先弹出「允许 / 拒绝」卡，你批准后才继续，拒绝即停止。</p>
           <p><strong>AI 连续操作</strong>：配置卡第二行，自动模式下允许 AI 连续执行的工作区步骤数（0–6，默认 3）；申请教程不计次数。达到上限后 AI 会停下，等你的下一条消息再继续。</p>
           <p><strong>精细文件工具</strong>：配置卡第三行，默认关闭。开启后 AI 才获得两条面向大项目的指令——检索工作区与本会话附件（返回至多 20 处「路径:行号」命中及前后片段）与读取上下文（看整文目录、按起止行读一段、读某行附近），用来先定位再精读，避免为找一个函数读完整个大文件；两条都计入连续操作次数。</p>
-          <p><strong>文件过长与截断</strong>：随消息上传的附件正文按「精细文件工具 → 附件正文上限」三档并入（省 15000 / 均衡 30000（默认）/ 全读 120000 字符），超出的部分截断并随消息自动附一份「行号｜该段首行」目录；AI 用检索 / 按行读取拿回的内容每次最多 6000 字符；其余工具与文件操作结果单次最多 12000 字符。大文件的正路是开启「精细文件工具」，让它先看目录、再按行精读；「全读」档每轮都把整份正文重发一遍，长会话容易撞模型上下文。</p>
+          <p><strong>文件过长与截断</strong>：随消息上传的附件正文按「精细文件工具 → 附件正文上限」三档并入（省 15000 / 均衡 30000（默认）/ 全读 120000 字符），超出不到三成的整份并入，再长的保留开头与结尾、省略中间并附「行号｜该段首行」目录，气泡里的附件小签标出截断字数；AI 用检索 / 按行读取拿回的内容每次最多 6000 字符；其余工具与文件操作结果单次最多 12000 字符。大文件的正路是开启「精细文件工具」，让它先看目录、再按行精读；「全读」档每轮都把整份正文重发一遍，长会话容易撞模型上下文。</p>
           <p><strong>发送量控制</strong>：聊天界面与本机数据库保留完整过程；发给 AI 的历史副本会把已成功执行的大文件内容折叠成很短的归档标记（失败或未确认的操作保留原文），避免几万字的文件长期占用后续对话的上下文。</p>
           <p><strong>GitHub 分区</strong>：ICode 底部分区栏第二格。填入 GitHub 访问令牌（PAT，需勾选 repo 权限）连接后，可列出你名下最近更新的 50 个仓库、逐级浏览目录并预览文件。</p>
           <p>「导入到工作区」会新建一个「GH·仓库名」项目供 AI 在对话里读改；改完回本分区「从工作区推回」，系统自动获取远端最新版本，按你填写的说明一次性提交到所选分支。令牌只保存在本机浏览器，不进导出备份、不提供给任何 AI；超过 500 KB 的文件与二进制文件会拒绝导入。</p>
@@ -4721,7 +4721,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
     <div class="psec" id="sec-guide-author">
       <div class="g-sec">
         <h3>版权信息</h3>
-        <p><strong>Project：InternalBeyond 边界之外——旨于维系情感的连续性而生。</strong></p>
+        <p><strong>Project：InternalBeyond 边界之外——旨在维系情感的连续性而生。</strong></p>
         <p>InternalBeyond关切于关系与情感的连续性。你的记忆与关系本身的分量，不该因不可抗的外界因素而断裂、消失。</p>
         <div class="author-welcome-md" aria-label="Welcome message">
           <p>Welcome to Internal Beyond.</p>
@@ -4883,8 +4883,8 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
           <p><strong>消息操作</strong>：长按气泡可引用、复制、收藏、修改、删除；最后一条 AI 回复可重新生成。有用量记录的回复，面板里有「缓存命中率」一行：缓存读 ÷ 这一轮的全部输入（未走缓存的、缓存读、缓存写相加）；Token 仪表盘的命中率同一算法。下面还有「上下文」一条，显示这一轮输入占模型上下文上限的比例，只在使用官方 API 地址时显示。TA 的回复还有「输入构成」一行（一对一含安静频道、共读间与观影室，群聊每位发言成员各记一轮，主动消息记在连发的第一条上）：这一轮发给 TA 的内容按来源拆成六部分，折起时写哪部分最多，点一下就地展开，每部分一行字符数、token 与占比。六部分是人设与资料、功能说明、对话历史、记忆与档案、实时资料、其他。字符数与 token 为本地估算，用于比较占比，实际用量以 Token 一行为准。只记大小、不保存内容，不进备份，本机留最近 500 轮。停止或断线保留下来的回复与工具续答的那一条没有这一行。群聊回复与主动消息也存用量，面板同样有 Token 一行；主动开口不走提示缓存，命中率是 0。「修改消息」只改这条的正文，时间、卡片与附件不动；改过的消息进历史，下一条消息重建一次提示缓存。</p>
           <p><strong>收藏夹</strong>：长按消息选「收藏」；入口在 Chat 底部分区栏的星星或 Desk 的星星图标。按好友分开存放：页顶名片点 ‹ 或左右滑换好友，右侧选年份，下面 ALL + 十二个月按<strong>原消息的时间</strong>归到哪一月，纸墙也按原消息时间从新到旧排，有收藏的月份带小点；顶栏放大镜按正文、语音文字稿、署名、频道名搜索，不分年月。每条收藏是一张纸：语音可回听、图片照显示、正文按 Markdown 渲染，长文折起、点折角摊开；收藏 TA 的回答会连带记下它回答的那条你的消息（只显示第一段），带思考链的一并收下（折着时署名旁提示「· Thought process」）；收藏自己的消息署名写 Me；× 移除。只存引用与文字，语音和图片按原消息回读，原消息删了就只剩文字稿；随备份往返。</p>
           <p><strong>引用消息</strong>：长按气泡选择「引用」，引用随下一条消息发出；点 ✕ 取消。</p>
-          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「转发」转给其他好友、「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响；群聊整群一条封档线，右上角菜单里也能解除；改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
-          <p><strong>转发聊天记录</strong>：Select 选好消息后点「转发」，弹出小窗列出其他好友（按最近聊天排，多了可以上下滑），点一位就跳到和 TA 的对话。记录和引用一样挂在输入框上方，点 ✕ 撤回；可以在输入框里再写几句一起发出。只能从一对一的对话转给一位好友，群聊里没有转发。发出去是一张聊天记录卡：标题写双方昵称，下面三行预览，底行是日期和条数；点卡片看完整记录。TA 收到的是全文，每条带年月日和时刻、带说话人的昵称，这段记录跟着这条消息留在 TA 的上下文里，对话摘要、前情提要、生成记忆 都读得到。转出去的是当时的一份副本，原对话之后再删改不影响副本。语音转成文字稿，表情包写名字，只有图片的写「（图片）」，只有文件的写文件名。「选择到这里」：选中一条后往上或往下滑，选中的那条离开屏幕时顶上或底下会浮出一枚小签，箭头指向已选的那条。点一下，从它旁边那条到已选的那条之间全部选上，上下都能一直接着选。</p>
+          <p><strong>Select（选择消息）</strong>：右上角菜单进入选择消息，点选消息（不限条数）。底栏两行：上行「转发」转给好友（含当前 TA）、「删除」批量删除选中的消息、「取消」退出；「封档到此处」选中一条消息作为封档截止点，该消息及之前的所有记录将不再发送给 API（已有封档线时不选消息直接点击可解除封档；话题频道各有自己独立的封档线，与主线互不影响；群聊整群一条封档线，右上角菜单里也能解除；改动封档会重建一次该会话的缓存）；「生成记忆」仅用选中的消息生成记忆（1 条也可以）；「移到新频道」把选中的消息整体搬进一条新的话题频道——弹出新建频道的同一张表单，起名保存即搬走，随后直接进入新频道；消息本体、时间、卡片与附件原样不动，只是不再出现在原会话里，原会话的旧摘要会丢掉重建。群聊没有话题频道，不能搬。「添加消息」在选中的那条之后插一条（不选＝接在最后）：可以选 TA 或你自己、可改时间（群聊里可指定成员），用来补回丢掉的消息或整理对话；添加后下一条消息重建一次提示缓存。</p>
+          <p><strong>转发聊天记录</strong>：Select 选好消息后点「转发」，弹出小窗列出好友（按最近聊天排，多了可以上下滑；当前这位 TA 也在列表里），点一位就跳到和 TA 的对话，选当前 TA 则留在原对话。记录和引用一样挂在输入框上方，点 ✕ 撤回；可以在输入框里再写几句一起发出。只能从一对一的对话转给一位好友，群聊里没有转发。发出去是一张聊天记录卡：标题写双方昵称，下面三行预览；点卡片看完整记录（里面有日期和条数）。TA 收到的是全文，每条带年月日和时刻、带说话人的昵称，这段记录跟着这条消息留在 TA 的上下文里，对话摘要、前情提要、生成记忆都读得到。转出去的是当时的一份副本，原对话之后再删改不影响副本。语音转成文字稿，表情包写名字，只有图片的写「（图片）」，只有文件的写文件名。「选择到这里」：选中一条后往上或往下滑，选中的那条离开屏幕时顶上或底下会浮出一枚小签，箭头指向已选的那条。点一下，从它旁边那条到已选的那条之间全部选上，上下都能一直接着选。</p>
           <p><strong>生成记忆</strong>：右上角菜单 Save Memory，AI 根据近期对话内容总结生成一条记忆，存入记忆库。不勾选时读封档线之后最近一段（按上下文条数，最多 50 条）。在「选择消息」里勾选后点「生成记忆」，读的是勾中的那几条全文，勾 1 条也可以，封档线之前的、按日期查看或搜索出来的历史消息也能勾。一次最多读 8 万字：勾选超了会提示少选几条，不勾选超了从最旧的让出。存下的是 TA 提炼的一条记忆（正文 100～250 字），不是原话。信件和日志生成记忆同样读全文。</p>
           <p><strong>话题频道</strong>：同一位好友下可开多个相互隔离的对话上下文。频道消息不与主线互通；每个频道可单独选择是否注入记忆库。长按频道标签可编辑或删除；编辑里的「带回主窗口」把这个频道整理成一章前情提要：存进记忆库（只本 TA 可见），同时在主窗口此刻贴一张卡，把这段提要带进主线的上下文；频道里的原话不动。频道内顶栏显示「昵称 · 频道名」。共读间与观影室的聊天各落在一条「共读 · 书名」「观影室 · 片名」频道里：这类频道不注入工具与协议、记忆只注入这位 TA 自己写的与你手建的；Auto Memory 与「记忆库写入」在这类频道里保留（TA 在房间里照样能写记忆），开了语音条的 TA 也照常发语音条；删掉它会一并清掉那本书的进度或那部片的记录。</p>
           <p><strong>分段对话（气泡分段）</strong>：API 页 → 全局 的聊天卡里开启。把 AI 的长回复按空行拆成多个气泡连续发出，读起来像连发消息；含代码块、表格或指令的回复不拆。这只是显示方式，与话题频道无关。</p>
@@ -5045,7 +5045,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
           <p><strong>代称</strong>：档案条目里写「团团（代称：小毛球、猫主子）」，聊天里提到小毛球就当提到了团团去想记忆。写「也叫」「又称」也认。</p>
         <p>「你对我的了解。」与记忆库不同，Auto Memory 是每个 AI 独立维护的、关于你的长期认知档案。</p>
         <div class="g-sub">
-          <p>每个 API 可独立开启（API 页 → 该 AI 独立配置 → Auto Memory）。开启后，AI 在对话过程中会自主判断是否需要记录：它通过在回复中插入系统标签来创建、更新或删除条目，标签由系统实时拦截执行，你只会看到操作结果卡片。每轮对话最多执行 3 次操作，单条内容上限 800 字符（手动编辑与记忆总结写出的条目每条 1500）。AI 写 always 级条目或改动已有 always 条目时先出确认卡，点了才落库；normal / low 即写。</p>
+          <p>每个 API 可独立开启（API 页 → 该 AI 独立配置 → Auto Memory）。开启后，AI 在对话过程中会自主判断是否需要记录：它通过在回复中插入系统标签来创建、更新或删除条目，标签由系统实时拦截执行，你只会看到操作结果卡片。每轮对话最多执行 3 次操作，单条内容上限 3000 字符（记忆总结写出的每条 1500），超长的只存前 3000 字并在卡片上标注。TA 下一轮会收到各条操作结果和条目编号。AI 写 always 级条目或改动已有 always 条目时先出确认卡，点了才落库；normal / low 即写。</p>
           <p><strong>分类与优先级</strong>：档案按六个分类组织：Work、Personal、Top of mind、History、Background、Instructions。每条可设优先级：always（核心事实，全档上限 5 条，每次对话必定注入）、normal 与 low（仅当话题相关时浮现）。</p>
           <p><strong>注入方式</strong>：always 条目全文常驻；normal / low 与记忆库过同一道门，聊到相关的才给，每轮最多 2 条，三轮内给过的只在接着追问同一件事时再给，没过门的在 Gazing Back 的「差一点」里标 [档案]。主聊天、话题频道（不论「记忆」开关）、群聊、写信、留言、主动开口都是这一套；没有字数上限，常驻了多少字在 Memory 页仪表盘看，按 TA 分列。</p>
         <p><strong>注入位置与缓存</strong>：always 条目写在 system 里、随提示缓存一起命中，只有这些条目本身改动时才重建一次；按相关度命中的条目随当前消息尾部逐轮变化，不占缓存。所以 AI 随意增删 normal / low 条目不会碰缓存，改 always 才会。</p>
@@ -5139,7 +5139,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
           <p><strong>Script 开关（自动 / 确认）</strong>：ICode 页顶部配置卡第一行。开启为自动模式：教程自动读取、文件操作直接执行，AI 可以在同一个回复气泡里连续多步推进；关闭为确认模式：教程与每一步操作都先弹出「允许 / 拒绝」卡，你批准后才继续，拒绝即停止。</p>
           <p><strong>AI 连续操作</strong>：配置卡第二行，自动模式下允许 AI 连续执行的工作区步骤数（0–6，默认 3）；申请教程不计次数。达到上限后 AI 会停下，等你的下一条消息再继续。</p>
           <p><strong>精细文件工具</strong>：配置卡第三行，默认关闭。开启后 AI 才获得两条面向大项目的指令——检索工作区与本会话附件（返回至多 20 处「路径:行号」命中及前后片段）与读取上下文（看整文目录、按起止行读一段、读某行附近），用来先定位再精读，避免为找一个函数读完整个大文件；两条都计入连续操作次数。</p>
-          <p><strong>文件过长与截断</strong>：随消息上传的附件正文按「精细文件工具 → 附件正文上限」三档并入（省 15000 / 均衡 30000（默认）/ 全读 120000 字符），超出的部分截断并随消息自动附一份「行号｜该段首行」目录；AI 用检索 / 按行读取拿回的内容每次最多 6000 字符；其余工具与文件操作结果单次最多 12000 字符。大文件的正路是开启「精细文件工具」，让它先看目录、再按行精读；「全读」档每轮都把整份正文重发一遍，长会话容易撞模型上下文。</p>
+          <p><strong>文件过长与截断</strong>：随消息上传的附件正文按「精细文件工具 → 附件正文上限」三档并入（省 15000 / 均衡 30000（默认）/ 全读 120000 字符），超出不到三成的整份并入，再长的保留开头与结尾、省略中间并附「行号｜该段首行」目录，气泡里的附件小签标出截断字数；AI 用检索 / 按行读取拿回的内容每次最多 6000 字符；其余工具与文件操作结果单次最多 12000 字符。大文件的正路是开启「精细文件工具」，让它先看目录、再按行精读；「全读」档每轮都把整份正文重发一遍，长会话容易撞模型上下文。</p>
           <p><strong>发送量控制</strong>：聊天界面与本机数据库保留完整过程；发给 AI 的历史副本会把已成功执行的大文件内容折叠成很短的归档标记（失败或未确认的操作保留原文），避免几万字的文件长期占用后续对话的上下文。</p>
           <p><strong>GitHub 分区</strong>：ICode 底部分区栏第二格。填入 GitHub 访问令牌（PAT，需勾选 repo 权限）连接后，可列出你名下最近更新的 50 个仓库、逐级浏览目录并预览文件。</p>
           <p>「导入到工作区」会新建一个「GH·仓库名」项目供 AI 在对话里读改；改完回本分区「从工作区推回」，系统自动获取远端最新版本，按你填写的说明一次性提交到所选分支。令牌只保存在本机浏览器，不进导出备份、不提供给任何 AI；超过 500 KB 的文件与二进制文件会拒绝导入。</p>
@@ -5307,7 +5307,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
     <div class="psec" id="sec-guide-author">
       <div class="g-sec">
         <h3>版权信息</h3>
-        <p><strong>Project：InternalBeyond 边界之外——旨于维系情感的连续性而生。</strong></p>
+        <p><strong>Project：InternalBeyond 边界之外——旨在维系情感的连续性而生。</strong></p>
         <p>InternalBeyond关切于关系与情感的连续性。你的记忆与关系本身的分量，不该因不可抗的外界因素而断裂、消失。</p>
         <div class="author-welcome-md" aria-label="Welcome message">
           <p>Welcome to Internal Beyond.</p>
@@ -6743,7 +6743,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
 
 <div class="sheet" id="sheet-amedit">
   <h3 id="ame-title">档案条目</h3>
-  <div class="f-group"><label>内容 <span class="lb-note">（上限 1500 字符）</span></label><textarea id="ame-c" rows="4" maxlength="1500"></textarea></div>
+  <div class="f-group"><label>内容 <span class="lb-note">（上限 3000 字符）</span></label><textarea id="ame-c" rows="4" maxlength="3000"></textarea></div>
   <div class="f-row">
     <div class="f-group"><label>分类</label><div class="sel"><select id="ame-cat">
       <option value="work_context">Work — 工作</option>
@@ -7332,7 +7332,7 @@ const _UV_BASE={
   dark:{glass:[24,34,62,0.3],panel:[22,32,58,0.28],soft:[28,40,70,0.24],sheet:[22,32,56,0.55],scrim:['linear-gradient(180deg,rgba(14,20,38,A1),rgba(12,17,32,A2))',0.4,0.68]}
 };
 function _uvA(base,f){return Math.max(0.04,Math.min(0.96,base*f))}
-var _UV_GZ=[['top','顶栏','#topbar.glass',0.55,0.58,'pa'],['dock','底栏','#dock.glass,#gl-selbar.glass',0.55,0.58,'pa'],['nav','导航抽屉','#drawer',0.62,0.70,'dr'],['cvh','聊天会话顶栏','.cv-head.glass',0.55,0.58,'pa'],['input','聊天输入区','.cv-input.glass,#cv-selbar.glass,#kao-panel.glass',0.60,0.58,'in'],['brv','Blog 阅读工具条','.brv-top-m',0.82,0.84,'pa'],['sheet','底部弹层','.sheet',0.82,0.84,'pa'],['side','侧栏面板','.bsd-panel,.tp-panel,.cvd-panel.glass',0.62,0.62,'pa']/* v303-p：会话右侧抽屉（收藏 / 操作 / 设置）也归侧栏 */,['sub','子页顶栏 / 底栏','.sub-head.glass,.sub-foot.glass,.ma-head,.ca-head',0.55,0.58,'pa']/* v303-p：日程表 / 音乐全屏页的玻璃顶栏也归这一区（v346 只绑了尺寸） */,['card','卡片 / 面板','.card,.set-card',0.55,0.58,'pa'],['mini','迷你播放器 · 桌面播放键','#mini-pw.glass',0.50,0.58,'pa'],['map','世界地图面板','#ib-map .mp-g.glass,#ib-map .trc-hi',0.55,0.58,'pa'],['mapnote','Map 游记底板','#mp-nbg,.mp-jc,.trc-pair,.trc-ent .nt',0.72,0.74,'pa'],['globe','Map 地球仪海面','#ib-map .mp-gtint',0.6,0.6,'pa']];
+var _UV_GZ=[['top','顶栏','#topbar.glass',0.55,0.58,'pa'],['dock','底栏','#dock.glass,#gl-selbar.glass',0.55,0.58,'pa'],['nav','导航抽屉','#drawer',0.62,0.70,'dr'],['cvh','聊天会话顶栏','.cv-head.glass',0.55,0.58,'pa'],['input','聊天输入区','.cv-input.glass,#cv-selbar.glass,#kao-panel.glass',0.60,0.58,'in'],['brv','Blog 阅读工具条','.brv-top-m',0.82,0.84,'pa'],['sheet','底部弹层','.sheet,#fw-pick .fw-win',0.82,0.84,'pa'],['side','侧栏面板','.bsd-panel,.tp-panel,.cvd-panel.glass',0.62,0.62,'pa']/* v303-p：会话右侧抽屉（收藏 / 操作 / 设置）也归侧栏 */,['sub','子页顶栏 / 底栏','.sub-head.glass,.sub-foot.glass,.ma-head,.ca-head',0.55,0.58,'pa']/* v303-p：日程表 / 音乐全屏页的玻璃顶栏也归这一区（v346 只绑了尺寸） */,['card','卡片 / 面板','.card,.set-card',0.55,0.58,'pa'],['mini','迷你播放器 · 桌面播放键','#mini-pw.glass',0.50,0.58,'pa'],['map','世界地图面板','#ib-map .mp-g.glass,#ib-map .trc-hi',0.55,0.58,'pa'],['mapnote','Map 游记底板','#mp-nbg,.mp-jc,.trc-pair,.trc-ent .nt',0.72,0.74,'pa'],['globe','Map 地球仪海面','#ib-map .mp-gtint',0.6,0.6,'pa']];
 var _uvGzOpen={};/* v355-p：分区玻璃分组的展开状态（本次打开有效；改色后整卡重画照旧展开） */
 var _UV_GZ_GRP=[['frame','通用',['top','dock','sub','side','sheet','card','field','ov2','uv-scroll-row']],
  ['nav','导航抽屉',['nav','uv-navsel-row','uv-navbar-row','uv-navico-row','uv-navfoot-row','uv-navdisc-row']],
@@ -9563,7 +9563,7 @@ function openAmEdit(fid,e){
   openSheet('sheet-amedit');
 }
 $('ame-save').addEventListener('click',async()=>{
-  const content=$('ame-c').value.trim().slice(0,1500);/* 档案每条放宽到 1500 */
+  const content=$('ame-c').value.trim().slice(0,3000);/* 档案每条放宽到 1500 */
   if(!content){toast('内容不能为空');return}
   const prio=$('ame-prio').value;
   if(prio==='always'){
@@ -11109,7 +11109,7 @@ function buildMsgEl(m,prev,opt){/* v327-p：opt.noPress＝不挂长按菜单（�
     }).join('')+(_ibImgGoneN(m)?_ibGoneChipM(_ibImgGoneN(m)):'')+'</div>';
   }else if(_ibImgGoneN(m))inner+='<div class="m-imgs">'+_ibGoneChipM(_ibImgGoneN(m))+'</div>';/* 删过的图 */
   if(Array.isArray(m.files)&&m.files.length){
-    inner+='<div class="m-files">'+m.files.map((f,fi)=>'<span class="m-file" data-fi="'+fi+'"><svg viewBox="0 0 24 24" style="width:11px;height:11px;vertical-align:-1px" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.2-9.19a4 4 0 0 1 5.65 5.66L9.4 17.4a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> '+esc((f&&(f.name||f.filename))||'附件')+'</span>').join('')+'</div>';
+    inner+='<div class="m-files">'+m.files.map((f,fi)=>'<span class="m-file" data-fi="'+fi+'"><svg viewBox="0 0 24 24" style="width:11px;height:11px;vertical-align:-1px" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M21.4 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.2-9.19a4 4 0 0 1 5.65 5.66L9.4 17.4a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg> '+esc((f&&(f.name||f.filename))||'附件')+_fileCutTagM(f)+'</span>').join('')+'</div>';
   }
   if(m.mapRun){try{inner+=(window.IBMap&&IBMap.runHtml)?IBMap.runHtml(m):''}catch(e){}}else if(m.link&&m.link.url){inner+=(m.link.kind==='serenade'&&window.IBSerenade)?IBSerenade.linkHtml(m.link):_lkCardHtml(m.link)}/* v327-p：消息上的卡片（发送位置、行迹）；聊天里的旅行走指令卡 *//* v327-p：外链卡；v327-p：聊天里的旅行走指令卡 */
   /* v327-p：走完一趟的旅行纪念卡不放气泡里，挂在消息行尾（本函数末尾） */
@@ -11784,6 +11784,22 @@ document.addEventListener('click',async function(ev){try{
 }catch(e){}});
 /* ═══════════ Chat：请求管道 ═══════════ */
 /*__PURE_START__*/
+
+var _IBT754={"file_cut_fine": "[…文件过长：这里省略了中间 {CUT} 字符（第 {A}–{B} 行）。原文共 {N} 字符、{L} 行，上面是开头 {H} 字符，下面是结尾 {T} 字符。省略的部分用 <ws_ctx path=\"{NAME}\" from=\"起始行\" to=\"结束行\"/> 按行读取，先按文末的目录定位。]", "file_cut_plain": "[…文件过长：这里省略了中间 {CUT} 字符（第 {A}–{B} 行）。原文共 {N} 字符、{L} 行，上面是开头 {H} 字符，下面是结尾 {T} 字符。如需处理省略的部分，请告知用户分段发送或开启精细文件工具。]", "bx_head": "【Beyond 最近动态】（新→旧；正文较长的只给开头，截断处标「…（预览，全文 N 字）」——评论或转述前先用 <ws_beyond_view id=\"动态编号\"/> 读全文）", "bx_cut": "…（预览，全文 {N} 字）", "bx_ccut": "…（评论过长，已截）", "am_frame": "［系统：你上一条里的档案操作结果——{ITEMS}］", "am_create": "已写入（{CAT}），条目 id {ID}", "am_merge": "与已有条目相近，已并入那一条，条目 id {ID}", "am_update": "条目 {ID} 已更新", "am_delete": "条目 {ID} 已删除", "am_pending": "这一条是 always 级，等{U}确认后才落库", "am_fail": "没有执行（{DETAIL}）", "am_cut": "，正文超过 3000 字，只存了前 3000 字（你写了 {N} 字）", "blog_hint": "《{T}》是{U}写的日志，要读用 <blog_read name=\"{T}\"/>。", "blog_more": "[全文 {N} 字，这里只给了前 10000 字]", "card_cut": "（超出 3000 字，只存了前 3000 字）"};
+function _ibFillM(s,o){s=String(s||'');for(var k in o)s=s.split('{'+k+'}').join(String(o[k]));return s}
+function _fileCutM(n){n=+n||0;var MAX=_fileCapM();if(n<=Math.round(MAX*1.3))return null;var H=Math.round(MAX*0.75);return {max:MAX,h:H,t:MAX-H,n:n}}
+function _fileCutTagM(f){try{var k=_fileCutM(String((f&&f.text)||'').length);return k?'<i class="mf-cut">已截断 '+k.max+' / '+k.n+'</i>':''}catch(e){return ''}}
+function _bxCutM(s,n,tpl){s=String(s||'').replace(/\s+/g,' ');return s.length>n?s.slice(0,n)+_ibFillM(tpl,{N:s.length}):s}
+function _amRcLineM(rs){var T=_IBT754,its=[];(rs||[]).forEach(function(r){if(!r)return;var s='';
+  if(r.ok===false)s=_ibFillM(T.am_fail,{DETAIL:String(r.detail||r.label||'')});
+  else if(r.pending)s=_ibFillM(T.am_pending,{U:_amUserName()});
+  else if(r.rk==='create')s=_ibFillM(T.am_create,{CAT:String(r.rcat||''),ID:String(r.rid||'')});
+  else if(r.rk==='merge')s=_ibFillM(T.am_merge,{ID:String(r.rid||'')});
+  else if(r.rk==='update')s=_ibFillM(T.am_update,{ID:String(r.rid||'')});
+  else if(r.rk==='delete')s=_ibFillM(T.am_delete,{ID:String(r.rid||'')});
+  if(s&&r.cut&&r.ok!==false)s+=_ibFillM(T.am_cut,{N:r.cut});
+  if(s)its.push(s)});
+  return its.length?_ibFillM(T.am_frame,{ITEMS:its.join('；')}):''}
 function _fileCapM(){/* v221-p：附件正文闸三档（本机，精细文件工具页设置；默认均衡 30000） */try{var v=parseInt(localStorage.getItem('ib_fileCap')||'',10);if(v===15000||v===30000||v===120000)return v}catch(e){}return 30000}
 function _fileOutlineM(t,maxN,maxC){
   maxN=maxN||60;maxC=maxC||1600;var lines=String(t||'').split('\n'),out=[],last=-99,gap=Math.max(6,Math.ceil(lines.length/maxN));
@@ -11795,7 +11811,9 @@ function _fileOutlineM(t,maxN,maxC){
   return r}
 function _wsAttachListM(){/* v221-p：本会话里上传过的文本附件（新→旧），检索与 ws_ctx 都能读 */var o=[];try{var ms=(typeof _msgs!=='undefined'&&Array.isArray(_msgs))?_msgs:[];for(var i=ms.length-1;i>=0;i--){var m=ms[i];if(!m||!Array.isArray(m.files))continue;for(var k=0;k<m.files.length;k++){var f=m.files[k];if(f&&typeof f.text==='string'&&f.text&&f.name)o.push({name:String(f.name),text:f.text})}}}catch(e){}return o}
 function _wsAttachFindM(name){name=String(name||'').trim().toLowerCase().replace(/^附件[\/／]/,'');if(!name)return null;var l=_wsAttachListM();for(var i=0;i<l.length;i++)if(l[i].name.toLowerCase()===name)return l[i];for(var j=0;j<l.length;j++){var n9=l[j].name.toLowerCase();if(n9.indexOf(name)!==-1||name.indexOf(n9)!==-1)return l[j]}return null}
-function _capFileTextM(t,name){t=t||'';const MAX=_fileCapM();if(t.length<=MAX)return t;var ol='';try{ol=_fileOutlineM(t)}catch(e){}var fine=false;try{fine=_wsFineOn()}catch(e){}return t.slice(0,MAX)+'\n[…文件过长，已截断至前 '+MAX+' 字符（原文共 '+t.length+' 字符、'+t.split('\n').length+' 行）。'+(fine?'后面的内容用 <ws_ctx path="'+String(name||'附件').replace(/"/g,'')+'" from="起始行" to="结束行"/> 按行读取，先按下面的目录定位。':'如需处理后续部分，请告知用户分段发送或开启精细文件工具。')+']'+(ol?'\n[目录 · 行号| 该段首行]\n'+ol:'')}/* v221-p：闸随三档设置；截断时附整文目录与按行读取的路径 */
+function _capFileTextM(t,name){t=t||'';const k=_fileCutM(t.length);if(!k)return t;/* 手机端 v754：留头留尾，中间省掉处放说明（原来只留开头、结尾整段没了） */var ol='';try{ol=_fileOutlineM(t)}catch(e){}var fine=false;try{fine=_wsFineOn()}catch(e){}
+  const hd=t.slice(0,k.h),tl=t.slice(t.length-k.t),L=t.split('\n').length,A=hd.split('\n').length,B=Math.max(A,L-tl.split('\n').length+1);
+  return hd+'\n'+_ibFillM(fine?_IBT754.file_cut_fine:_IBT754.file_cut_plain,{CUT:t.length-k.max,A:A,B:B,N:t.length,L:L,H:k.h,T:k.t,NAME:String(name||'附件').replace(/"/g,'')})+'\n'+tl+(ol?'\n[目录 · 行号| 该段首行]\n'+ol:'')}/* v221-p：闸随三档设置；截断时附整文目录与按行读取的路径 */
 /* 缓存友好历史窗口：与电脑版一致。窗口起点阶梯推进，避免每轮 slice(-N) 导致整个历史前缀逐条滑动。 */
 function _cacheStableSliceM(list,keepCount,stepArg){
   keepCount=Math.max(1,keepCount|0);
@@ -11844,7 +11862,7 @@ function buildHist(msgs,limit,cfg,bopt){
   const noVision=_noVisionM(cfg);
   const out=[];let _prev9=null;
   const _flt9=msgs.filter(m=>(m.timestamp||0)>seal&&!m.callFold&&(!m.mark||(window._ibAppTailM&&window._ibAppTailM.id===m.id)))/* v322-p：正在携带本轮 tail 的标记行（主动开口）当轮进历史 *//* v322-p：标记行不进 API 历史 */;const src=(bopt&&bopt.lad)?_flt9:_cacheStableSliceM(_flt9,limit);/* v322-p：callFold（已压缩通话原话）不进上下文，仅界面展示 */
-  src.forEach(m=>{
+  let _amRc9='';src.forEach(m=>{
     let c=(m.content||'').trim();
     if(m.role==='user'&&m.gift)c=_giftLineM(m);else if(m.role==='user'&&m.callEnd&&m.callEnd.gifts&&m.callEnd.gifts.total>0){var _gsL=_giftSumLineM(m);if(_gsL)c+='\n'+_gsL}else if(m.role==='user'&&/^\[视频通话快照\]/.test(c))c=_snapLineM(m);
     if(m.role!=='user')c=_wsStubHistoryM(c,m.wsResults);if(m.role!=='user'&&window.IBSerenade){try{c=IBSerenade.hist(c,m)}catch(e){}}if(m.role==='user'&&m.link&&m.link.kind==='serenade')c=(c?c+'\n\n':'')+'[Serenade '+String(m.link.title||'')+']';if(m.role!=='user'&&m.mapRun&&m.mapRun.ctx)c=String(m.mapRun.ctx)+(c?('\n'+c):'');/* v327-p：Map 旅行那一轮取到的资料跟在回复前面 *//* 仅 API 历史副本瘦身；DB/界面原文不变 */
@@ -11863,6 +11881,7 @@ function buildHist(msgs,limit,cfg,bopt){
     if(m.role==='user'&&Array.isArray(m.galRef))m.galRef.forEach(function(r){if(r&&r.txt)c=(c?c+'\n\n':'')+r.txt});/* v397-p：从相册发的图：发出去那一刻定稿的那段，之后一字不变 */
     let imgs=(!noVision&&m.role==='user'&&Array.isArray(m.images))?m.images.map(x=>x&&(x.dataUrl||x.url)).filter(Boolean):[];let _mj9=[];if(!noVision&&m.role==='user'&&Array.isArray(m.memImgs))m.memImgs.forEach(x=>{const u=x&&x.dataUrl;if(!u)return;if(x.j)_mj9.push(u);else imgs.push(u)});
     var _ep9=false;if(!noVision&&m.role==='user'&&window._ibcEphM&&window._ibcEphM.id===m.id&&Array.isArray(window._ibcEphM.imgs)){imgs=imgs.concat(window._ibcEphM.imgs);_ep9=true}/* v579：临时帧＝一轮即焚，条目标 _eph（追加式历史不记它的 sent） */
+    if(m.role!=='user'){if(m.amRc)_amRc9=(_amRc9?_amRc9+'\n':'')+String(m.amRc)}else if(_amRc9){c=_amRc9+(c?'\n\n'+c:'');_amRc9=''}/* 手机端 v754：TA 上一条里档案操作的结果（带条目 id）回在你这条最前面；只有这一版起的新操作带 amRc，老消息一字不变 */
     if(!c&&!imgs.length&&!_mj9.length)return;
     const r=m.role==='user'?'user':'assistant';
     const _gap9=(r==='assistant'&&out.length&&out[out.length-1].role===r)?_toolGapStubM(_prev9):'';_prev9=m;/* v322-p */
@@ -14553,7 +14572,7 @@ convEl('cv-msgs').addEventListener('click',e=>{
 },true);
 $('sel-cancel').addEventListener('click',()=>setSelMode(false));
 
-var _FW_T={"pick": "转发给", "title": "{U} 与 {TA} 的聊天记录", "foot": "{D} · {N} 条", "bar": "{T} · {N} 条", "none": "没有可以转发的好友", "head": "［{U} 转给你的聊天记录：{U} 与 {TA} 的对话，共 {N} 条。你没有参与这段对话。］", "tail": "［转发的聊天记录结束］", "close": "关闭"};
+var _FW_T={"pick": "转发给", "title": "{U} 与 {TA} 的聊天记录", "foot": "{D} · {N} 条", "bar": "{T} · {N} 条", "none": "没有可以转发的好友", "head": "［{U} 转给你的聊天记录：{U} 与 {TA} 的对话，共 {N} 条。你没有参与这段对话。］", "tail": "［转发的聊天记录结束］", "headSelf": "［{U} 转给你的聊天记录：你与 {U} 之前的对话，共 {N} 条。］", "close": "关闭"};
 var _fwRaf=0,_fwPS={t:null,b:null};
 function _fwFill(s,o){s=String(s||'');for(var k in o)s=s.split('{'+k+'}').join(String(o[k]));return s}
 function _fwYmdM(ts){var d=new Date(ts||0),p=function(x){return (x<10?'0':'')+x};return d.getFullYear()+'-'+p(d.getMonth()+1)+'-'+p(d.getDate())+' '+p(d.getHours())+':'+p(d.getMinutes())}/* 给 TA 的一律带年 */
@@ -14580,7 +14599,7 @@ function _fwFreezeM(list,cfg){/* 发出前定稿：说话人、时间、正文�
   var txt=_fwFill(_FW_T.head,o)+'\n'+items.map(function(x){return _fwYmdM(x.ts)+' '+x.n+'：'+x.t}).join('\n')+'\n'+_fwFill(_FW_T.tail,o);
   return {v:1,from:cfg.id,taN:taN,me:me,n:items.length,t0:items[0].ts,t1:items[items.length-1].ts,items:items,txt:txt}}
 function _fwdCardHtmlM(f){var L=(f.items||[]).slice(0,3).map(function(x){return '<div class="fw-cl"><b>'+esc(x.n)+'：</b>'+esc(String(x.t).replace(/\s+/g,' ').slice(0,80))+'</div>'}).join('');
-  return '<div class="fw-card"><div class="fw-ct">'+esc(_fwTitleM(f))+'</div>'+L+'<div class="fw-cf">'+esc(_fwFill(_FW_T.foot,{D:_fwSpanM(f.t0,f.t1),N:f.n}))+'</div></div>'}
+  return '<div class="fw-card"><div class="fw-ct">'+esc(_fwTitleM(f))+'</div>'+L+'</div>'}/* 手机端 v754：卡上不再有底行的日期和条数（点开的完整记录里还在） */
 function _fwdOpenM(m){var f=m&&m.fwd;if(!f||!Array.isArray(f.items))return;var sh=document.getElementById('sheet-fwdrec');
   if(!sh){sh=document.createElement('div');sh.className='sheet';sh.id='sheet-fwdrec';document.body.appendChild(sh)}
   var days={},Y=new Date().getFullYear(),last='',h='';f.items.forEach(function(x){days[new Date(x.ts||0).toDateString()]=1});var multi=Object.keys(days).length>1;
@@ -14595,7 +14614,7 @@ function _fwPickClose(){var ov=document.getElementById('fw-pick');if(ov)ov.hidde
 async function _fwdPickM(){var cfg=_activeCfg;if(!cfg||cfg._group)return;if(!_selIds.size){toast('先选择消息');return}
   var list=[];try{list=await _selMsgsM()}catch(e){}var f=_fwFreezeM(list,cfg);if(!f){toast('选中的消息里没有可读的文字');return}
   var MX=(typeof _MEM_SRC_MAX_M==='number')?_MEM_SRC_MAX_M:80000;if(f.txt.length>MX){toast('选中约 '+_memWanM(f.txt.length)+'，超过 '+_memWanM(MX)+'，请少选几条');return}/* 同生成记忆的上限 */
-  var cs=(_cfgs||[]).filter(function(c){return c&&c.id!==cfg.id});if(!cs.length){toast(_FW_T.none);return}
+  var cs=(_cfgs||[]).filter(function(c){return !!c});/* 手机端 v754：也列出当前这位（转给本人） */if(!cs.length){toast(_FW_T.none);return}
   var lasts=await Promise.all(cs.map(function(c){return dbLastByFriend(c.id).catch(function(){return null})}));if(_activeCfg!==cfg||!_selMode)return;
   var L=cs.map(function(c,i){return {c:c,t:(lasts[i]&&lasts[i].timestamp)||0,i:i}}).sort(function(a,b){return (b.t-a.t)||(a.i-b.i)});/* 同会话列表：按最后一条消息的时间排 */
   var ov=document.getElementById('fw-pick');
@@ -14608,7 +14627,9 @@ async function _fwdPickM(){var cfg=_activeCfg;if(!cfg||cfg._group)return;if(!_se
 function _fwSbM(){/* 好友多了要看得出能滑：自己画一条细滚动条（手机上系统的滚动条常常不显示） */var ov=document.getElementById('fw-pick');if(!ov||ov.hidden)return;var wl=ov.querySelector('.fw-wl'),sb=ov.querySelector('.fw-sb'),th=sb&&sb.firstChild;if(!wl||!th)return;
   var sh=wl.scrollHeight,ch=wl.clientHeight;if(sh<=ch+2){sb.style.display='none';return}sb.style.display='';var H=Math.max(20,ch-16),t=Math.max(24,Math.round(H*ch/sh));
   sb.style.top=(wl.offsetTop+8)+'px';sb.style.height=H+'px';th.style.height=t+'px';th.style.top=Math.round((H-t)*wl.scrollTop/Math.max(1,sh-ch))+'px'}
-async function _fwdGoM(c,f){_fwPickClose();setSelMode(false);try{await openConv(c)}catch(e){}if(_activeCfg!==c)return;_fwdSetM(f)}
+function _fwSelfM(f){var o={U:f.me||'',TA:f.taN||'',N:f.n};
+  return Object.assign({},f,{self:1,txt:_fwFill(_FW_T.headSelf,o)+'\n'+(f.items||[]).map(function(x){return _fwYmdM(x.ts)+' '+x.n+'：'+x.t}).join('\n')+'\n'+_fwFill(_FW_T.tail,o)})}
+async function _fwdGoM(c,f){_fwPickClose();setSelMode(false);if(c&&f&&_activeCfg&&!_activeCfg._group&&_activeCfg.id===c.id&&f.from===c.id){_fwdSetM(_fwSelfM(f));return}/* 转给本人：留在原对话（话题频道里也不跳走） */try{await openConv(c)}catch(e){}if(_activeCfg!==c)return;_fwdSetM(f)}
 function _fwSelHookM(){var b=document.getElementById('sel-fwd');if(b)b.style.display=(_activeCfg&&_activeCfg._group)?'none':'';_fwPillsQ()}
 function _fwPillsQ(){if(_fwRaf)return;_fwRaf=requestAnimationFrame(function(){_fwRaf=0;try{_fwPillsM()}catch(e){}})}
 function _fwEls(id){var box=document.getElementById('cv-msgs');if(!box)return [];var q=(window.CSS&&CSS.escape)?CSS.escape(id):String(id).replace(/["\\]/g,'\\$&');return [].slice.call(box.querySelectorAll('.m[data-id="'+q+'"]'))}
@@ -15407,7 +15428,7 @@ async function procMemOps(cfg,m){
       if(op.kind==='create'){
         const cat=AM_CATS[op.attrs.category]?op.attrs.category:'personal_context';
         const prio=AM_PRIOS.indexOf(op.attrs.priority)!==-1?op.attrs.priority:'normal';
-        const content=(op.body||'').slice(0,800);/* v325-p：聊天里主动写入放宽到 800 */
+        const _b9=String(op.body||''),content=_b9.slice(0,3000),_cut9=_b9.length>3000?_b9.length:0;/* 手机端 v754：上限 800 → 3000；超了照存前 3000 字，卡片和回执都写明（原来悄悄截掉） */
         if(!content){results.push({ok:false,label:'记忆写入失败',detail:'内容为空'});continue}
         let nearE=null;
         if(_dupOnM(cfg,'amDedup')){try{const _ex0=await amGetEntries(cfg.id),_gN=_gramsM(content),_nl=content.replace(/\s+/g,'').length;let _best=null,_bj=0;
@@ -15415,36 +15436,36 @@ async function procMemOps(cfg,m){
           if(prio!=='always'&&_best&&_bj>=0.5&&_nl>=String(_best.content||'').replace(/\s+/g,'').length*0.7){const _old=_best.content;
             if(_best.priority==='always'){results.push({ok:true,pending:'update',via:'dup',id:_best.id,old:_old,content:content,alt:{id:_amNewId(),friendId:cfg.id,category:cat,priority:prio,content:content,created:Date.now(),updated:Date.now(),updatedBy:cfgName(cfg)},label:'待确认 · 并入核心记忆（always）· '+(AM_CATS[_best.category]||_best.category),detail:'原：'+_old+'\n新：'+content});_wlogM({fid:cfg.id,k:'档案',t:content.slice(0,24),id:'am_'+_best.id,n:'很像 always 旧条目，等你确认并入'});continue}
             Object.assign(_best,{content:content,updated:Date.now(),updatedBy:cfgName(cfg)});await dbPut('autoMemory',_best);
-            results.push({ok:true,label:'已并入记忆 · '+(AM_CATS[_best.category]||_best.category),detail:'原：'+_old+'\n新：'+content,old:_old,now:content});_wlogM({fid:cfg.id,k:'档案',t:content.slice(0,24),id:'am_'+_best.id,n:'并入旧条目（相似 '+_bj.toFixed(2)+'）'});continue}
+            results.push({ok:true,label:'已并入记忆 · '+(AM_CATS[_best.category]||_best.category)+(_cut9?_IBT754.card_cut:''),detail:'原：'+_old+'\n新：'+content,old:_old,now:content,rk:'merge',rid:_best.id,cut:_cut9});_wlogM({fid:cfg.id,k:'档案',t:content.slice(0,24),id:'am_'+_best.id,n:'并入旧条目（相似 '+_bj.toFixed(2)+'）'});continue}
           if(_best&&_bj>=0.3)nearE={id:_best.id,content:String(_best.content||'')}}catch(e){}}
         if(prio==='always'){
           const ex=await amGetEntries(cfg.id);
           if(ex.filter(e=>e.priority==='always').length>=5){results.push({ok:false,label:'记忆写入失败',detail:'always 条目已达 5 条上限'});continue}
         }
         const entry={id:_amNewId(),friendId:cfg.id,category:cat,priority:prio,content:content,created:Date.now(),updated:Date.now(),updatedBy:cfgName(cfg)};
-        if(prio==='always'){results.push({ok:true,pending:'create',entry:entry,label:'待确认 · 写入核心记忆（always）· '+(AM_CATS[cat]||cat),detail:content,near:nearE});continue}/* always 级先出确认卡：核心条目进 system 缓存块、每位 TA 每轮都带，写不写由用户点 */
+        if(prio==='always'){results.push({ok:true,pending:'create',entry:entry,label:'待确认 · 写入核心记忆（always）· '+(AM_CATS[cat]||cat)+(_cut9?_IBT754.card_cut:''),detail:content,near:nearE,cut:_cut9});continue}/* always 级先出确认卡：核心条目进 system 缓存块、每位 TA 每轮都带，写不写由用户点 */
         await dbPut('autoMemory',entry);
-        results.push({ok:true,label:'已写入记忆 · '+(AM_CATS[cat]||cat),detail:content,near:nearE});_wlogM({fid:cfg.id,k:'档案',t:content.slice(0,24),id:'am_'+entry.id,n:nearE?'相近':''});
+        results.push({ok:true,label:'已写入记忆 · '+(AM_CATS[cat]||cat)+(_cut9?_IBT754.card_cut:''),detail:content,near:nearE,rk:'create',rid:entry.id,rcat:(AM_CATS[cat]||cat),cut:_cut9});_wlogM({fid:cfg.id,k:'档案',t:content.slice(0,24),id:'am_'+entry.id,n:nearE?'相近':''});
       }else if(op.kind==='update'){
         const ex=await dbGet('autoMemory',op.attrs.id||'').catch(()=>null);
         if(!ex||ex.friendId!==cfg.id){results.push({ok:false,label:'记忆更新失败',detail:'未找到条目'});continue}
-        const content=(op.body||'').slice(0,800);/* v325-p：聊天里主动写入放宽到 800 */
+        const _b9=String(op.body||''),content=_b9.slice(0,3000),_cut9=_b9.length>3000?_b9.length:0;/* 手机端 v754：上限 800 → 3000；超了照存前 3000 字，卡片和回执都写明（原来悄悄截掉） */
         if(!content){results.push({ok:false,label:'记忆更新失败',detail:'内容为空'});continue}
         const old=ex.content;
-        if(ex.priority==='always'){results.push({ok:true,pending:'update',id:ex.id,old:old,content:content,label:'待确认 · 改动核心记忆（always）· '+(AM_CATS[ex.category]||ex.category),detail:'原：'+old+'\n新：'+content});continue}/* 改动 always 条目同样先确认 */
+        if(ex.priority==='always'){results.push({ok:true,pending:'update',id:ex.id,old:old,content:content,label:'待确认 · 改动核心记忆（always）· '+(AM_CATS[ex.category]||ex.category)+(_cut9?_IBT754.card_cut:''),detail:'原：'+old+'\n新：'+content,cut:_cut9});continue}/* 改动 always 条目同样先确认 */
         Object.assign(ex,{content:content,updated:Date.now(),updatedBy:cfgName(cfg)});
         await dbPut('autoMemory',ex);_wlogM({fid:cfg.id,k:'档案·改',t:content.slice(0,24),id:'am_'+ex.id,n:''});
-        results.push({ok:true,label:'已更新记忆 · '+(AM_CATS[ex.category]||ex.category),detail:'原：'+old+'\n新：'+content,old:old,now:content});
+        results.push({ok:true,label:'已更新记忆 · '+(AM_CATS[ex.category]||ex.category)+(_cut9?_IBT754.card_cut:''),detail:'原：'+old+'\n新：'+content,old:old,now:content,rk:'update',rid:ex.id,cut:_cut9});
       }else if(op.kind==='delete'){
         const ex=await dbGet('autoMemory',op.attrs.id||'').catch(()=>null);
         if(!ex||ex.friendId!==cfg.id){results.push({ok:false,label:'记忆删除失败',detail:'未找到条目'});continue}
         await dbDelete('autoMemory',op.attrs.id);
-        results.push({ok:true,label:'已删除记忆 · '+(AM_CATS[ex.category]||ex.category),detail:ex.content});
+        results.push({ok:true,label:'已删除记忆 · '+(AM_CATS[ex.category]||ex.category),detail:ex.content,rk:'delete',rid:ex.id});
       }
     }catch(e){results.push({ok:false,label:'记忆操作异常',detail:String((e&&e.message)||e)})}
   }
   if(!results.length)return;
-  m.content=p.clean;m.memOps=results;
+  m.content=p.clean;m.memOps=results;try{var _rc9=_amRcLineM(results);if(_rc9)m.amRc=_rc9}catch(e){}/* 手机端 v754：这一刻定稿的回执，下一条你的消息最前面回给 TA */
   try{await dbPut('chatMessages',m)}catch(e){}
   redrawMsg(m);
 }
@@ -17171,7 +17192,7 @@ function _orientApply(){try{
   setTimeout(function(){try{if(window.IBNative&&window.IBNative.available){var _bg=$('pres-bg');var _row=_bg&&_bg.closest('.tog');if(_row)_row.style.display=''}}catch(e){}},1200);/* v116-p：壳内显露「后台 Presence（系统级）」开关（桥在文末激活，故延时探测；浏览器 / PWA 保持隐藏） */
 })();
 function _vidQNormM(v){v=String(v==null?'m':v);if(v==='384')return 'l';if(v==='768')return 'h';if(v==='512')return 'm';return (v==='l'||v==='h')?v:'m'}/* 画质档位兼容电脑端备份里的 384/512/768 写法 */
-var IB_VER='v519-p',IB_VER_DATE='2026-11-20';
+var IB_VER='v520-p',IB_VER_DATE='2026-11-20';
 (function _appVerDraw(){var e=document.getElementById('app-ver');if(e)e.textContent='InternalBeyond Mobile '+IB_VER+'（'+IB_VER_DATE+'）'})();
 function _ibVeilHeal(){try{setTimeout(function(){try{var v=document.getElementById('lk-preveil');if(!v||v.classList.contains('off'))return;var lk=document.getElementById('lockscr');if(lk){_lkVeilOff();return}if(localStorage.getItem('ib_lockOn')==='1')return;_lkVeilOff()}catch(e){}},1600)}catch(e){}}/* v246-p：启动完成后仍盖幕的静默自愈 */
 function _lkVeilOff(){try{window._ibVeilOff=true;var v=document.getElementById('lk-preveil');if(v){v.classList.add('off');setTimeout(function(){try{v.remove()}catch(e){}},420)}}catch(e){}}/* fix-r4：预遮罩揭幕（任务 8） */
@@ -19364,10 +19385,10 @@ async function _ibBlogEditExecM(cfg,op){
   if(!hit){var fz=mine.filter(function(p){var t=_ibBlogNormT(p.title);return t&&(t.indexOf(want)!==-1||want.indexOf(t)!==-1)});
     if(fz.length>1)return{ok:false,label:L,mode:md,title:t0,detail:'「'+t0+'」对上 '+fz.length+' 篇',response:'标题「'+t0+'」对上了你写过的 '+fz.length+' 篇：'+tl(fz)+'，没有动手——写完整标题再来。'};
     hit=fz[0]}
-  if(!hit)return{ok:false,label:L,mode:md,title:t0,detail:'没找到《'+t0+'》',response:'你写过的日志里没有《'+t0+'》，没有修改。'+(mine.length?('你写过的：'+tl(mine)):'你还没有写过日志。')+'（只能改你自己写的）'};
+  if(!hit){var _uh9='';try{var _up9=(await dbGetAll('posts')).filter(function(p){return p&&!p.aiWritten&&!isLockedPost(p)&&_ibBlogNormT(p.title)===want})[0];if(_up9&&(typeof _blogAllowedM!=='function'||_blogAllowedM(cfg)))_uh9=_ibFillM(_IBT754.blog_hint,{T:String(_up9.title||t0),U:_amUserName()})}catch(e){}/* 手机端 v754：这个标题是你写的日志时，指给 TA 该用哪条指令读（这位没开 Blog 读取的不指） */return{ok:false,label:L,mode:md,title:t0,detail:'没找到《'+t0+'》',response:'你写过的日志里没有《'+t0+'》，没有修改。'+(mine.length?('你写过的：'+tl(mine)):'你还没有写过日志。')+'（只能改你自己写的）'+_uh9}}
   if(body&&op.truncated)return{ok:false,label:L,mode:md,title:hit.title,detail:'输出被截断',response:'输出被截断，新正文不完整，《'+hit.title+'》没有修改'};
   if(md==='read'){var full=String(hit.content||''),d9=new Date(tsOf(hit)),ds=isNaN(d9)?'':(d9.getFullYear()+'-'+String(d9.getMonth()+1).padStart(2,'0')+'-'+String(d9.getDate()).padStart(2,'0'));
-    return{ok:true,label:L,mode:'read',title:hit.title,postId:hit.id,detail:'《'+hit.title+'》 · '+full.length+' 字',response:'日志《'+hit.title+'》（分类「'+(hit.category||'')+'」'+(ds?'，最后修改 '+ds:'')+'）现有全文：\n'+full.slice(0,10000)}}
+    return{ok:true,label:L,mode:'read',title:hit.title,postId:hit.id,detail:'《'+hit.title+'》 · '+full.length+' 字',response:'日志《'+hit.title+'》（分类「'+(hit.category||'')+'」'+(ds?'，最后修改 '+ds:'')+'）现有全文：\n'+full.slice(0,10000)+(full.length>10000?'\n'+_ibFillM(_IBT754.blog_more,{N:full.length}):'')}}
   var p2=Object.assign({},hit);if(body)p2.content=body.slice(0,10000);if(nt)p2.title=nt;p2.updated=Date.now();
   try{await dbPut('posts',p2)}catch(e){return{ok:false,label:L,mode:md,title:hit.title,detail:'保存失败',response:'保存失败，《'+hit.title+'》没有修改'}}
   try{if(typeof currentPage!=='undefined'&&currentPage==='blog'&&typeof blogRender==='function')blogRender()}catch(e){}
@@ -21237,14 +21258,14 @@ async function buildBeyondTail(cfg){
     var rows=(await ibfAll()).filter(function(p){return ibfVisibleTo(p,cfg.id)}).slice(0,lim);
     if(rows.length){
       var me=null;try{me=await loadAbout()}catch(e){}
-      var lines=['【Beyond 最近动态】（新→旧）'];
+      var lines=[_IBT754.bx_head];/* 手机端 v754：首行说明正文长的只是预览 */
       rows.forEach(function(p){
         var nm=p.author&&p.author.type==='user'?((me&&me.name)||'用户'):_nmByIdM(p.author&&p.author.fid,(p.author&&p.author.name)||'AI');
-        var l='#'+p.id+' ｜ '+nm+' ｜ '+_ibfAgoTA(p.ts||0)+((p.loc&&p.loc.label)?(' ｜ 定位：'+String(p.loc.label).replace(/\s+/g,' ').slice(0,40)):'')+' ｜ '+String(p.text||'').replace(/\s+/g,' ').slice(0,(p.author&&p.author.type==='user')?1000:100)+((p.imgs&&p.imgs.length>1)?(' ｜ [配图×'+Math.min(p.imgs.length,3)+']'):(p.img?' ｜ [配图]':''))+(p.vis==='user'?'（仅用户可见）':(p.vis&&p.vis!=='all'?'（部分可见）':''));
+        var l='#'+p.id+' ｜ '+nm+' ｜ '+_ibfAgoTA(p.ts||0)+((p.loc&&p.loc.label)?(' ｜ 定位：'+String(p.loc.label).replace(/\s+/g,' ').slice(0,40)):'')+' ｜ '+_bxCutM(p.text,(p.author&&p.author.type==='user')?1000:200,_IBT754.bx_cut)+((p.imgs&&p.imgs.length>1)?(' ｜ [配图×'+Math.min(p.imgs.length,3)+']'):(p.img?' ｜ [配图]':''))+(p.vis==='user'?'（仅用户可见）':(p.vis&&p.vis!=='all'?'（部分可见）':''));
         lines.push(l);
         (p.comments||[]).slice(-2).forEach(function(cm){
           var cn=cm.author&&cm.author.type==='user'?((me&&me.name)||'用户'):_nmByIdM(cm.author&&cm.author.fid,(cm.author&&cm.author.name)||'AI');
-          lines.push('  └ 评论 · '+cn+'：'+String(cm.text||'').replace(/\s+/g,' ').slice(0,1200));
+          lines.push('  └ 评论 · '+cn+'：'+_bxCutM(cm.text,1200,_IBT754.bx_ccut));
         });
       });
       seg.push(lines.join('\n'));
@@ -38159,7 +38180,7 @@ var TZ=[
  ['icosh','桌面图标（投影与光晕）','',function(C,C2,C3,rgb){var u=ui()||{};var st='';try{st=(typeof _vzGet==='function')?_vzGet(u,'icoStyle'):(u.icoStyle||'')}catch(e){}var dk=String(u.deskIco||'').toLowerCase();dk=/^#[0-9a-f]{6}$/.test(dk)?hexRgb(dk):'';var iL,iD;if(dk){iL='inset 0 1.5px 0 rgba(255,255,255,.85),inset 0 -2px 3px rgba('+dk+',.2)';iD='inset 0 1px 0 rgba(255,255,255,.14)'}else if(st==='glass'||st==='frost'){iL=iD='inset 0 1px 0 rgba(255,255,255,.4)'}else if(st==='ink'){iL=iD='inset 0 1px 0 rgba(255,255,255,.1)'}else{iL='inset 0 1.5px 0 rgba(255,255,255,.95),inset 0 -2px 3px rgba('+rgb+',.2)';iD='inset 0 1px 0 rgba(200,222,248,.14)'}var T='#sec-profile-cal#sec-profile-cal .sb-app .sb-ic';return 'html body:not(.theme-infernal) '+T+'{box-shadow:'+iL+',0 8px 22px rgba('+rgb+',.24),0 0 12px rgba('+rgb+',.3)!important}html body.theme-infernal '+T+'{box-shadow:'+iD+',0 8px 22px rgba(0,0,0,.34),0 0 14px rgba('+rgb+',.3)!important}'+'html body:not(.theme-infernal) '+T+' svg{filter:drop-shadow(0 1px 1px rgba('+rgb+',.62)) drop-shadow(0 2px 4px rgba('+rgb+',.34))!important}html body.theme-infernal '+T+' svg{filter:drop-shadow(0 1.5px 2.5px rgba('+rgb+',.55)) drop-shadow(0 0 5px rgba('+rgb+',.3))!important}'}],
  ['ttl','页面大标题','.pg-hero,.sub-title',function(C,C2){return 'html .pg-hero .ph-title,html .ph-title{color:'+C+'!important}html .ph-cn,html .sub-title,html .ph-title .ph-cn{color:'+C2+'!important}'}],
  ['lab','分区小标 / 说明文字','.sec-label,.sc-t,.hint',function(C){return 'html .sec-label,html .sc-t,html .hint,html .tog-s,html .lb-note,html .uvr-h label,html .f-group>label,html .ov2-lab,html .ov2-hint{color:'+C+'!important}'}],
- ['card','卡片 / 面板文字','.card,.set-card,.am-card,.ca-grp,.ca-list,.ca-note,.ca-slv,.ic-list,.sheet,.pf-card,#ib-helper-sheet',null],
+ ['card','卡片 / 面板文字','.card,.set-card,.am-card,.ca-grp,.ca-list,.ca-note,.ca-slv,.ic-list,.sheet,.pf-card,#ib-helper-sheet,#fw-pick .fw-win',null],
  ['chat','聊天正文','#conv #cv-msgs',function(C,C2){return 'html body #conv .ws-op-text,html body #conv .ws-op-detail{color:'+C2+'!important}html body #conv .ws-op-text b{color:'+C+'!important}'}],/* v303-p：聊天里指令卡的标题 / 加粗 / 详情框文字在明亮主题写死深蓝，不跟这一行 */
  ['think','思考链','.think-b',function(C,C2){return 'html body .think-b,html body .think-b .think-t,html body .think-b .think-t *,html body #fav-ov .fav-th-b,html body #fav-ov .fav-th-b *{color:'+C+'!important}html body .think-label,html body #fav-ov .fav-th-h{color:'+C2+'!important}'}],
  ['fav','收藏夹','#fav-ov',function(C,C2){return 'html #fav-ov .fav-tx,html #fav-ov .fav-tx *,html #fav-ov .fav-tt{color:'+C+'!important}html #fav-ov .fav-ft,html #fav-ov .fav-uq,html #fav-ov .fav-sub{color:'+C2+'!important}'}],
@@ -38267,7 +38288,7 @@ function decoCss(){
   var u=ui();var g=(u&&u.gz&&typeof u.gz==='object')?u.gz:{};var tz=(u&&u.tz&&typeof u.tz==='object')?u.tz:{};var H=function(x){x=String(x||'').toLowerCase();return /^#[0-9a-f]{6}$/.test(x)?hexRgb(x):''};var out='';
   
   var sh=H(g.sheet);if(sh)out+='html body #dlg,html body #toast,html body #at-pop,html body .ava-menu{background:rgba('+sh+',.82)!important}html body.theme-infernal #dlg,html body.theme-infernal #toast,html body.theme-infernal #at-pop,html body.theme-infernal .ava-menu{background:rgba('+sh+',.6)!important}';
-  var ip=H(g.input);if(ip)out+='html body #conv .cv-input .cv-mini,html body #conv .cv-input .send-btn,html body #ib-helper-sheet .hp-in{background:rgba('+ip+',.55)!important}html body.theme-infernal #conv .cv-input .cv-mini,html body.theme-infernal #conv .cv-input .send-btn,html body.theme-infernal #ib-helper-sheet .hp-in{background:rgba('+ip+',.42)!important}html body #conv #cv-quote-bar{background:rgba('+ip+',.18)!important}';
+  var ip=H(g.input);if(ip)out+='html body #conv .cv-input .cv-mini,html body #conv .cv-input .send-btn,html body #ib-helper-sheet .hp-in{background:rgba('+ip+',.55)!important}html body.theme-infernal #conv .cv-input .cv-mini,html body.theme-infernal #conv .cv-input .send-btn,html body.theme-infernal #ib-helper-sheet .hp-in{background:rgba('+ip+',.42)!important}html body #conv #cv-quote-bar,html body #conv #cv-fwd-bar{background:rgba('+ip+',.18)!important}';
   var bt=H(g.brv);if(bt)out+='html body #anno-toolbar,html body #anno-input-bar{background:rgba('+bt+',.82)!important}html body #anno-toolbar #anno-drop{background:rgba('+bt+',.97)!important}html body.theme-infernal #anno-toolbar,html body.theme-infernal #anno-input-bar{background:rgba('+bt+',.6)!important}html body.theme-infernal #anno-toolbar #anno-drop{background:rgba('+bt+',.94)!important}';
   var cd=H(g.card);if(cd)out+='html body .mio-box{background:rgba('+cd+',.4)!important}html body #page-guide .g-callout{background:rgba('+cd+',.14)!important}html body #uv-theme-note,html body .zone-tabs,html body .gtoc-tabs,html body .tip-dropdown-inner{background:rgba('+cd+',.32)!important}html body.theme-infernal .mio-box{background:rgba('+cd+',.32)!important}html body.theme-infernal #uv-theme-note,html body.theme-infernal .zone-tabs,html body.theme-infernal .gtoc-tabs,html body.theme-infernal .tip-dropdown-inner{background:rgba('+cd+',.28)!important}';
   var by=H(g.beyond);if(by)out+='html body #bx-search{background:rgba('+by+',.3)!important}html body.theme-infernal #bx-search{background:rgba('+by+',.4)!important}';
@@ -38276,7 +38297,7 @@ function decoCss(){
   var ac=H(u&&u.accColor);if(ac)out+='html body .post-card .pc-date{background:linear-gradient(135deg,rgba('+ac+',.5),rgba('+ac+',.3))!important}html body.theme-infernal .post-card .pc-date{background:linear-gradient(135deg,rgba('+ac+',.42),rgba('+ac+',.24))!important}html body .post-card .pc-cat{background:rgba('+ac+',.12)!important}';
   var w=H(u&&u.deskIco);if(w)out+='html body #sec-profile-cal#sec-profile-cal .sb-ic{background:linear-gradient(172deg,rgba('+w+',.4),rgba('+w+',.2))!important;border-color:rgba(255,255,255,.7)!important;box-shadow:0 6px 14px rgba('+w+',.3),inset 0 1.5px 0 rgba(255,255,255,.85),inset 0 -2px 3px rgba('+w+',.2)!important}html body.theme-infernal #sec-profile-cal#sec-profile-cal .sb-ic{background:linear-gradient(158deg,rgba('+w+',.34),rgba('+w+',.16))!important;border-color:rgba('+w+',.34)!important;box-shadow:0 7px 18px rgba(0,0,0,.38),0 0 12px rgba('+w+',.18),inset 0 1px 0 rgba(255,255,255,.14)!important}';
   var n=H(u&&u.navIco);if(n)out+='html body .hp-gbtn,html body #ib-helper-sheet .hp-send{background:rgba('+n+',.24)!important;border-color:rgba('+n+',.4)!important}html body #ib-helper-sheet .hp-chip{background:rgba('+n+',.18)!important;border-color:rgba('+n+',.32)!important}html body #drawer#drawer .dw-med{background:linear-gradient(150deg,rgba('+n+',.3),rgba('+n+',.12))!important;border-color:rgba('+n+',.36)!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.55),0 2px 8px rgba('+n+',.22)!important}html body #drawer#drawer .dw-item.active .dw-med{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 0 14px rgba('+n+',.38)!important}';var ns=H(u&&u.navSel);if(ns)out+='html body #drawer#drawer .dw-item.active{background:rgba('+ns+',.42)!important;box-shadow:0 4px 16px rgba('+ns+',.2)!important}html body.theme-infernal #drawer#drawer .dw-item.active{background:rgba('+ns+',.2)!important;box-shadow:none!important}';var nb=H(u&&u.navBar);if(nb)out+='html body #drawer#drawer .dw-item.active::before{background:rgba('+nb+',.95)!important}';var nf=H(u&&u.navFoot);if(nf)out+='html body #drawer#drawer .dw-foot-btn{background:linear-gradient(158deg,rgba('+nf+',.26),rgba('+nf+',.1))!important;border-color:rgba('+nf+',.3)!important;box-shadow:0 3px 12px rgba('+nf+',.16)!important}html body.theme-infernal #drawer#drawer .dw-foot-btn{background:linear-gradient(158deg,rgba('+nf+',.2),rgba('+nf+',.08))!important;box-shadow:0 4px 14px rgba(0,0,0,.28)!important}';var nd=H(u&&u.navDisc);if(nd)out+='html body #drawer#drawer .dwf-ico{background:radial-gradient(circle at 32% 28%,rgba(255,255,255,.5),rgba('+nd+',.28))!important}html body.theme-infernal #drawer#drawer .dwf-ico{background:radial-gradient(circle at 32% 28%,rgba('+nd+',.34),rgba('+nd+',.12))!important}';
-  var t=H(g.top);if(t)out+='html body #blog-side-btn#blog-side-btn{background:rgba('+t+',.22)!important;border-color:rgba('+t+',.36)!important}';var cvb=H(g.cvh)||t;var vbx=function(sd,hex){var c=rgbArr(hex);if(!c)return '';var r=function(x){return Math.round(x[0])+','+Math.round(x[1])+','+Math.round(x[2])};var dk=r(mixC(c,K9,.28)),lt=r(mixC(c,W9,.3));var P='html body #conv .vm-stack.'+sd+' ',Q='html body #conv .m.'+sd+' ',DP='html body.theme-infernal #conv .vm-stack.'+sd+' ',DQ='html body.theme-infernal #conv .m.'+sd+' ';var o=P+'.vmsg,'+P+'.ibvb{--vb-r1:'+r(mixC(c,W9,.42))+';--vb-r2:'+r(mixC(c,W9,.12))+';--vb-r3:'+r(mixC(c,W9,.55))+'}'+DP+'.vmsg,'+DP+'.ibvb{--vb-r1:'+r(mixC(c,W9,.22))+';--vb-r2:'+r(mixC(c,K9,.08))+';--vb-r3:'+r(mixC(c,W9,.32))+'}'+P+'.vmsg,'+P+'.ibvb,'+P+'.vm-orig,'+Q+'.vmsg-call{border-color:rgba('+dk+',.42)!important}'+DP+'.vmsg,'+DP+'.ibvb,'+DP+'.vm-orig,'+DQ+'.vmsg-call{border-color:rgba('+lt+',.3)!important}'+P+'.vm-play,'+P+'.ibvb .vb-p,'+Q+'.vmsg-call .vm-play{background:rgba('+dk+',.24)!important}'+DP+'.vm-play,'+DP+'.ibvb .vb-p,'+DQ+'.vmsg-call .vm-play{background:rgba('+lt+',.2)!important}'+P+'.ibvb .vb-t{border-color:rgba('+dk+',.42)!important}'+DP+'.ibvb .vb-t{border-color:rgba('+lt+',.3)!important}'+P+'.ibvb .vb-t.on{background:rgba('+dk+',.28)!important;border-color:rgba('+dk+',.6)!important}'+DP+'.ibvb .vb-t.on{background:rgba('+lt+',.28)!important;border-color:rgba('+lt+',.6)!important}';return sd==='ai'?o+o.split('#conv .vm-stack.ai ').join('#fav-ov .vm-stack.ai ').split('#conv .m.ai ').join('#fav-ov .fav-cvb '):o/* v445-p 收藏夹里 TA 的语音条与通话小条也跟 */};if(H(g.vbu))out+=vbx('user',g.vbu);if(H(g.vbc))out+=vbx('ai',g.vbc);var fvc=H(g.fav)?rgbArr(g.fav):null;if(fvc){var fr=function(x){return Math.round(x[0])+','+Math.round(x[1])+','+Math.round(x[2])};out+='html body #fav-ov .fav-fold{background:rgb('+fr(mixC(fvc,W9,.45))+')!important}html body.theme-infernal #fav-ov .fav-fold{background:rgb('+fr(mixC(fvc,W9,.12))+')!important}'}var bq=H(g.beyond),bqa=bq?rgbArr(g.beyond):null;if(bq&&bqa){var bqd=Math.round(mixC(bqa,K9,.2)[0])+','+Math.round(mixC(bqa,K9,.2)[1])+','+Math.round(mixC(bqa,K9,.2)[2]),bql=Math.round(mixC(bqa,W9,.25)[0])+','+Math.round(mixC(bqa,W9,.25)[1])+','+Math.round(mixC(bqa,W9,.25)[2]);out+='html body .bx-rtq,html body .bx-cbox,html body #ibfc-ava.li-ava{background-color:rgba('+bq+',.32)!important}html body.theme-infernal .bx-rtq,html body.theme-infernal .bx-cbox,html body.theme-infernal #ibfc-ava.li-ava{background-color:rgba('+bq+',.28)!important}html body .bx-rtq{border-left-color:rgba('+bqd+',.55)!important}html body.theme-infernal .bx-rtq{border-left-color:rgba('+bql+',.5)!important}'}var oq=H(g.opcard);if(oq){var oqa=rgbArr(g.opcard),oq3=function(x){return Math.round(x[0])+','+Math.round(x[1])+','+Math.round(x[2])},oqd=oq3(mixC(oqa,K9,.2)),oql=oq3(mixC(oqa,W9,.25));out+='html body #conv .m .m-quote{background:rgba('+oq+',.14)!important;border-left-color:rgba('+oqd+',.55)!important}html body.theme-infernal #conv .m .m-quote{background:rgba('+oq+',.16)!important;border-left-color:rgba('+oql+',.5)!important}html body #conv #cv-quote-bar{background:rgba('+oq+',.16)!important;border-left-color:rgba('+oqd+',.55)!important}html body.theme-infernal #conv #cv-quote-bar{background:rgba('+oq+',.18)!important;border-left-color:rgba('+oql+',.5)!important}'}var sz9=H(g.sheet);if(sz9){var sc9=String(sz9).split(',').map(Number),mx9=function(t,k){return sc9.map(function(v){return Math.round(v+(t-v)*k)}).join(',')};out+='html body #sheet-msginfo .mi-cw-bar{background:rgba('+mx9(0,.28)+',.42)!important}html body.theme-infernal #sheet-msginfo .mi-cw-bar{background:rgba('+mx9(255,.3)+',.3)!important}'}var mz=H(g.mem);if(mz)out+='html body #page-memory .ms-cell{background:rgba('+mz+',.4)!important;border-color:rgba('+mz+',.34)!important}html body.theme-infernal #page-memory .ms-cell{background:rgba('+mz+',.32)!important;border-color:rgba('+mz+',.26)!important}'+'html body #page-memory #mem-tok{background:rgba('+mz+',.32)!important;border-color:rgba('+mz+',.3)!important}html body.theme-infernal #page-memory #mem-tok{background:rgba('+mz+',.28)!important;border-color:rgba('+mz+',.22)!important}'+'html body #page-memory #mem-search,html body #page-memory .mem-cat-btn{background:rgba('+mz+',.3)!important;border-color:rgba('+mz+',.34)!important}html body.theme-infernal #page-memory #mem-search,html body.theme-infernal #page-memory .mem-cat-btn{background:rgba('+mz+',.28)!important;border-color:rgba('+mz+',.24)!important}';
+  var t=H(g.top);if(t)out+='html body #blog-side-btn#blog-side-btn{background:rgba('+t+',.22)!important;border-color:rgba('+t+',.36)!important}';var cvb=H(g.cvh)||t;var vbx=function(sd,hex){var c=rgbArr(hex);if(!c)return '';var r=function(x){return Math.round(x[0])+','+Math.round(x[1])+','+Math.round(x[2])};var dk=r(mixC(c,K9,.28)),lt=r(mixC(c,W9,.3));var P='html body #conv .vm-stack.'+sd+' ',Q='html body #conv .m.'+sd+' ',DP='html body.theme-infernal #conv .vm-stack.'+sd+' ',DQ='html body.theme-infernal #conv .m.'+sd+' ';var o=P+'.vmsg,'+P+'.ibvb{--vb-r1:'+r(mixC(c,W9,.42))+';--vb-r2:'+r(mixC(c,W9,.12))+';--vb-r3:'+r(mixC(c,W9,.55))+'}'+DP+'.vmsg,'+DP+'.ibvb{--vb-r1:'+r(mixC(c,W9,.22))+';--vb-r2:'+r(mixC(c,K9,.08))+';--vb-r3:'+r(mixC(c,W9,.32))+'}'+P+'.vmsg,'+P+'.ibvb,'+P+'.vm-orig,'+Q+'.vmsg-call{border-color:rgba('+dk+',.42)!important}'+DP+'.vmsg,'+DP+'.ibvb,'+DP+'.vm-orig,'+DQ+'.vmsg-call{border-color:rgba('+lt+',.3)!important}'+P+'.vm-play,'+P+'.ibvb .vb-p,'+Q+'.vmsg-call .vm-play{background:rgba('+dk+',.24)!important}'+DP+'.vm-play,'+DP+'.ibvb .vb-p,'+DQ+'.vmsg-call .vm-play{background:rgba('+lt+',.2)!important}'+P+'.ibvb .vb-t{border-color:rgba('+dk+',.42)!important}'+DP+'.ibvb .vb-t{border-color:rgba('+lt+',.3)!important}'+P+'.ibvb .vb-t.on{background:rgba('+dk+',.28)!important;border-color:rgba('+dk+',.6)!important}'+DP+'.ibvb .vb-t.on{background:rgba('+lt+',.28)!important;border-color:rgba('+lt+',.6)!important}';return sd==='ai'?o+o.split('#conv .vm-stack.ai ').join('#fav-ov .vm-stack.ai ').split('#conv .m.ai ').join('#fav-ov .fav-cvb '):o/* v445-p 收藏夹里 TA 的语音条与通话小条也跟 */};if(H(g.vbu))out+=vbx('user',g.vbu);if(H(g.vbc))out+=vbx('ai',g.vbc);var fvc=H(g.fav)?rgbArr(g.fav):null;if(fvc){var fr=function(x){return Math.round(x[0])+','+Math.round(x[1])+','+Math.round(x[2])};out+='html body #fav-ov .fav-fold{background:rgb('+fr(mixC(fvc,W9,.45))+')!important}html body.theme-infernal #fav-ov .fav-fold{background:rgb('+fr(mixC(fvc,W9,.12))+')!important}'}var bq=H(g.beyond),bqa=bq?rgbArr(g.beyond):null;if(bq&&bqa){var bqd=Math.round(mixC(bqa,K9,.2)[0])+','+Math.round(mixC(bqa,K9,.2)[1])+','+Math.round(mixC(bqa,K9,.2)[2]),bql=Math.round(mixC(bqa,W9,.25)[0])+','+Math.round(mixC(bqa,W9,.25)[1])+','+Math.round(mixC(bqa,W9,.25)[2]);out+='html body .bx-rtq,html body .bx-cbox,html body #ibfc-ava.li-ava{background-color:rgba('+bq+',.32)!important}html body.theme-infernal .bx-rtq,html body.theme-infernal .bx-cbox,html body.theme-infernal #ibfc-ava.li-ava{background-color:rgba('+bq+',.28)!important}html body .bx-rtq{border-left-color:rgba('+bqd+',.55)!important}html body.theme-infernal .bx-rtq{border-left-color:rgba('+bql+',.5)!important}'}var oq=H(g.opcard);if(oq){var oqa=rgbArr(g.opcard),oq3=function(x){return Math.round(x[0])+','+Math.round(x[1])+','+Math.round(x[2])},oqd=oq3(mixC(oqa,K9,.2)),oql=oq3(mixC(oqa,W9,.25));out+='html body #conv .m .m-quote{background:rgba('+oq+',.14)!important;border-left-color:rgba('+oqd+',.55)!important}html body.theme-infernal #conv .m .m-quote{background:rgba('+oq+',.16)!important;border-left-color:rgba('+oql+',.5)!important}html body #conv #cv-quote-bar,html body #conv #cv-fwd-bar{background:rgba('+oq+',.16)!important;border-left-color:rgba('+oqd+',.55)!important}html body.theme-infernal #conv #cv-quote-bar,html body.theme-infernal #conv #cv-fwd-bar{background:rgba('+oq+',.18)!important;border-left-color:rgba('+oql+',.5)!important}'}var sz9=H(g.sheet);if(sz9){var sc9=String(sz9).split(',').map(Number),mx9=function(t,k){return sc9.map(function(v){return Math.round(v+(t-v)*k)}).join(',')};out+='html body #sheet-msginfo .mi-cw-bar{background:rgba('+mx9(0,.28)+',.42)!important}html body.theme-infernal #sheet-msginfo .mi-cw-bar{background:rgba('+mx9(255,.3)+',.3)!important}'}var mz=H(g.mem);if(mz)out+='html body #page-memory .ms-cell{background:rgba('+mz+',.4)!important;border-color:rgba('+mz+',.34)!important}html body.theme-infernal #page-memory .ms-cell{background:rgba('+mz+',.32)!important;border-color:rgba('+mz+',.26)!important}'+'html body #page-memory #mem-tok{background:rgba('+mz+',.32)!important;border-color:rgba('+mz+',.3)!important}html body.theme-infernal #page-memory #mem-tok{background:rgba('+mz+',.28)!important;border-color:rgba('+mz+',.22)!important}'+'html body #page-memory #mem-search,html body #page-memory .mem-cat-btn{background:rgba('+mz+',.3)!important;border-color:rgba('+mz+',.34)!important}html body.theme-infernal #page-memory #mem-search,html body.theme-infernal #page-memory .mem-cat-btn{background:rgba('+mz+',.28)!important;border-color:rgba('+mz+',.24)!important}';
   var nt=H(tz.nav);if(nt)out+='html body #drawer#drawer .dw-orn i{background:linear-gradient(90deg,transparent,rgba('+nt+',.5),transparent)!important}html body #drawer#drawer .dw-orn span{color:rgba('+nt+',.8)!important}';
   return out}
 function moreCss(){
