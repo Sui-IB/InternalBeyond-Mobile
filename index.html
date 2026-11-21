@@ -1066,6 +1066,11 @@ body.sheet-on #music-app *,body.sheet-on #music-app *::before,body.sheet-on #mus
 
 body.sheet-on #page-profile *,body.sheet-on #page-profile *::before,body.sheet-on #page-profile *::after,body.sheet-on #mini-pw *,body.sheet-on #mini-pw *::before,body.sheet-on #mini-pw *::after{animation-play-state:paused!important}
 
+body.ib-cvov main *,body.ib-cvov main *::before,body.ib-cvov main *::after{animation-play-state:paused!important}
+
+#sheet-scrim.ib-idle,#drawer-scrim.ib-idle,#dlg-scrim.ib-idle,#drawer.ib-idle,#chat-side.ib-idle,#blog-side.ib-idle,#music-app.ib-idle,#cal-app.ib-idle{visibility:hidden}
+#music-app.ib-idle *,#music-app.ib-idle *::before,#music-app.ib-idle *::after,#cal-app.ib-idle *,#cal-app.ib-idle *::before,#cal-app.ib-idle *::after{animation-play-state:paused!important}
+
 body.ib-appov main *,body.ib-appov main *::before,body.ib-appov main *::after,body.ib-appov #conv *,body.ib-appov #conv *::before,body.ib-appov #conv *::after,body.ib-appov #mini-pw *,body.ib-appov #mini-pw *::before,body.ib-appov #mini-pw *::after,body.ib-appov #topbar *,body.ib-appov #topbar *::before,body.ib-appov #topbar *::after,body.ib-appov #dock *,body.ib-appov #dock *::before,body.ib-appov #dock *::after{animation-play-state:paused!important}
 .sheet h3{font-family:var(--disp);font-weight:300;font-size:0.76rem;letter-spacing:0.3em;color:var(--tx2);margin-bottom:18px;text-align:center;text-transform:uppercase}
 .sheet-btns{display:flex;gap:10px;margin-top:12px}
@@ -7052,7 +7057,7 @@ self.addEventListener(&#x27;fetch&#x27;,function(e){
 <script></script><script>
 'use strict';
 const SEC_RENDER={};
-var _gwFeedQ=[];
+var _gwFeedQ=[];function _gwCkM(m){return _keyOf(m&&m.friendId||'',m&&m.threadId||'')}
 /* ═══════════ 与电脑版一致的数据层 ═══════════ */
 const DB_NAME='InternalBeyondDB',DB_VER=16;/* v315-p：+memVec（记忆向量指纹表，意思榜用；不在 SYNC_STORES、不进备份），15→16 *//* v72-m：+feed（Internet Beyond 动态流），两端同轮 14→15 */
 const IB_STORES=['posts','categories','about','music','apiSettings','chatMessages','letters','apiConfigs','groups','blogComments','memories','chatThreads','chatSummaries','uploadedFiles','blogAnnotations','projects','projectFiles','autoMemory','calEvents','calNotes','calLedger','feed','memVec'];
@@ -7080,10 +7085,10 @@ function _dbEachByFriend(fid,cb){return new Promise((res,rej)=>{try{const st=db.
 function dbCount(s){return new Promise((res,rej)=>{const r=db.transaction(s).objectStore(s).count();r.onsuccess=()=>res(r.result||0);r.onerror=()=>rej(r.error)})}
 function dbGetRange(s,lo,hi){return new Promise((res,rej)=>{const r=db.transaction(s).objectStore(s).getAll(IDBKeyRange.bound(lo,hi));r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error)})}
 function dbGetByIndex(s,idx,val){return new Promise((res,rej)=>{const r=db.transaction(s).objectStore(s).index(idx).getAll(IDBKeyRange.only(val));r.onsuccess=()=>res(r.result||[]);r.onerror=()=>rej(r.error)})}
-function dbPut(s,v){if(s==='memories')_memAllC=null;return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');tx.objectStore(s).put(v);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
-function dbPutAll(s,arr){if(s==='memories')_memAllC=null;return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');const st=tx.objectStore(s);arr.forEach(v=>{try{st.put(v)}catch(e){}});tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
-function dbDelete(s,k){if(s==='memories')_memAllC=null;return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');tx.objectStore(s).delete(k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
-function dbDeleteMany(s,keys){return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');const st=tx.objectStore(s);keys.forEach(k=>{try{st.delete(k)}catch(e){}});tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+function dbPut(s,v){if(s==='memories')_memAllC=null;if(s==='music')window._ibMusicVer=(window._ibMusicVer|0)+1;/* 手机端 v757：曲库写过，_pwLoad 下次重读 */return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');tx.objectStore(s).put(v);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+function dbPutAll(s,arr){if(s==='memories')_memAllC=null;if(s==='music')window._ibMusicVer=(window._ibMusicVer|0)+1;/* 手机端 v757：曲库写过，_pwLoad 下次重读 */return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');const st=tx.objectStore(s);arr.forEach(v=>{try{st.put(v)}catch(e){}});tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+function dbDelete(s,k){if(s==='memories')_memAllC=null;if(s==='chatMessages'){try{var q9=window._gwFeedQ;if(q9&&q9.length)window._gwFeedQ=q9.filter(function(x){return !x||x.mid!==k})}catch(e){}}/* 手机端 v758：删消息 / 重新生成时，那条消息的回执跟着清掉 */if(s==='music')window._ibMusicVer=(window._ibMusicVer|0)+1;/* 手机端 v757：曲库写过，_pwLoad 下次重读 */return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');tx.objectStore(s).delete(k);tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+function dbDeleteMany(s,keys){if(s==='music')window._ibMusicVer=(window._ibMusicVer|0)+1;/* 手机端 v757：清空全部数据走这条 */return new Promise((res,rej)=>{const tx=db.transaction(s,'readwrite');const st=tx.objectStore(s);keys.forEach(k=>{try{st.delete(k)}catch(e){}});tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 /* 好友最近一条主线消息（游标逆序，不整仓读取） */
 function dbLastByFriend(fid){return new Promise((res,rej)=>{
   const idx=db.transaction('chatMessages').objectStore('chatMessages').index('byFriend');
@@ -7942,9 +7947,9 @@ function _dkOsEdge(e){
     try{if(navigator.vibrate)navigator.vibrate(8)}catch(x3){}
   },450);
 }
-(function(){var t=null;window.addEventListener('resize',function(){if(!_dkOsOn())return;if(document.body.classList.contains('ib-appov')){window._dkOsLag=1;return}/* 手机端 v647：MUSIC / 日程表整页盖着时（键盘弹起收起那一下）桌面先不重铺，揭开时补一次 */if(t)clearTimeout(t);t=setTimeout(function(){t=null;try{_dkOsFlow()}catch(e){}},160)})})();
+(function(){var t=null;window.addEventListener('resize',function(){if(!_dkOsOn())return;if(document.body.classList.contains('ib-appov')||document.body.classList.contains('ib-cvov')){window._dkOsLag=1;return}/* 手机端 v647：MUSIC / 日程表整页盖着时（键盘弹起收起那一下）桌面先不重铺，揭开时补一次 */if(t)clearTimeout(t);t=setTimeout(function(){t=null;try{_dkOsFlow()}catch(e){}},160)})})();
 (function(){
-  var t=null;function kick(){if(!_dkOsOn())return;if(document.body.classList.contains('ib-appov')){window._dkOsLag=1;return}/* 手机端 v647：MUSIC / 日程表整页盖着时（键盘弹起收起那一下）桌面先不重铺，揭开时补一次 */if(t)clearTimeout(t);t=setTimeout(function(){t=null;try{_dkOsFlow()}catch(e){}},120)}
+  var t=null;function kick(){if(!_dkOsOn())return;if(document.body.classList.contains('ib-appov')||document.body.classList.contains('ib-cvov')){window._dkOsLag=1;return}/* 手机端 v647：MUSIC / 日程表整页盖着时（键盘弹起收起那一下）桌面先不重铺，揭开时补一次 */if(t)clearTimeout(t);t=setTimeout(function(){t=null;try{_dkOsFlow()}catch(e){}},120)}
   if(window.visualViewport){try{window.visualViewport.addEventListener('resize',kick)}catch(e){}}
   window.addEventListener('orientationchange',kick);
   window.addEventListener('pageshow',kick);
@@ -8621,9 +8626,10 @@ function bsSplit(text){
 }
 
 
-var _ibBfIO=null;
+var _ibBfIO=null,_ibBfBulk=0;
 function _ibBfObs(el){
   if(!el)return;
+  if(!_ibBfBulk){try{el.classList.add('ibbf')}catch(e){}}
   if(typeof IntersectionObserver==='undefined'){try{document.body.classList.add('ibbf-all')}catch(e){}return}
   if(!_ibBfIO){
     try{
@@ -8650,6 +8656,18 @@ function fmtTime(ts){if(!ts)return'';const d=new Date(ts),n=new Date();
 function openSheet(id){$(id).classList.add('open');$('sheet-scrim').classList.add('show')}
 function closeSheets(){try{const _a9=document.activeElement;if(_a9&&_a9!==document.body&&_a9.closest&&_a9.closest('.sheet')&&_a9.blur)_a9.blur()}catch(e){}try{document.body.classList.remove('sheet-typing')}catch(e){}document.querySelectorAll('.sheet.open').forEach(s=>s.classList.remove('open'));$('sheet-scrim').classList.remove('show')}
 (function(){try{const sc=document.getElementById('sheet-scrim');if(!sc)return;const f=()=>document.body.classList.toggle('sheet-on',sc.classList.contains('show'));new MutationObserver(f).observe(sc,{attributes:true,attributeFilter:['class']});f()}catch(e){}})();
+(function(){
+  function setup(){try{if(typeof MutationObserver==='undefined')return;var cv=document.getElementById('conv'),t=0;
+    var f=function(){var b=document.body,op=cv.classList.contains('open');
+      if(!op){if(t){clearTimeout(t);t=0}if(b.classList.contains('ib-cvov')){b.classList.remove('ib-cvov');try{_pwTime()}catch(e){}if(window._dkOsLag&&!b.classList.contains('ib-appov')){window._dkOsLag=0;setTimeout(function(){try{if(_dkOsOn())_dkOsFlow()}catch(e){}},420)}}return}
+      if(!t&&!b.classList.contains('ib-cvov'))t=setTimeout(function(){t=0;if(cv.classList.contains('open'))b.classList.add('ib-cvov')},380)};
+    if(cv){new MutationObserver(f).observe(cv,{attributes:true,attributeFilter:['class']});f()}
+    [['sheet-scrim','show'],['drawer-scrim','show'],['dlg-scrim','show'],['drawer','open'],['chat-side','open'],['blog-side','open'],['music-app','open'],['cal-app','open']].forEach(function(p){var e=document.getElementById(p[0]);if(!e)return;var tm=0;
+      var g=function(){if(e.classList.contains(p[1])){if(tm){clearTimeout(tm);tm=0}if(e.classList.contains('ib-idle'))e.classList.remove('ib-idle');return}
+        if(!tm&&!e.classList.contains('ib-idle'))tm=setTimeout(function(){tm=0;if(!e.classList.contains(p[1]))e.classList.add('ib-idle')},520)};
+      new MutationObserver(g).observe(e,{attributes:true,attributeFilter:['class']});g()})}catch(e){}}
+  if(document.readyState==='complete')setTimeout(setup,1200);else window.addEventListener('load',function(){setTimeout(setup,1200)});
+})();
 (function(){
   try{const sc=document.getElementById('sheet-scrim');if(!sc)return;const AP=['music-app','cal-app'];let t=0;
     const on=id=>{const e=document.getElementById(id);return !!(e&&e.classList.contains('open'))};
@@ -11043,11 +11061,11 @@ function _prCardM(m,idx){var pr=(m.ibPays||[])[idx]||{};var d=document.createEle
     var go=document.createElement('a');go.className='pr-go';go.textContent='打开支付宝付款';go.href=pr.link||'#';go.target='_blank';go.rel='noopener';go.addEventListener('click',function(e){e.stopPropagation()});
     var ok=document.createElement('button');ok.className='pr-ok';ok.textContent='已完成支付';
     ok.addEventListener('click',async function(e){e.stopPropagation();pr.status='paid';pr.paidAt=Date.now();try{await dbPut('chatMessages',m)}catch(_){}
-      _gwFeedQ.push({fid:m.friendId,text:'[AI付] 用户已完成支付：'+(pr.item||'')+' \uffe5'+pr.amount+'（收款方 '+pr.to+'）'});
+      _gwFeedQ.push({fid:m.friendId,ck:_gwCkM(m),mid:m.id,text:'[AI付] 用户已完成支付：'+(pr.item||'')+' \uffe5'+pr.amount+'（收款方 '+pr.to+'）'});
       redrawMsg(m);toast('已记录，结果将随下一条消息回传')});
     var no=document.createElement('button');no.className='pr-no';no.textContent='拒绝';
     no.addEventListener('click',async function(e){e.stopPropagation();pr.status='declined';try{await dbPut('chatMessages',m)}catch(_){}
-      _gwFeedQ.push({fid:m.friendId,text:'[AI付] 用户拒绝了本次支付：'+(pr.item||'')});
+      _gwFeedQ.push({fid:m.friendId,ck:_gwCkM(m),mid:m.id,text:'[AI付] 用户拒绝了本次支付：'+(pr.item||'')});
       redrawMsg(m);toast('已拒绝')});
     row.appendChild(go);row.appendChild(ok);row.appendChild(no);d.appendChild(row);
   }
@@ -11199,7 +11217,9 @@ function _tmCollapse(host){try{var rows=[].slice.call(host.querySelectorAll(':sc
   }}catch(e){}}
 function _tmCollapseAll(){try{var h=convEl('cv-msgs');if(h)_tmCollapse(h)}catch(e){}}
 function _rowOf(el){return (el&&el.closest&&el.closest('.mrow'))||el}
-function replaceMsgRow(oldEl,m){const r=_rowOf(oldEl);if(r){r.replaceWith(buildMsgEl(m));try{_tmCollapseAll()}catch(e){}}}
+function _ibBfCarryM(o,n){
+  try{if(o&&n&&o.querySelector&&n.querySelectorAll&&((o.classList&&o.classList.contains('ibbf'))||o.querySelector('.ibbf'))){var q=n.querySelectorAll('.m,.bs-seg');for(var i=0;i<q.length;i++)q[i].classList.add('ibbf')}}catch(e){}return n}
+function replaceMsgRow(oldEl,m){const r=_rowOf(oldEl);if(r){r.replaceWith(_ibBfCarryM(r,buildMsgEl(m)));try{_tmCollapseAll()}catch(e){}}}
 function drawConv(){
   try{_ibBfReset()}catch(e){}/* v137-p 任务3 */
   const box=convEl('cv-msgs');box.innerHTML='';
@@ -11213,7 +11233,7 @@ function drawConv(){
   }
   if(!_msgs.length&&!_more){box.innerHTML='<div class="empty cv-hello"><svg viewBox="0 0 64 64"><path d="M40 9a21 21 0 1 0 15 36 17 17 0 0 1-15-36z"/><path d="M15 12l1.6 3.8 3.8 1.6-3.8 1.6-1.6 3.8-1.6-3.8L9.6 17.4l3.8-1.6z"/><path d="M53 40l1.1 2.6 2.6 1.1-2.6 1.1-1.1 2.6-1.1-2.6-2.6-1.1 2.6-1.1z"/><circle cx="23" cy="46" r="1.3"/><circle cx="9" cy="34" r="1"/></svg><div>Hello, Welcome to Internal Beyond!</div></div>';return}/* v291-p：空会话的月亮与星星 */
   const frag=document.createDocumentFragment();
-  _msgs.forEach((m,i)=>frag.appendChild(buildMsgEl(m,i>0?_msgs[i-1]:null)));
+  _msgs.forEach((m,i)=>{_ibBfBulk=(i<_msgs.length-12)?1:0;try{frag.appendChild(buildMsgEl(m,i>0?_msgs[i-1]:null))}finally{_ibBfBulk=0}});
   try{_tmCollapseAll()}catch(e){}/* v97-m 任务3 */
   box.appendChild(frag);
   ensureSealLine();
@@ -11254,7 +11274,7 @@ async function loadEarlier(){
   if(!pg.items.length){_more=false;if(btn)btn.remove();return}
   const prevH=box.scrollHeight,prevTop=box.scrollTop;
   const frag=document.createDocumentFragment();
-  pg.items.forEach((m,i)=>frag.appendChild(buildMsgEl(m,i>0?pg.items[i-1]:null)));
+  pg.items.forEach((m,i)=>{_ibBfBulk=1;try{frag.appendChild(buildMsgEl(m,i>0?pg.items[i-1]:null))}finally{_ibBfBulk=0}});
   try{_tmCollapseAll()}catch(e){}/* v97-m 任务3 */
   const oldFirst=_msgs[0];
   if(btn)btn.after(frag);else box.prepend(frag);
@@ -12625,33 +12645,77 @@ function _stPaintText(raw){/* v13 任务④：直播文本按当前 Markdown 显
   if(pref.mdMode==='clean')return esc(mdSoften(t));
   return esc(t);
 }
+function _stMdLineM(L,f,o){
+  if(/^\s*(```|~~~)/.test(L))return [!f,!f];
+  if(f)return [f,1];
+  if(/^\|/.test(L))return [0,1];
+  if(/^\s*([-*_])(\s*\1){2,}\s*$/.test(L))return [0,0];
+  if(/^\s*>\s?/.test(L))return [0,1];
+  if(/^\s*(#{1,4})[ \t]+(.*?)[ \t]*#*[ \t]*$/.test(L))return [0,0];
+  if(/^(\s*)[-*+]\s+(.*)/.test(L)||/^(\s*)\d+\.\s+(.*)/.test(L))return [0,1];
+  return [0,0];
+}
+function _stMdClosedM(X){var a=String(X).split('\n'),s=[0,0];for(var i=0;i<a.length;i++)s=_stMdLineM(a[i],s[0],s[1]);return !s[0]&&!s[1]}
+function _stStripM(X){try{if(X.indexOf('【')!==-1&&typeof window._ibReactStripM==='function')return window._ibReactStripM(X)}catch(e){}return X}/* 手机端 v756：跟 mdRenderHtml 外面那层剥句中声音的同一个函数 */
+function _stCommitM(c,s,q){
+  var h=_stPaintText(s.slice(c.len,q))+'\n';c.ch.push(h);c.len=q+1;c.head=s.slice(0,c.len);c.fp=0;c.op=0;c.br=0}
+function _stCutM(c,s){
+  var p;
+  while((p=s.indexOf('\n',c.scan))!==-1){
+    var L=s.slice(c.scan,p);c.scan=p+1;
+    if(c.md==='none'){_stCommitM(c,s,p);continue}
+    if(c.md==='clean'){var inF=c.fp,isF=/^\s*(```|~~~)/.test(L);if(isF)c.fp=!c.fp;var good=!inF&&!isF&&mdSoften(L)!=='';if(good&&c.pk)_stCommitM(c,s,c.pe);c.pk=good;c.pe=p;continue}
+    if(L.indexOf('【')!==-1)c.br=1;
+    if(!c.br){var st=_stMdLineM(L,c.fp,c.op);c.fp=st[0];c.op=st[1];if(!c.fp&&!c.op)_stCommitM(c,s,p);continue}
+    var X=s.slice(c.len,p);if(X.length>4000){c.stuck=1;return}
+    if(!/[【】]/.test(X.replace(/\s+$/,'').slice(-12))&&_stMdClosedM(X)&&_stMdClosedM(_stStripM(X)))_stCommitM(c,s,p);
+  }
+}
+function _stSegM(el,md,s,at,P){
+  var C=el._ibStC||(el._ibStC={}),c=C[at];
+  if(!c||c.md!==md||s.length<c.len||(c.len&&s.slice(0,c.len)!==c.head)||(c.scan>c.len&&(s.length<c.scan||s.slice(c.len,c.scan)!==c.ss)))c=C[at]={md:md,len:0,head:'',ch:[],scan:0,ss:'',fp:0,op:0,br:0,pk:0,pe:-1,stuck:0,ts:null,th:''};/* 定稿之后看过的那几行变了（照理不会；clean 的切口还要看切口后面那一行）也整段从头来 */
+  if(!c.stuck){var n0=c.ch.length,l0=c.len;try{_stCutM(c,s)}catch(e){c.ch.length=n0;c.len=l0;c.head=s.slice(0,l0);c.stuck=1}c.ss=s.slice(c.len,c.scan)}
+  for(var i=0;i<c.ch.length;i++)P.push(c.ch[i]);
+  var t=s.slice(c.len);if(t!==c.ts){c.th=_stPaintText(t);c.ts=t}P.push(c.th);
+}
+function _stPutM(el,P){
+  var d=el._ibStD,i=0,j,q,k,n0,ks;
+  if(d&&el.childNodes.length===d.n&&(!d.n||(el.firstChild===d.f&&el.lastChild===d.l))){
+    k=Math.min(P.length,d.p.length);while(i<k&&P[i]===d.p[i])i++;
+    if(i===P.length&&i===d.p.length)return;
+    for(j=d.p.length-1;j>=i;j--)for(q=d.k[j].length-1;q>=0;q--){var x=d.k[j][q];if(x.parentNode===el)el.removeChild(x)}
+    d.p.length=i;d.k.length=i;
+  }else{d=el._ibStD={p:[],k:[],n:0,f:null,l:null};el.textContent=''}
+  for(j=i;j<P.length;j++){n0=el.childNodes.length;if(P[j])el.insertAdjacentHTML('beforeend',P[j]);ks=[];for(q=n0;q<el.childNodes.length;q++)ks.push(el.childNodes[q]);d.p.push(P[j]);d.k.push(ks)}
+  d.n=el.childNodes.length;d.f=el.firstChild;d.l=el.lastChild;
+}
 function _stPaintNow(el,raw){
-  let out='',rest=String(raw||'').replace(/<ws_(?:vgift|vsnap|pass)\b[^>]*?\/?>/gi,'');
+  let rest=String(raw||'').replace(/<ws_(?:vgift|vsnap|pass)\b[^>]*?\/?>/gi,'');
   const pref=chatPref();el.classList.toggle('mdr',pref.mdMode==='full');
-  const open=new RegExp('<('+_ST_TAGS+')\\b([^>]*)>','i');const base=rest;let off=0;/* v341-p：base / off 给 _wsInCodeM 定位 */
+  const open=new RegExp('<('+_ST_TAGS+')\\b([^>]*)>','i');const base=rest;let off=0;const P=[],md=pref.mdMode==='full'?'full':pref.mdMode==='clean'?'clean':'none',T=function(s,at){_stSegM(el,md,s,at,P)};/* v341-p：base / off 给 _wsInCodeM 定位 */
   for(;;){
     const m=rest.match(open);
     if(!m){
       const half=rest.match(/<ws_[a-z0-9_]*(?:\s[^>]*)?$|<[a-z_]{0,15}$/i);/* 半截标签继续隐藏，避免流式时把 ws_* 指令漏给用户；v341-p：带属性还没写到 > 的也算半截，在代码里的不藏 */
-      out+=_stPaintText((half&&!_wsInCodeM(base,off+half.index))?rest.slice(0,half.index):rest);
+      T((half&&!_wsInCodeM(base,off+half.index))?rest.slice(0,half.index):rest,off);
       break;
     }
     const tag=m[1].toLowerCase();
     const after=rest.slice(m.index+m[0].length);
     if(tag==='ws_score'&&window.IBSerenade&&!_wsInCodeM(base,off+m.index)){/* 手机端 v686：夜曲的谱不出芯片，气泡下面挂一张进度卡（歌名、状态、进度条） */
-      out+=_stPaintText(rest.slice(0,m.index));
+      T(rest.slice(0,m.index),off);
       if(/\/\s*$/.test(m[2]||'')){off+=m.index+m[0].length;rest=after;continue}
       const c9=after.match(/<\/ws_score\s*>/i);IBSerenade.live(el,c9?after.slice(0,c9.index):after,!!c9);
       if(c9){off+=m.index+m[0].length+c9.index+c9[0].length;rest=after.slice(c9.index+c9[0].length);continue}
       rest='';break}
-    if(_wsInCodeM(base,off+m.index)||(!WS_META[tag.replace(/^ws_/,'')]&&!/\/\s*$/.test(m[2]||'')&&!after.match(new RegExp('</'+tag+'>','i')))){out+=_stPaintText(rest.slice(0,m.index+m[0].length));off+=m.index+m[0].length;rest=after;continue}/* v341-p：代码里的标签、没闭合的自造标签当文字，后文照常显示 */
-    out+=_stPaintText(rest.slice(0,m.index));
-    if(/\/\s*$/.test(m[2]||'')){out+='<span class="st-chip"><i></i>'+esc(_stLabel(tag,m[2],false))+'</span>';off+=m.index+m[0].length;rest=after;continue}
+    if(_wsInCodeM(base,off+m.index)||(!WS_META[tag.replace(/^ws_/,'')]&&!/\/\s*$/.test(m[2]||'')&&!after.match(new RegExp('</'+tag+'>','i')))){T(rest.slice(0,m.index+m[0].length),off);off+=m.index+m[0].length;rest=after;continue}/* v341-p：代码里的标签、没闭合的自造标签当文字，后文照常显示 */
+    T(rest.slice(0,m.index),off);
+    if(/\/\s*$/.test(m[2]||'')){P.push('<span class="st-chip"><i></i>'+esc(_stLabel(tag,m[2],false))+'</span>');off+=m.index+m[0].length;rest=after;continue}
     const c=after.match(new RegExp('</'+tag+'>','i'));
-    if(c){out+='<span class="st-chip"><i></i>'+esc(_stLabel(tag,m[2],false))+'</span>';off+=m.index+m[0].length+c.index+c[0].length;rest=after.slice(c.index+c[0].length)}
-    else{out+='<span class="st-chip busy"><i></i>'+esc(_stLabel(tag,m[2],true))+'</span>';rest='';break}
+    if(c){P.push('<span class="st-chip"><i></i>'+esc(_stLabel(tag,m[2],false))+'</span>');off+=m.index+m[0].length+c.index+c[0].length;rest=after.slice(c.index+c[0].length)}
+    else{P.push('<span class="st-chip busy"><i></i>'+esc(_stLabel(tag,m[2],true))+'</span>');rest='';break}
   }
-  el.innerHTML=out;
+  _stPutM(el,P);/* 手机端 v756：只换变了的那几块（v755 是整段一样才不写） */
 }
 var _ibcFgEl=null;
 function _ibCallFgM(){try{if(!_ibcFgEl)_ibcFgEl=document.getElementById('ibcall');return !!(_ibcFgEl&&!_ibcFgEl.hidden&&!_ibcFgEl.classList.contains('mini'))}catch(e){return false}}/* 通话全屏是否前台 */
@@ -12660,10 +12724,10 @@ function _thPaintM(el,k,box){
   const run=function(){el._ibThPend=0;if(!el.isConnected)return;el.textContent=el._ibThK;try{if(box&&box.scrollHeight-box.scrollTop-box.clientHeight<160)box.scrollTop=box.scrollHeight}catch(e){}};
   if(typeof requestAnimationFrame==='function')requestAnimationFrame(run);else setTimeout(run,16)
 }
-function _stPaint(el,raw){/* 与电脑版同思路：高频 SSE 只保留最新全文，每帧最多重排一次，避免完整 Markdown 每个 token 都同步重绘 */
+function _stPaint(el,raw,box){/* 手机端 v755：box＝消息列表；给了就由这里在写完字以后跟到底 */if(box)el._ibStBox=box;/* 与电脑版同思路：高频 SSE 只保留最新全文，每帧最多重排一次，避免完整 Markdown 每个 token 都同步重绘 */
   el._ibStRaw=String(raw||'');
   if(el._ibStPend)return;
-  const run=function(){el._ibStPend=0;_stPaintNow(el,el._ibStRaw)};
+  const run=function(){el._ibStPend=0;const b9=el._ibStBox;let nb9=false;try{nb9=!!(b9&&b9.isConnected&&el.isConnected&&b9.scrollHeight-b9.scrollTop-b9.clientHeight<160)}catch(e){}_stPaintNow(el,el._ibStRaw);if(nb9){try{b9.scrollTop=b9.scrollHeight}catch(e){}}};
   if(_ibCallFgM()){el._ibStPend=1;setTimeout(function(){if(typeof requestAnimationFrame==='function')requestAnimationFrame(run);else run()},200);return}/* 通话全屏在前台：正文重绘降频，让位于音频与识别 */
   if(typeof requestAnimationFrame==='function')el._ibStPend=requestAnimationFrame(run);
   else{el._ibStPend=1;setTimeout(run,16)}
@@ -13315,8 +13379,8 @@ async function genReply(cfg,internalCtx){
     if(!aiEl||!aiEl.isConnected)return;
     if(k&&thWrap.style.display==='none')thWrap.style.display='';
     if(k)_thPaintM(thEl,k,box);
-    if(t){_bub.classList.remove('typing');_stPaint(txtEl,t)}
-    const nearBottom=box.scrollHeight-box.scrollTop-box.clientHeight<160;
+    if(t){_bub.classList.remove('typing');_stPaint(txtEl,t,box)}
+    const nearBottom=!t&&box.scrollHeight-box.scrollTop-box.clientHeight<160;/* 手机端 v755：有正文时由 _stPaint 写完再跟 */
     if(nearBottom)box.scrollTop=box.scrollHeight;
   };
   try{
@@ -13393,11 +13457,11 @@ async function genReply(cfg,internalCtx){
       try{let _mems9=await _memAllM();if(_quietM)_mems9=_mems9.filter(m=>m&&(m.createdBy===cfg.id||m.createdBy==='user'||!m.createdBy));/* 安静频道只注入这位 TA 自己写的与用户手建的记忆 */
         const _q9=_memQueryM(myMsgs),_nm9=[String((a&&a.name)||''),String(cfgName(cfg)||'')];let _qv9=null,_qx9=null,_qvq9=null;try{window._ibQxNoteM='';if(cfg&&cfg.memJudge&&typeof _memQxM==='function'&&_memP4M()==='on'&&window.IBMem&&!IBMem.trivial(IBMem.cleanQuery(_q9,_nm9)))_qx9=await _memQxM(cfg,_q9,myMsgs,_nm9)}catch(e){}/* 搜索单 */
         try{if(window.IBVec&&IBVec.on()&&window.IBMem&&!IBMem.trivial(IBMem.cleanQuery(_q9,_nm9))){const _tq9=(_qx9&&_qx9.on&&_qx9.need!==false&&_qx9.topic)?String(_qx9.topic):'';const _pv9=await Promise.all([IBVec.embedQuery(_q9),_tq9?IBVec.embedQuery(_tq9):Promise.resolve(null)]);_qv9=_pv9[0];_qvq9=_pv9[1]}}catch(e){}/* 寒暄轮不嵌；查询嵌入超时即退回字面榜并记降级 */
-        const _wid9=new Set((_histSrc9||[]).map(m=>m&&m.id).filter(Boolean)),_wfr9=(_histSrc9&&_histSrc9.length&&_histSrc9[0]&&_histSrc9[0].timestamp)||0,_scp9=myThread?String(myThread.id||''):'',_ws9=String((_histSrc9&&_histSrc9.length&&_histSrc9[0]&&_histSrc9[0].id)||'');try{_cold9=_coldBlockM(cfg,_mems9,myThread,_scp9,_ws9,_wid9,_wfr9,amBlock,_quietM)}catch(e){try{console.error('[IBMem] cold failed',e)}catch(x){}}/* 块二快照（档案核心 + 冷读块） */const _amPool9=_cold9?((amBlock&&amBlock.all)||[]).filter(e=>!(_cold9.amv&&_cold9.amv[e.id]===(e.updated||e.created||0))):((amBlock&&amBlock.pool)||[]);/* 快照外的档案条目（low、装不下的、快照后新写或改过的）过门 */window._ibMemSelM=null;const _mo9={uname:_amUserName(),record:'defer',scope:_scp9,names:_nm9,winIds:_wid9,winFrom:_wfr9,qvec:_qv9&&_qv9.vec,vecDeg:!!(_qv9&&_qv9.deg),vecWhy:(_qv9&&_qv9.why)||'',coldIds:_cold9?new Set(_cold9.ids||[]):null,am:_amPool9,gaze:!!(cfg&&cfg.memGaze),seat:(cfg&&(+cfg.memSeat===1||+cfg.memSeat===2))?+cfg.memSeat:3,carry:!!(_mp&&_mp.mem&&_mp.mem.carry),qx:(_qx9&&_qx9.on&&_qx9.need===false)?{need:false,topic:'',kws:[],probes:[],win:null,ms:_qx9.ms|0,on:true}:null,qxs:_qx9||null,qxMenu:!!(_qx9&&_qx9.on&&_qx9.need!==false),/* v513-p：最后这一遍不带搜索单（过不过门只看你自己这句话）；它判成「没有具体的事」照旧不翻 */aka:_amAkaM((amBlock&&amBlock.all)||[])};/* v349-p：叫法 *//* 每轮最多想起 3 / 2 / 1、顺带想起开关（按 TA） */if(cfg&&cfg.memJudge){try{const _j9=await _memJudgeM(_mems9,cfg,_q9,_mo9,myMsgs,(_qx9&&_qx9.on&&_qx9.need!==false)?{qx:_qx9,qvec:_qvq9&&_qvq9.vec,vecDeg:!!(_qvq9&&_qvq9.deg)}:null);if(_j9)Object.assign(_mo9,_j9)}catch(e){}}/* 判官（灰区才叫）与闲聊不翻 */_memTailM=buildMemBlock(_mems9,cfg.id,await loadMS(),undefined,undefined,_q9,_mo9)||'';try{if(window._ibImgMemM&&_memTailM)_memTailM+=await window._ibImgMemM.tail(cfg,window._ibMemSelM)}catch(e){}_amDyn9=(window._ibMemSelM&&window._ibMemSelM.amBlock)||'';_memHit9=_memHitFromSelM(window._ibMemSelM);try{const _ra9=(_mo9.judgePick&&_mo9.judgePick.all)||_mo9.judgeAll;if(_memHit9&&_ra9)_memHit9.rr=_ra9}catch(e){}try{if(_memHit9&&window._ibQxNoteM)_memHit9.judge=(_memHit9.judge?(_memHit9.judge+' ｜ '):'')+'搜索单没用上（'+window._ibQxNoteM+'）'}catch(e){}/* v512-p：重排没插手时重排分照记；搜索单没写出来在页脚写明 */_memCommit9=(window._ibMemSelM&&window._ibMemSelM.commit)||null}catch(e){try{console.error('[IBMem] genReply memory block failed',e)}catch(x){}}/* 冷却落库延到回复落库后；winFrom 给没有 sourceId 的老记忆判「原话在眼前」；异常进控制台 */
+        const _wid9=new Set((_histSrc9||[]).map(m=>m&&m.id).filter(Boolean)),_wfr9=(_histSrc9&&_histSrc9.length&&_histSrc9[0]&&_histSrc9[0].timestamp)||0,_scp9=myThread?String(myThread.id||''):'',_ws9=String((_histSrc9&&_histSrc9.length&&_histSrc9[0]&&_histSrc9[0].id)||'');try{_cold9=_coldBlockM(cfg,_mems9,myThread,_scp9,_ws9,_wid9,_wfr9,amBlock,_quietM)}catch(e){try{console.error('[IBMem] cold failed',e)}catch(x){}}/* 块二快照（档案核心 + 冷读块） */const _amPool9=_cold9?((amBlock&&amBlock.all)||[]).filter(e=>!(_cold9.amv&&_cold9.amv[e.id]===(e.updated||e.created||0))):((amBlock&&amBlock.pool)||[]);/* 快照外的档案条目（low、装不下的、快照后新写或改过的）过门 */window._ibMemSelM=null;const _mo9={uname:_amUserName(),record:'defer',scope:_scp9,names:_nm9,winIds:_wid9,winFrom:_wfr9,qvec:_qv9&&_qv9.vec,vecDeg:!!(_qv9&&_qv9.deg),vecWhy:(_qv9&&_qv9.why)||'',coldIds:_cold9?new Set(_cold9.ids||[]):null,am:_amPool9,gaze:!!(cfg&&cfg.memGaze),seat:(cfg&&(+cfg.memSeat===1||+cfg.memSeat===2))?+cfg.memSeat:3,carry:!!(_mp&&_mp.mem&&_mp.mem.carry),qx:(_qx9&&_qx9.on&&_qx9.need===false)?{need:false,topic:'',kws:[],probes:[],win:null,ms:_qx9.ms|0,on:true}:null,qxs:_qx9||null,qxMenu:!!(_qx9&&_qx9.on&&_qx9.need!==false),/* v513-p：最后这一遍不带搜索单（过不过门只看你自己这句话）；它判成「没有具体的事」照旧不翻 */aka:_amAkaM((amBlock&&amBlock.all)||[])};/* v349-p：叫法 *//* 每轮最多想起 3 / 2 / 1、顺带想起开关（按 TA） */if(cfg&&cfg.memJudge){try{const _j9=await _memJudgeM(_mems9,cfg,_q9,_mo9,myMsgs,(_qx9&&_qx9.on&&_qx9.need!==false)?{qx:_qx9,qvec:_qvq9&&_qvq9.vec,vecDeg:!!(_qvq9&&_qvq9.deg)}:null);if(_j9)Object.assign(_mo9,_j9)}catch(e){}}/* 判官（灰区才叫）与闲聊不翻 */_memTailM=buildMemBlock(_mems9,cfg.id,await loadMS(),undefined,undefined,_q9,_mo9)||'';var _selK9=window._ibMemSelM;try{if(window._ibImgMemM&&_memTailM)_memTailM+=await window._ibImgMemM.tail(cfg,_selK9)}catch(e){}window._ibMemSelM=_selK9;_amDyn9=(window._ibMemSelM&&window._ibMemSelM.amBlock)||'';_memHit9=_memHitFromSelM(window._ibMemSelM);try{const _ra9=(_mo9.judgePick&&_mo9.judgePick.all)||_mo9.judgeAll;if(_memHit9&&_ra9)_memHit9.rr=_ra9}catch(e){}try{if(_memHit9&&window._ibQxNoteM)_memHit9.judge=(_memHit9.judge?(_memHit9.judge+' ｜ '):'')+'搜索单没用上（'+window._ibQxNoteM+'）'}catch(e){}/* v512-p：重排没插手时重排分照记；搜索单没写出来在页脚写明 */_memCommit9=(window._ibMemSelM&&window._ibMemSelM.commit)||null}catch(e){try{console.error('[IBMem] genReply memory block failed',e)}catch(x){}}/* 冷却落库延到回复落库后；winFrom 给没有 sourceId 的老记忆判「原话在眼前」；异常进控制台 */
     }else if(amBlock&&amBlock.pool&&amBlock.pool.length){
       try{const _q9=_memQueryM(myMsgs),_nm9=[String((a&&a.name)||''),String(cfgName(cfg)||'')];let _qv9=null;try{if(window.IBVec&&IBVec.on()&&window.IBMem&&!IBMem.trivial(IBMem.cleanQuery(_q9,_nm9)))_qv9=await IBVec.embedQuery(_q9)}catch(e){}
         const _wid9=new Set((_histSrc9||[]).map(m=>m&&m.id).filter(Boolean)),_wfr9=(_histSrc9&&_histSrc9.length&&_histSrc9[0]&&_histSrc9[0].timestamp)||0,_scp9=myThread?String(myThread.id||''):'';window._ibMemSelM=null;
-        _memTailM=buildMemBlock([],cfg.id,await loadMS(),undefined,undefined,_q9,{uname:_amUserName(),record:'defer',scope:_scp9,names:_nm9,winIds:_wid9,winFrom:_wfr9,qvec:_qv9&&_qv9.vec,vecDeg:!!(_qv9&&_qv9.deg),vecWhy:(_qv9&&_qv9.why)||'',am:amBlock.pool})||'';try{if(window._ibImgMemM&&_memTailM)_memTailM+=await window._ibImgMemM.tail(cfg,window._ibMemSelM)}catch(e){}/* v397-p：想起的记忆连着图时单列一段 */
+        _memTailM=buildMemBlock([],cfg.id,await loadMS(),undefined,undefined,_q9,{uname:_amUserName(),record:'defer',scope:_scp9,names:_nm9,winIds:_wid9,winFrom:_wfr9,qvec:_qv9&&_qv9.vec,vecDeg:!!(_qv9&&_qv9.deg),vecWhy:(_qv9&&_qv9.why)||'',am:amBlock.pool})||'';var _selK9=window._ibMemSelM;try{if(window._ibImgMemM&&_memTailM)_memTailM+=await window._ibImgMemM.tail(cfg,_selK9)}catch(e){}window._ibMemSelM=_selK9;/* v397-p：想起的记忆连着图时单列一段 */
         _amDyn9=(window._ibMemSelM&&window._ibMemSelM.amBlock)||'';_memHit9=_memHitFromSelM(window._ibMemSelM);_memCommit9=(window._ibMemSelM&&window._ibMemSelM.commit)||null}catch(e){try{console.error('[IBMem] genReply am gate failed',e)}catch(x){}}
     }
     const _amCore9=_cold9?String(_cold9.am||''):((amBlock&&amBlock.stable)||'');const _chapTx9=_chapTextM(_chap9);/* v322-p：前情提要在块二、最后说明之前；没开或没有章时一字不加 */parts.push(_SYS_SPLIT_M+(_amCore9?_amCore9+'\n\n':'')+((_cold9&&_cold9.text)?_cold9.text+'\n\n':'')+(_chapTx9?_chapTx9+'\n\n':'')+_IB_PERSONA_LOCK.replace(/^\n+/,''));
@@ -13428,7 +13492,7 @@ async function genReply(cfg,internalCtx){
     _tq=_ctxT.tk2('dm.tail.beyond','dm.tail.bxinbox',tails,_tq);
     try{if(_presGap){if(_presGap.fid===cfg.id){tails.push(_presGap.text);_pgTaken=_presGap}_presGap=null}}catch(e){}/* v49g-m Presence：随本条消息带出后即清空；对话对不上就作废 */
     _tq=_ctxT.tk('dm.tail.presence',tails,_tq);
-    try{if(_gwFeedQ.length){const _gq=_gwFeedQ.filter(x=>x.fid===cfg.id);_gwFeedQ=_gwFeedQ.filter(x=>x.fid!==cfg.id);_gqTaken=_gq;/* fix-m① */if(_gq.length)tails.push('【调取结果】\n'+_gq.map(x=>x.text).join('\n'))}}catch(e){}/* v83-m r7：ws_loc/ws_weather 结果按承诺在下一条消息回传（任务 12） */
+    try{if(_gwFeedQ.length){const _gwK9=_keyOf(cfg.id,myThread?myThread.id:''),_gwIn9=x=>!!x&&x.fid===cfg.id&&(!x.ck||x.ck===_gwK9);const _gq=_gwFeedQ.filter(_gwIn9);_gwFeedQ=_gwFeedQ.filter(x=>!_gwIn9(x));/* 手机端 v758：只取这个对话（主线 / 这个话题频道）的回执 */_gqTaken=_gq;/* fix-m① */if(_gq.length)tails.push('【调取结果】\n'+_gq.map(x=>x.text).join('\n'))}}catch(e){}/* v83-m r7：ws_loc/ws_weather 结果按承诺在下一条消息回传（任务 12） */
     _tq=_ctxT.tk('dm.tail.gwfeed',tails,_tq);
     try{let _fbT='',_im=0;for(let i=hist.length-1;i>=0;i--){if(hist[i]&&hist[i].role==='user'){const _c0=String(hist[i].content||''),_fi=_c0.indexOf('\n\n[系统执行结果回传]');if(_fi>=0)_fbT=_c0.slice(_fi+2);break}}for(let i=0;i<hist.length;i++)_im+=(hist[i]&&Array.isArray(hist[i].images))?hist[i].images.length:0;_ctxT.add('dm.tail.toolfb',_fbT);_ctxT.img(_im);_ctxT.wrap((tails.length&&hist.length)?(_IB_TAIL_HEAD.length+_IB_TAIL_USER.length):0)}catch(e){}
     if(tails.length&&hist.length){/* v87-m 语义反序：参考资料在前、用户原话压轴；执行结果回传块并入资料区首位。仅改发送副本，历史落库与缓存断点不变 */
@@ -13549,7 +13613,7 @@ async function saveAi(cfg,content,thinking,aiEl,ctx){/* v54-m ctx：后台完成
   try{var _sp9=window._ibSentPendM&&window._ibSentPendM[String(cfg.id)];if(_sp9&&_sp9.id){delete window._ibSentPendM[String(cfg.id)];var _um9=await dbGet('chatMessages',_sp9.id);if(_um9&&_um9.role==='user'){_um9.sent=_sp9.content;await dbPut('chatMessages',_um9);var _ml9=(ctx&&ctx.myMsgs)?ctx.myMsgs:_msgs;var _mi9=(_ml9||[]).find(function(x){return x&&x.id===_sp9.id});if(_mi9)_mi9.sent=_sp9.content}}}catch(e){}
   const live=ctx?ctx.sameConv():true;
   if(live){_msgs.push(am)}else if(ctx&&ctx.myMsgs)ctx.myMsgs.push(am);
-  if(live&&aiEl&&aiEl.isConnected){aiEl.replaceWith(buildMsgEl(am));try{_tmCollapseAll()}catch(e){}}/* v97-m 任务3 */
+  if(live&&aiEl&&aiEl.isConnected){aiEl.replaceWith(_ibBfCarryM(aiEl,buildMsgEl(am)));try{_tmCollapseAll()}catch(e){}}/* v97-m 任务3 */
   else if(aiEl&&aiEl.isConnected)aiEl.remove();
   
   if(!live)toast(cfgName(cfg)+' 的回复已完成');
@@ -13859,7 +13923,7 @@ async function _runToolLoopStateM(st){
     }
     const all=_rsAll.filter(r=>r&&EXEC_WS[r.type]&&typeof r.ok==='boolean'&&!r.fed);
     const pending=all;
-    let gw9=[];try{gw9=_gwFeedQ.filter(x=>x.fid===st.cfg.id)}catch(e){}
+    let gw9=[];const _gwK8=st.lastAm?_gwCkM(st.lastAm):'',_gwIn8=x=>!!x&&x.fid===st.cfg.id&&(!x.ck||!_gwK8||x.ck===_gwK8);try{gw9=_gwFeedQ.filter(_gwIn8)}catch(e){}/* 手机端 v758：续答轮同样只认这条回复所在的对话 */
     
     const _trigR=pending.filter(r=>!_wsSideEffectM(r)&&_wsTrigOnM(_wsTrigKindM(r))),_trigQ=gw9.filter(x=>!x.act&&_wsTrigOnM('env'));/* v133-p：逐类开关并入判定 */
     if(!_trigR.length&&!_trigQ.length){st.waitingConfirm=false;_wsLoopStateM.delete(st.rootAm.id);return}
@@ -13869,7 +13933,7 @@ async function _runToolLoopStateM(st){
     if(!onlyHelp&&st.used>=cap&&!(_trigR.some(r=>r.type==='trip'&&r.ok)&&(st.trB=(st.trB||0)+1)<=2)){st.waitingConfirm=false;_wsLoopStateM.delete(st.rootAm.id);return}/* v327-p：出发拿到资料这一步总要续答（最多两次） */
     st.h=st.h.concat([{role:'assistant',content:st.stepTxt},{role:'user',content:'［系统：以下为你刚才调用的工具/数据结果，请据此继续当前任务；仍可继续调用，但不要重复相同参数的调用。］'}]);
     var _gq9T=null;const _fed9=await feedToolResults(st.h,st.cfg,[st.rootAm,st.lastAm]);/* fix-m①：取回执 */
-    try{if(_gwFeedQ.length){const _gq9=_gwFeedQ.filter(x=>x.fid===st.cfg.id);_gwFeedQ=_gwFeedQ.filter(x=>x.fid!==st.cfg.id);_gq9T=_gq9;/* fix-m① */if(_gq9.length){for(let j9=st.h.length-1;j9>=0;j9--){if(st.h[j9].role==='user'){st.h[j9].content+='\n\n【调取结果】\n'+_gq9.map(x=>x.text).join('\n');break}}}}}catch(e){}/* v124-p：#1 出队注入续答轮（user 位）；已出队条目不会再走下一条消息的 tails 径，无重复 */
+    try{if(_gwFeedQ.length){const _gq9=_gwFeedQ.filter(_gwIn8);_gwFeedQ=_gwFeedQ.filter(x=>!_gwIn8(x));_gq9T=_gq9;/* fix-m① */if(_gq9.length){for(let j9=st.h.length-1;j9>=0;j9--){if(st.h[j9].role==='user'){st.h[j9].content+='\n\n【调取结果】\n'+_gq9.map(x=>x.text).join('\n');break}}}}}catch(e){}/* v124-p：#1 出队注入续答轮（user 位）；已出队条目不会再走下一条消息的 tails 径，无重复 */
     let t2='',u2=null,s2=null;try{const r2=await callAIC(st.cfg,st.h,st.sys,()=>{},st.signal||null,st.pa);t2=_ibFakeResultCutM((r2&&r2.t)||'');u2=(r2&&r2.u)||null;s2=(r2&&r2.srch)||null}catch(e){if(e&&e.name==='AbortError'){try{toast('已停止')}catch(e9){}}try{if(_fed9)_fed9.restore()}catch(e9){}try{if(_gq9T&&_gq9T.length)_gwFeedQ=_gq9T.concat(_gwFeedQ)}catch(e9){}break}
     if(!t2.trim()){try{if(_fed9)_fed9.restore()}catch(e9){}try{if(_gq9T&&_gq9T.length)_gwFeedQ=_gq9T.concat(_gwFeedQ)}catch(e9){}break}
     if(_fed9){try{_fed9.commit().catch(function(){})}catch(e9){}}try{_ibEphStripM(st.h)}catch(e9){}/* 上一轮挂的工具图下一轮不再重发 *//* fix-m①：本轮续答送达且有效，结果落“已回传”标 */
@@ -15026,8 +15090,8 @@ async function genReplyGroup(pcfg,opt){
         if(!aiEl.isConnected)return;
         if(k&&thWrap.style.display==='none')thWrap.style.display='';
         if(k)_thPaintM(thEl,k,box);
-        if(t){_bub.classList.remove('typing');_stPaint(txtEl,t)}
-        const nb=box.scrollHeight-box.scrollTop-box.clientHeight<160;if(nb)box.scrollTop=box.scrollHeight;
+        if(t){_bub.classList.remove('typing');_stPaint(txtEl,t,box)}
+        const nb=!t&&box.scrollHeight-box.scrollTop-box.clientHeight<160;if(nb)box.scrollTop=box.scrollHeight;
       };
       try{
         const keep=_gKeep9;/* v323-p 33：全群一个窗口 *//* v323-p：群设了上下文条数就全群统一 *//* v323-p：摘要范围只留「上下文之外」 *//* 本轮：覆盖范围 ctx＝群聊原文仍按该成员的群聊上下文条数 *//* v61-m t1：按发言 AI 的独立配置截取群聊历史（原硬编码 30），与电脑端全局 readingLimits 互不读写 */
@@ -15098,7 +15162,7 @@ async function genReplyGroup(pcfg,opt){
         _tq=_ctxT.tk2('grp.tail.mem','grp.tail.amdyn',tails,_tq);
         try{if(cfg&&cfg.beyond&&cfg.beyond.on&&await _ibfMaster()){let btG=await buildBeyondTail(cfg);if(btG){if(btG.length>5500)btG=btG.slice(0,5500)+'\n（清单超出预算已截断——需要完整读某条请用 <ws_beyond_view/>）';tails.push(btG);const _ibxG=await _bxInboxTail(cfg);if(_ibxG)tails.push(_ibxG)}}}catch(e){}
         _tq=_ctxT.tk2('grp.tail.beyond','grp.tail.bxinbox',tails,_tq);
-        try{if(_gwFeedQ.length){const _gqG=_gwFeedQ.filter(x=>x.fid===cfg.id);_gwFeedQ=_gwFeedQ.filter(x=>x.fid!==cfg.id);_gqGT=_gqG;/* fix-m① */if(_gqG.length)tails.push('【调取结果】\n'+_gqG.map(x=>x.text).join('\n'))}}catch(e){}/* v323-p：#3 群内动作成败同样回传给发起动作的那位成员 */
+        try{if(_gwFeedQ.length){const _gwPG=String(pcfg.id)+'|',_gwInG=x=>!!x&&x.fid===cfg.id&&(!x.ck||x.ck.indexOf(_gwPG)===0);const _gqG=_gwFeedQ.filter(_gwInG);_gwFeedQ=_gwFeedQ.filter(x=>!_gwInG(x));/* 手机端 v758：群里只取这个群的 */_gqGT=_gqG;/* fix-m① */if(_gqG.length)tails.push('【调取结果】\n'+_gqG.map(x=>x.text).join('\n'))}}catch(e){}/* v323-p：#3 群内动作成败同样回传给发起动作的那位成员 */
         _tq=_ctxT.tk('grp.tail.gwfeed',tails,_tq);
         if(tails.length){/* v87-m 语义反序（群聊）：同 1对1 */
           for(let i=messages.length-1;i>=0;i--){if(messages[i].role==='user'){messages[i].content=_IB_TAIL_HEAD+tails.join('\n\n')+_IB_TAIL_USER+messages[i].content;break}}
@@ -17192,7 +17256,7 @@ function _orientApply(){try{
   setTimeout(function(){try{if(window.IBNative&&window.IBNative.available){var _bg=$('pres-bg');var _row=_bg&&_bg.closest('.tog');if(_row)_row.style.display=''}}catch(e){}},1200);/* v116-p：壳内显露「后台 Presence（系统级）」开关（桥在文末激活，故延时探测；浏览器 / PWA 保持隐藏） */
 })();
 function _vidQNormM(v){v=String(v==null?'m':v);if(v==='384')return 'l';if(v==='768')return 'h';if(v==='512')return 'm';return (v==='l'||v==='h')?v:'m'}/* 画质档位兼容电脑端备份里的 384/512/768 写法 */
-var IB_VER='v520-p',IB_VER_DATE='2026-11-20';
+var IB_VER='v524-p',IB_VER_DATE='2026-11-21';
 (function _appVerDraw(){var e=document.getElementById('app-ver');if(e)e.textContent='InternalBeyond Mobile '+IB_VER+'（'+IB_VER_DATE+'）'})();
 function _ibVeilHeal(){try{setTimeout(function(){try{var v=document.getElementById('lk-preveil');if(!v||v.classList.contains('off'))return;var lk=document.getElementById('lockscr');if(lk){_lkVeilOff();return}if(localStorage.getItem('ib_lockOn')==='1')return;_lkVeilOff()}catch(e){}},1600)}catch(e){}}/* v246-p：启动完成后仍盖幕的静默自愈 */
 function _lkVeilOff(){try{window._ibVeilOff=true;var v=document.getElementById('lk-preveil');if(v){v.classList.add('off');setTimeout(function(){try{v.remove()}catch(e){}},420)}}catch(e){}}/* fix-r4：预遮罩揭幕（任务 8） */
@@ -18436,7 +18500,7 @@ async function searchChatM(q){
   try{_ibBfReset()}catch(e){}/* v137-p 任务3 */
   host.innerHTML='';
   if(!hits.length){host.innerHTML='<i class="sch-mark" hidden></i><div class="empty" style="padding:40px 20px">没有找到匹配的消息</div>';return}
-  {const mk9=document.createElement('i');mk9.className='sch-mark';mk9.hidden=true;host.appendChild(mk9)}/* v345-p：搜索结果的标记，_cvAltViewM 认它 */hits.slice(-80).forEach(x=>{const el=buildMsgEl(x,null);try{_srchWhenSetM(el,x.timestamp)}catch(e){}host.appendChild(el)});
+  {const mk9=document.createElement('i');mk9.className='sch-mark';mk9.hidden=true;host.appendChild(mk9)}/* v345-p：搜索结果的标记，_cvAltViewM 认它 */hits.slice(-80).forEach(x=>{let el;_ibBfBulk=1;try{el=buildMsgEl(x,null)}finally{_ibBfBulk=0}try{_srchWhenSetM(el,x.timestamp)}catch(e){}host.appendChild(el)});
 }
 
 
@@ -18523,7 +18587,7 @@ async function _cvLoadLaterM(){/* v345-p：往下翻补更晚的一页（已在�
   try{pg=await _dbPageFromM(_activeCfg.id,_cvAfter,PAGE,tid,true)}catch(e){}
   _cvLoadLaterM._busy=false;if(seq!==_convSeq||!_cvHist||_cvAltViewM())return;
   const have=new Set(_msgs.map(m=>m.id)),items=pg.items.filter(m=>!have.has(m.id));
-  if(items.length){const box=convEl('cv-msgs'),frag=document.createDocumentFragment();let prev=_msgs[_msgs.length-1]||null;items.forEach(m=>{frag.appendChild(buildMsgEl(m,prev));prev=m});try{_tmCollapseAll()}catch(e){}box.appendChild(frag);_msgs=_msgs.concat(items)}
+  if(items.length){const box=convEl('cv-msgs'),frag=document.createDocumentFragment();let prev=_msgs[_msgs.length-1]||null;items.forEach(m=>{_ibBfBulk=1;try{frag.appendChild(buildMsgEl(m,prev))}finally{_ibBfBulk=0}prev=m});try{_tmCollapseAll()}catch(e){}box.appendChild(frag);_msgs=_msgs.concat(items)}
   if(pg.lastKey)_cvAfter=pg.lastKey;_cvMoreAfter=!!pg.more;
   if(!_cvMoreAfter)_cvHistSet(false);
   try{ensureSealLine()}catch(e){}}
@@ -19918,23 +19982,31 @@ function _pwA(){
 function _pwFmt(x){if(!isFinite(x)||x<0)return'--:--';x=Math.round(x);return Math.floor(x/60)+':'+String(x%60).padStart(2,'0')}
 function _pwName(r){return String((r&&(r.name||r.title))||'').replace(/\.[a-z0-9]{1,5}$/i,'')||'未命名音频'}
 async function _pwLoad(){
-  let arr=[];try{arr=await dbGetAll('music')}catch(e){arr=[]}
-  arr=(arr||[]).filter(function(r){return r&&((typeof Blob!=='undefined'&&r.blob instanceof Blob)||typeof r.data==='string')});
-  arr.sort(function(x,y){return (x.addedAt||0)-(y.addedAt||0)});
+  const v9=window._ibMusicVer|0,c9=window._ibMusicLC;let arr;
+  if(c9&&c9.v===v9)arr=c9.arr.slice();
+  else{let ok9=true;arr=[];try{arr=await dbGetAll('music')}catch(e){arr=[];ok9=false}
+    arr=(arr||[]).filter(function(r){return r&&((typeof Blob!=='undefined'&&r.blob instanceof Blob)||typeof r.data==='string')});
+    arr.sort(function(x,y){return (x.addedAt||0)-(y.addedAt||0)});
+    if(ok9)window._ibMusicLC={v:v9,arr:arr.slice()}}
   _pw.list=arr;
   if(_pw.idx>=arr.length)_pw.idx=arr.length?arr.length-1:-1;
 }
+try{document.addEventListener('visibilitychange',function(){if(!document.hidden)window._ibMusicLC=null})}catch(e){}/* 手机端 v757：切回前台重读一次（别的窗口可能动过曲库） */
 function _pwSrc(r){
   if(_pw.url){try{URL.revokeObjectURL(_pw.url)}catch(e){}_pw.url=''}
   if(typeof Blob!=='undefined'&&r.blob instanceof Blob){_pw.url=URL.createObjectURL(r.blob);return _pw.url}
   return r.data||'';
 }
+function _musicCovKeyM(c){c=String(c||'');return c.length+':'+c.slice(-24)}
+function _musicCovM(rec){
+  var c=rec&&rec.cover?String(rec.cover):'';if(!c||c.indexOf('data:')!==0)return c;
+  return (rec.coverThumb&&rec.coverTk===_musicCovKeyM(c))?String(rec.coverThumb):c}
 function _pwPaint(){
   var t=$('pw-t');if(!t)return;
   var n=_pw.list.length,cur=_pw.idx>=0?_pw.list[_pw.idx]:null;
   t.textContent=cur?_pwName(cur):'Music';
   var _sl9=document.querySelector('.player-w .pw-sleeve');/* v128 任务9：有封面时专辑图入唱片盒方框 */
-  if(_sl9){var _cv9=cur&&cur.cover?String(cur.cover):'';_sl9.classList.toggle('hasart',!!_cv9);_sl9.style.backgroundImage=_cv9?('url("'+_cv9+'")'):''}
+  if(_sl9){var _cv9=cur?_musicCovM(cur):'';_sl9.classList.toggle('hasart',!!_cv9);if(_sl9._ibCv!==_cv9){_sl9._ibCv=_cv9;_sl9.style.backgroundImage=_cv9?('url("'+_cv9+'")'):''}}/* 手机端 v757：用缩略图；封面没变就不重写（原来每次都把整串原图写进样式） */
   var st=$('pw-s');
   if(st){if(!n)st.textContent='尚未添加音乐';
     else{var _alb=cur&&cur.album?String(cur.album).trim():'';
@@ -19956,7 +20028,7 @@ function _pwPaint(){
   _pwTime();
 }
 function _pwTime(){
-  if(document.body.classList.contains('ib-appov'))return;/* 手机端 v647：MUSIC / 日程表整页盖着时桌面播放器的进度与时间先不动（每次都要重画被盖住的那块），揭开时补一次 */
+  if(document.body.classList.contains('ib-appov')||document.body.classList.contains('ib-cvov'))return;/* 手机端 v755：对话层盖稳时也一样 *//* 手机端 v647：MUSIC / 日程表整页盖着时桌面播放器的进度与时间先不动（每次都要重画被盖住的那块），揭开时补一次 */
   var f=$('pw-fill');if(!f)return;
   var a=_pw.a,cu=a?a.currentTime:0,du=a?a.duration:NaN;
   f.style.width=(isFinite(du)&&du>0?Math.min(100,cu/du*100):0)+'%';
@@ -20412,6 +20484,23 @@ function buildMusicTail(userMsg,fid){
 function _mtName(it){try{return (typeof _pwName==='function')?_pwName(it):String((it&&(it.title||it.name))||'').replace(/\.[a-z0-9]{1,5}$/i,'')}catch(e){return ''}}
 function _mtNq(s){return String(s||'').toLowerCase().replace(/\.[a-z0-9]{1,5}$/i,'').replace(/[\s《》「」『』“”"'‘’·・\/、,，.。:：\-—_()（）!！?？]+/g,'')}
 function _mtFind(L,q){var k=_mtNq(q);if(!k)return -1;var ks=function(it){var t=_mtName(it),f=String((it&&it.name)||''),ar=String((it&&it.artist)||'');return[_mtNq(t),_mtNq(f),_mtNq(t+ar),_mtNq(ar+t)]};var i,j,a;for(i=0;i<L.length;i++){a=ks(L[i]);for(j=0;j<4;j++)if(a[j]&&a[j]===k)return i}for(i=0;i<L.length;i++){a=ks(L[i]);for(j=0;j<2;j++)if(a[j]&&a[j].indexOf(k)>=0)return i}for(i=0;i<L.length;i++){a=ks(L[i]);for(j=0;j<2;j++)if(a[j]&&a[j].length>=2&&k.indexOf(a[j])>=0)return i}return -1}
+var _ibAiPlayM=new WeakSet();
+var _IB_PW_TXT={"a1": "[未播] {L}：《{T}》未播出，当前在放《{N}》", "a2": "[未播] {L}：《{T}》未播出，当前无播放", "b": "《{T}》未播出", "c1": "，已回到《{N}》接着放", "c2": ""};
+function _pwAiTxtM(k,L,T,N){return String(_IB_PW_TXT[k]||'').split('{L}').join(L||'').split('{T}').join(T||'').split('{N}').join(N||'')}
+function _pwAiNowM(){try{var a=_pw.a,r=(_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null;return (r&&a&&!a.paused&&!a.ended)?String(_mtName(r)||''):''}catch(e){return ''}}
+function _pwAiGoneM(L,T){
+  var N=_pwAiNowM();return{ok:false,label:L,detail:_pwAiTxtM('b',L,T,N),feed:_pwAiTxtM(N?'a1':'a2',L,T,N)}}
+function _pwAiSnapM(){var a=_pw&&_pw.a;return{idx:_pw?_pw.idx:-1,rec:(_pw&&_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null,src:a?(a.currentSrc||a.src||''):'',t:a?(a.currentTime||0):0,on:!!(a&&!a.paused&&!a.ended)}}/* 手机端 v758：TA 发起播放前记下原来在放什么、放到哪 */
+async function _pwAiBackM(o){
+  try{var L=_pw.list||[];if(!o||!o.rec){if(o&&o.idx<0)_pw.idx=-1;else if(_pw.idx>=L.length)_pw.idx=L.length?L.length-1:-1;_pwPaint();_pwListDraw();return null}
+    var oi=L.indexOf(o.rec);if(oi<0&&o.rec.id)oi=L.findIndex(function(x){return x&&x.id===o.rec.id});if(oi<0){if(_pw.idx>=L.length)_pw.idx=L.length?L.length-1:-1;_pwPaint();_pwListDraw();return null}
+    _pw.idx=oi;var a=_pwA(),ok=false,net=!!(o.src&&o.src.indexOf('blob:')!==0),T=o.t||0,seek=function(){try{var b=_pwA();if(T>1&&Math.abs((b.currentTime||0)-T)>1)b.currentTime=T}catch(e){}};/* 放起来以后再定位一次：有的 WebView 刚换地址时不认 currentTime */
+    if(o.on){if(net){try{a.src=o.src;a.currentTime=T;await a.play();ok=true;seek()}catch(e){ok=false}}
+      if(!ok){if(_pw.idx!==oi||(net&&(a.currentSrc||a.src)!==o.src))return null;/* 回去的半路她自己换了歌：听她的，不再抢回来 */
+        _ibAiPlayM.add(o.rec);try{ok=(await _pwPlayIdx(oi))===true}finally{_ibAiPlayM.delete(o.rec)}/* 原来那首重放也放不出来，同样不自己跳到下一首 */if(ok)seek()}}
+    else{try{var lm=function(){a.removeEventListener('loadedmetadata',lm);try{if(T>1&&Math.abs((a.currentTime||0)-T)>1)a.currentTime=T}catch(e){}};a.addEventListener('loadedmetadata',lm);if(net)a.src=o.src;else if(typeof Blob!=='undefined'&&o.rec.blob instanceof Blob)a.src=_pwSrc(o.rec);a.currentTime=T}catch(e){}}
+    _pwPaint();_pwListDraw();try{_musicSyncCardsM()}catch(e){}return{n:String(_mtName((_pw.list||[])[oi])||''),on:!!(o.on&&ok)}}catch(e){return null}}
+function _pwAiTailM(bk,L,T){return (bk&&bk.on)?_pwAiTxtM('c1',L,T,bk.n):(bk?_pwAiTxtM('c2',L,T,bk.n):'')}/* 手机端 v758：放不出来那句后面接「已回到原来那首」 */
 async function _mtExec(op,q){
   try{
     if(!_pw)return{ok:false,label:'播放器',detail:'播放器不可用'};
@@ -20421,8 +20510,9 @@ async function _mtExec(op,q){
       if(!L.length)return{ok:false,label:'播放歌曲',detail:EMPTY};
       var idx=_mtFind(L,q);
       if(idx<0)return{ok:false,label:'播放歌曲',detail:'歌单里没有找到「'+q+'」'};
-      var nm=_mtName(L[idx]);
-      if((await _pwPlayIdx(idx))===false)return{ok:false,label:'播放歌曲',detail:BAD(nm)};
+      var nm=_mtName(L[idx]),o9=_pwAiSnapM(),r9=L[idx],pr9;_ibAiPlayM.add(r9);try{pr9=await _pwPlayIdx(idx)}finally{_ibAiPlayM.delete(r9)}/* 手机端 v758：被顶掉单独报；放不出来回到原来那首 */
+      if(pr9==='superseded')return _pwAiGoneM('播放歌曲',nm);
+      if(pr9===false){var bk9=(o9.rec&&o9.rec!==r9)?await _pwAiBackM(o9):null;return{ok:false,label:'播放歌曲',detail:BAD(nm)+_pwAiTailM(bk9,'播放歌曲',nm)}}
       return{ok:true,label:'播放歌曲',detail:'《'+nm+'》'};
     }
     if(op==='play'){
@@ -21045,7 +21135,7 @@ async function _dkRenderSet(){
     await loadMP();var dd=_mp.desk||{};var hid=Array.isArray(dd.hidden)?dd.hidden.slice():[];if(hid.indexOf(k)===-1)hid.push(k);
     await _dkSave(order,hid,Object.assign({},dd.pages||{}));await deskApplyLayout();try{_dkRenderSet()}catch(e){}
     toast('已隐藏「'+(DK_NAMES[k]||k)+'」，可在 设置 → Desk 重新显示')}catch(e){toast('隐藏失败，请重试')}}
-  document.addEventListener('touchmove',function(e){if(drag)e.preventDefault()},{passive:false});
+  host.addEventListener('touchmove',function(e){if(drag)e.preventDefault()},{passive:false});
   host.addEventListener('contextmenu',function(e){if(drag||T)e.preventDefault()});
   host.addEventListener('click',function(e){if(supClick){e.stopPropagation();e.preventDefault();return}
     if(!editOn)return;var it=e.target.closest('.sb-desk>[data-dk]');/* v154-p：#2 编辑态：点「−」隐藏、点条目本体不跳转、点空白退出 */
@@ -21419,7 +21509,7 @@ async function procIbOps(cfg,m){
     }
     if(!results.length&&!_cnDang)return;/* v120-p：#2 打捞剪除后即使零结果也要把清洗文本写回 */
     m.content=c.replace(/\n{3,}/g,'\n\n').trim();
-    try{results.forEach(function(_r){var _retr=_r.env===true||/^(当前天气|天气|当前定位|定位|手机状态)$/.test(String(_r.label||''));_gwFeedQ.push({fid:cfg.id,act:!_retr,text:(typeof _r.feed==='string'&&_r.feed)?_r.feed:('['+(_r.ok?'成功':'失败')+'] '+(_r.label||'')+(_r.detail?('：'+_ibCut(String(_r.detail).replace(/\s+/g,' '),300)):''))});delete _r.feed;delete _r.env})}catch(e){}/* v327-p：回传 300 字、结果可自带 feed / env *//* v132-p：act 标＝动作类（发动态 / 评论 / 转发 / 签名 / 便笺 / 播放器 / AI付），不触发续答轮，只随下一条消息回传 */
+    try{results.forEach(function(_r){var _retr=_r.env===true||/^(当前天气|天气|当前定位|定位|手机状态)$/.test(String(_r.label||''));_gwFeedQ.push({fid:cfg.id,ck:_gwCkM(m),mid:m&&m.id,act:!_retr,text:(typeof _r.feed==='string'&&_r.feed)?_r.feed:('['+(_r.ok?'成功':'失败')+'] '+(_r.label||'')+(_r.detail?('：'+_ibCut(String(_r.detail).replace(/\s+/g,' '),300)):''))});delete _r.feed;delete _r.env})}catch(e){}/* v327-p：回传 300 字、结果可自带 feed / env *//* v132-p：act 标＝动作类（发动态 / 评论 / 转发 / 签名 / 便笺 / 播放器 / AI付），不触发续答轮，只随下一条消息回传 */
     m.ibOps=(m.ibOps||[]).concat(results);
     try{await dbPut('chatMessages',m)}catch(e){}
     redrawMsg(m);
@@ -21681,7 +21771,7 @@ setInterval(async function(){
 },60000);/* v72-m 模块二：60s 心跳巡检 → v115-m 全应用触发改造 */
 
 /* ═══ v55-m t10/t13：聊天记录管理（全部/按对话/按日）与 Token 仪表盘 ═══ */
-function dbClear(st){if(st==='memories')_memAllC=null;return new Promise((res,rej)=>{const tx=db.transaction(st,'readwrite');tx.objectStore(st).clear();tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
+function dbClear(st){if(st==='memories')_memAllC=null;if(st==='music')window._ibMusicVer=(window._ibMusicVer|0)+1;/* 手机端 v757：曲库写过，_pwLoad 下次重读 */return new Promise((res,rej)=>{const tx=db.transaction(st,'readwrite');tx.objectStore(st).clear();tx.oncomplete=()=>res();tx.onerror=()=>rej(tx.error)})}
 function _cmLabel(fid,groups){
   if(String(fid).indexOf('group_')===0){const g=(groups||[]).find(x=>x.id===fid);return '群聊: '+(g?g.name:fid)}
   const c=[..._cfgs,..._archived].find(x=>x.id===fid);
@@ -29299,7 +29389,7 @@ async function html(){var all=[];try{all=await dbGetAll('memories')}catch(e){}va
   return '<div class="cs-wrap"><div class="cs-card'+(lt?' light':'')+'" id="cs-card" role="button" tabindex="0" aria-label="Nameless Coastline，'+n+' 条记忆，点开看"><div class="cs-art" style="background-image:'+bgFor(n,lt)+'"></div><div class="cs-live" aria-hidden="true"></div><div class="cs-haze"></div><div class="cs-shade"></div><div class="cs-tide"></div><div class="cs-txt"><div class="cs-t">Nameless Coastline</div><div class="cs-n">'+fmt(n)+' '+(n===1?'memory':'memories')+'</div></div><span class="cs-go" aria-hidden="true"><em>wade in</em><i></i></span></div></div>'}
 function setCount(n){PENDN=n;var c=document.getElementById('cs-card');if(!c)return;var el=c.querySelector('.cs-n');if(el)el.textContent=fmt(n)+' '+(n===1?'memory':'memories');c.setAttribute('aria-label','Nameless Coastline，'+n+' 条记忆，点开看');
   if(!thumb(appLight())){var a=c.querySelector('.cs-art');if(a)a.style.backgroundImage=art(n,appLight())}}
-function recount(){clearTimeout(CT);CT=setTimeout(function(){if(!document.getElementById('cs-card'))return;dbGetAll('memories').then(function(all){SIG=sigOf(all||[]);setCount((all||[]).length)}).catch(function(){})},500)}
+function recount(){clearTimeout(CT);CT=setTimeout(function(){if(!document.getElementById('cs-card'))return;(typeof _memAllM==='function'?_memAllM():dbGetAll('memories')).then(function(all){SIG=sigOf(all||[]);setCount((all||[]).length)}).catch(function(){})},500)}
 function bind(){var c=document.getElementById('cs-card');if(!c||c.dataset.wired==='1')return;c.dataset.wired='1';
   c.addEventListener('click',function(){open()});c.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();open()}});
   if(PENDN===0&&RETRY<1){RETRY++;setTimeout(recount,700)}/* 刚开机库还没就绪时读到 0：过一会儿再数一次 */
@@ -31362,7 +31452,7 @@ window.addEventListener('unhandledrejection',function(e){try{console.error('[IB-
           var enc=u[p],txt=cleanText(_decText(u.slice(p+1,p+sz),enc));
           if(txt){if(id==='TIT2')ret.title=txt;else if(id==='TPE1')ret.artist=txt;else ret.album=txt}
         }else if((id==='APIC'||id==='PIC')&&!ret.cover){
-          var im=_imgStart(u,p,p+sz);if(im){try{ret.cover=await blobDataUrl(new Blob([u.slice(im.at,p+sz)],{type:im.mime}))}catch(e){}}
+          var im=_imgStart(u,p,p+sz);if(im){try{ret.cover=await blobDataUrl(new Blob([u.slice(im.at,p+sz)],{type:im.mime}))}catch(e){}if(ret.cover){try{ret.coverThumb=await _musicThumbM(ret.cover)}catch(e){}}/* 手机端 v757：另出一张缩略图给小地方用，原图照旧放 cover */}
         }
         p+=sz;
       }
@@ -31389,8 +31479,10 @@ window.addEventListener('unhandledrejection',function(e){try{console.error('[IB-
   }
   function _avg(a,from,to){var s=0,n=0;for(var i=Math.max(0,from);i<Math.min(a.length,to);i++){s+=a[i];n++}return n?s/n:0}
   async function analyze(blob){
-    var ab=await blob.arrayBuffer(),AC=window.AudioContext||window.webkitAudioContext,ctx=null,b=null;
-    try{ctx=new AC();b=await ctx.decodeAudioData(ab.slice(0))}finally{try{if(ctx&&ctx.close)await ctx.close()}catch(e){}}
+    var ab=await blob.arrayBuffer(),AC=window.AudioContext||window.webkitAudioContext,OC=window.OfflineAudioContext||window.webkitOfflineAudioContext,ctx=null,b=null;
+    
+    if(OC){try{ctx=new OC(1,1,8000);b=await ctx.decodeAudioData(ab)}catch(e){b=null}ctx=null}
+    if(!b){if(!ab||!ab.byteLength)ab=await blob.arrayBuffer();try{ctx=new AC();b=await ctx.decodeAudioData(ab)}finally{try{if(ctx&&ctx.close)await ctx.close()}catch(e){}}}
     if(!b)throw new Error('无法解码音频');
     var sr=b.sampleRate,dur=b.duration||b.length/sr,winSec=2,win=Math.max(1,Math.floor(sr*winSec)),stride=Math.max(1,Math.floor(sr/1800)),raw=[];
     for(var start=0;start<b.length;start+=win){
@@ -31497,7 +31589,7 @@ _pwAddFiles=async function(files,ctx){
   await _pwLoad();var first=_pw.idx<0;
   for(var k=0;k<aud.length;k++){var f=aud[k],meta=null;
     try{meta=await IBMusicCore.readMeta(f)}catch(e){meta={title:IBMusicCore.base(f.name),artist:'',album:'',cover:''}}
-    var rec={id:'msong_'+Date.now()+'_'+Math.floor(Math.random()*1e6),name:f.name||'音频',title:(meta&&meta.title)||IBMusicCore.base(f.name),artist:(meta&&meta.artist)||'',album:(meta&&meta.album)||'',cover:(meta&&meta.cover)||'',type:f.type||'',size:f.size||0,addedAt:Date.now()+k,src:'mobile',blob:f,metaScanned:true};
+    var rec={id:'msong_'+Date.now()+'_'+Math.floor(Math.random()*1e6),name:f.name||'音频',title:(meta&&meta.title)||IBMusicCore.base(f.name),artist:(meta&&meta.artist)||'',album:(meta&&meta.album)||'',cover:(meta&&meta.cover)||'',coverThumb:(meta&&meta.coverThumb)||'',coverTk:(meta&&meta.cover)?_musicCovKeyM(meta.cover):'',type:f.type||'',size:f.size||0,addedAt:Date.now()+k,src:'mobile',blob:f,metaScanned:true};
     try{await dbPut('music',rec);ids.push(rec.id)}catch(e){failed++;console.error('[Music import]',f&&f.name,e)}
   }
   await _pwLoad();var lk=0;
@@ -31515,15 +31607,26 @@ _pwAddFiles=async function(files,ctx){
   if(first&&ids.length){var ix=_pw.list.findIndex(function(r){return r.id===ids[0]});if(ix>=0)_pwPlayIdx(ix)}
 };
 _pwPlayIdx=async function(i){
-  await _pwLoad();if(!_pw.list.length){toast('曲库为空，先添加音乐');_pwPaint();return false}i=((i%_pw.list.length)+_pw.list.length)%_pw.list.length;_pw.idx=i;var rec=_pw.list[i],a=_pwA();a.src=_pwSrc(rec);var ok9=true;try{await a.play()}catch(e){toast('播放失败');ok9=false}_pwPaint();_pwListDraw();try{await loadMP();_musicEnsureM(rec,!!(_mp.musicAi&&_mp.musicAi.share))}catch(e){_musicEnsureM(rec,false)}_musicSyncCardsM();return ok9
+  await _pwLoad();if(!_pw.list.length){toast('曲库为空，先添加音乐');_pwPaint();return false}i=((i%_pw.list.length)+_pw.list.length)%_pw.list.length;_pw.idx=i;var rec=_pw.list[i],a=_pwA();a.src=_pwSrc(rec);var ok9=true,s9=a.src;try{await a.play()}catch(e){if(_pw.idx!==i||a.src!==s9)return 'superseded';toast('播放失败');ok9=false}_pwPaint();_pwListDraw();try{await loadMP();_musicEnsureM(rec,!!(_mp.musicAi&&_mp.musicAi.share))}catch(e){_musicEnsureM(rec,false)}_musicSyncCardsM();return ok9
 };
+function _musicQuietM(){/* 手机端 v757：聊天回复还在往外写的时候，先不做整首解码、出缩略图这类重活，等写完再做（最多等 3 分钟） */
+  return new Promise(function(res){var n=0;(function chk(){var busy=false;try{busy=typeof _sendKeys!=='undefined'&&_sendKeys.size>0}catch(e){}if(!busy||++n>180){res();return}setTimeout(chk,1000)})()})}
+function _musicThumbM(src){
+  return new Promise(function(res){try{src=String(src||'');if(src.indexOf('data:image/')!==0){res('');return}var im=new Image();
+    im.onload=function(){try{var w=im.naturalWidth||im.width||0,h=im.naturalHeight||im.height||0,M=512;if(!w||!h||Math.max(w,h)<=M){res('');return}
+      var sc=M/Math.max(w,h),cv=document.createElement('canvas');cv.width=Math.max(1,Math.round(w*sc));cv.height=Math.max(1,Math.round(h*sc));var x=cv.getContext('2d');try{x.imageSmoothingQuality='high'}catch(e){}x.drawImage(im,0,0,cv.width,cv.height);
+      var out=/^data:image\/(png|webp|gif)/i.test(src)?cv.toDataURL('image/png'):cv.toDataURL('image/jpeg',0.86);res(out&&out.indexOf('data:image/')===0&&out.length<src.length?out:'')}catch(e){res('')}};
+    im.onerror=function(){res('')};im.src=src}catch(e){res('')}})}
+function _musicPreloadM(src){/* 手机端 v757：换上缩略图之前先把它解好码（最多等 1.5 秒），换的那一下不空一帧 */
+  return new Promise(function(res){try{var im=new Image(),t=setTimeout(res,1500);im.onload=im.onerror=function(){clearTimeout(t);var d=null;try{d=im.decode&&im.decode()}catch(e){}if(d&&d.then)d.then(res,res);else res()};im.src=src}catch(e){res()}})}
 async function _musicEnsureM(rec,wantTranscript){
-  if(!rec||!rec.id)return null;if(_ibMusicMJobs[rec.id])return _ibMusicMJobs[rec.id];
-  _ibMusicMJobs[rec.id]=(async function(){var dirty=false;
-    try{if(!rec.metaScanned&&rec.blob instanceof Blob){var m=await IBMusicCore.readMeta(rec.blob);rec.title=m.title||rec.title||IBMusicCore.base(rec.name);rec.artist=m.artist||rec.artist||'';rec.album=m.album||rec.album||'';rec.cover=m.cover||rec.cover||'';rec.metaScanned=true;dirty=true}}catch(e){}
-    if(!rec.analysis||rec.analysis.version!==IBMusicCore.VERSION){try{rec.analysis=await IBMusicCore.analyze(rec.blob);dirty=true;if(_pw.idx>=0&&_pw.list[_pw.idx]&&_pw.list[_pw.idx].id===rec.id)toast('歌曲结构分析完成')}catch(e){}}
-    if(dirty){try{await dbPut('music',rec)}catch(e){}_pwPaint();_pwListDraw()}
-    if(wantTranscript&&!rec.lyrics&&rec.blob instanceof Blob){try{var vt=await loadVT();if(vt&&vt.endpoint&&vt.apiKey&&vt.model){var lr=await IBMusicCore.transcribe(rec,vt,vtUrl);lr=_musicCleanLyricsM(lr);var latest=null;try{latest=await dbGet('music',rec.id)}catch(x){}if(latest&&latest.lyrics){Object.assign(rec,latest);console.info('[Music Together] transcript discarded: lyrics already exist (manual import wins)')}else{rec.lyrics=lr||{source:'transcript',segments:[],text:'',timed:false,at:Date.now()};rec.lyricsAttemptedAt=Date.now();await dbPut('music',rec);if(lr&&((lr.segments&&lr.segments.length)||lr.text))toast('歌曲人声时间轴已生成');else toast('歌曲结构已分析，未识别到可用人声')}try{if(window._maRefreshMusicM)window._maRefreshMusicM()}catch(x){}}}catch(e){console.warn('[Music Together] transcript failed',e)}}
+  if(!rec||!rec.id)return null;if(_ibMusicMJobs[rec.id]){if(wantTranscript)_ibMusicMJobs[rec.id]._tr=1;return _ibMusicMJobs[rec.id]}/* 手机端 v757：这一趟可能还在等回复写完，后来要转写的记一笔，轮到转写那步时一起做 */
+  _ibMusicMJobs[rec.id]=(async function(){var dirty=false,ch9={};
+    try{if(!rec.metaScanned&&rec.blob instanceof Blob){var m=await IBMusicCore.readMeta(rec.blob);rec.title=m.title||rec.title||IBMusicCore.base(rec.name);rec.artist=m.artist||rec.artist||'';rec.album=m.album||rec.album||'';rec.cover=m.cover||rec.cover||'';if(m.cover&&rec.cover===m.cover){rec.coverThumb=m.coverThumb||'';rec.coverTk=_musicCovKeyM(m.cover);ch9.coverThumb=ch9.coverTk=1}rec.metaScanned=true;dirty=true;ch9.title=ch9.artist=ch9.album=ch9.cover=ch9.metaScanned=1}}catch(e){}
+    try{var c9=String(rec.cover||'');if(rec.blob instanceof Blob&&c9.indexOf('data:')===0&&rec.coverTk!==_musicCovKeyM(c9)){await _musicQuietM();var th9=await _musicThumbM(c9);if(th9)await _musicPreloadM(th9);if(String(rec.cover||'')===c9){rec.coverThumb=th9;rec.coverTk=_musicCovKeyM(c9);ch9.coverThumb=ch9.coverTk=1;dirty=true}}}catch(e){}/* 手机端 v757：老曲库里只存着原图封面的，补一张缩略图（原图 cover 不动）；和下面的分析结果一起写库，只写一次 */
+    if((!rec.analysis||rec.analysis.version!==IBMusicCore.VERSION)&&rec.blob instanceof Blob&&rec.anaFail!==IBMusicCore.VERSION){await _musicQuietM();try{rec.analysis=await IBMusicCore.analyze(rec.blob);if(rec.anaFail)delete rec.anaFail;ch9.analysis=ch9.anaFail=1;dirty=true;if(_pw.idx>=0&&_pw.list[_pw.idx]&&_pw.list[_pw.idx].id===rec.id)toast('歌曲结构分析完成')}catch(e){var en9=String(e&&e.name||''),em9=String(e&&e.message||'');if(en9==='EncodingError'||/无法解码音频/.test(em9)){rec.anaFail=IBMusicCore.VERSION;ch9.anaFail=1;dirty=true}}}
+    if(dirty){try{var lat9=await dbGet('music',rec.id);if(lat9){Object.keys(ch9).forEach(function(k){if(rec[k]===undefined)delete lat9[k];else lat9[k]=rec[k]});await dbPut('music',lat9)}}catch(e){}_pwPaint();_pwListDraw()}
+    if((wantTranscript||(_ibMusicMJobs[rec.id]&&_ibMusicMJobs[rec.id]._tr))&&!rec.lyrics&&rec.blob instanceof Blob){try{var vt=await loadVT();if(vt&&vt.endpoint&&vt.apiKey&&vt.model){var lr=await IBMusicCore.transcribe(rec,vt,vtUrl);lr=_musicCleanLyricsM(lr);var latest=null;try{latest=await dbGet('music',rec.id)}catch(x){}if(!latest){/* 手机端 v757：转写回来时这首已经删了，不写回去 */}else if(latest.lyrics){Object.assign(rec,latest);console.info('[Music Together] transcript discarded: lyrics already exist (manual import wins)')}else{rec.lyrics=lr||{source:'transcript',segments:[],text:'',timed:false,at:Date.now()};rec.lyricsAttemptedAt=Date.now();await dbPut('music',rec);if(lr&&((lr.segments&&lr.segments.length)||lr.text))toast('歌曲人声时间轴已生成');else toast('歌曲结构已分析，未识别到可用人声')}try{if(window._maRefreshMusicM)window._maRefreshMusicM()}catch(x){}}}catch(e){console.warn('[Music Together] transcript failed',e)}}
     _musicSyncCardsM();return rec;
   })();try{return await _ibMusicMJobs[rec.id]}finally{delete _ibMusicMJobs[rec.id]}
 }
@@ -31537,16 +31640,29 @@ function _musicRelatedM(text,rec){var t=String(text||'').replace(/<[^>]+>/g,' ')
 function _musicSvgM(pause){return pause?'<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="7" y="5" width="3.2" height="14" rx="1"/><rect x="13.8" y="5" width="3.2" height="14" rx="1"/></svg>':'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6.2v11.6L18 12z"/></svg>'}
 function _musicBuildCardM(snap){
   var card=document.createElement('div');card.className='chat-music-card';card.dataset.track=snap.trackId||'';card.dataset.at=String(snap.atSec||0);card.dataset.dur=String(snap.duration||0);
-  var art=document.createElement('div');art.className='cmc-art';var tr=_musicTrackByIdM(snap.trackId);if(tr&&tr.cover){var im=document.createElement('img');im.src=tr.cover;im.alt='';art.appendChild(im)}else art.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="17" r="2.4"/><circle cx="17" cy="15" r="2.4"/><path d="M10.4 17V7.2L19.4 5v10"/></svg>';
+  var art=document.createElement('div');art.className='cmc-art';var tr=_musicTrackByIdM(snap.trackId);var cv9=tr?_musicCovM(tr):'';if(cv9){var im=document.createElement('img');im.src=cv9;im.alt='';art.appendChild(im)}/* 手机端 v757：听歌卡用缩略图 */else art.innerHTML='<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8" cy="17" r="2.4"/><circle cx="17" cy="15" r="2.4"/><path d="M10.4 17V7.2L19.4 5v10"/></svg>';
   var mid=document.createElement('div');mid.className='cmc-mid';var st=document.createElement('div');st.className='cmc-status';st.textContent='Listening Together';var ti=document.createElement('div');ti.className='cmc-title';ti.textContent=snap.title||'Music';var ar=document.createElement('div');ar.className='cmc-artist';ar.textContent=snap.artist||'Internal Beyond';var line=document.createElement('div');line.className='cmc-line';var bar=document.createElement('div');bar.className='cmc-bar';bar.innerHTML='<i></i>';var tm=document.createElement('span');tm.className='cmc-time';line.appendChild(bar);line.appendChild(tm);mid.appendChild(st);mid.appendChild(ti);mid.appendChild(ar);mid.appendChild(line);var btn=document.createElement('button');btn.className='cmc-play';btn.type='button';btn.innerHTML=_musicSvgM(false);card.appendChild(art);card.appendChild(mid);card.appendChild(btn);
   btn.addEventListener('click',async function(e){e.stopPropagation();await _pwLoad();var ix=_pw.list.findIndex(function(x){return x.id===card.dataset.track});if(ix<0){toast('这首歌已不在本机曲库');return}if(_pw.idx!==ix){await _pwPlayIdx(ix)}else{var a=_pwA();if(a.paused)a.play().catch(function(){toast('播放失败')});else a.pause()}_musicSyncCardsM()});
   bar.addEventListener('click',function(e){e.stopPropagation();var a=_pw.a;if(!a||_pw.idx<0||!_pw.list[_pw.idx]||_pw.list[_pw.idx].id!==card.dataset.track||!isFinite(a.duration))return;var r=bar.getBoundingClientRect();a.currentTime=Math.max(0,Math.min(1,(e.clientX-r.left)/r.width))*a.duration;_musicSyncCardsM()});
   card.addEventListener('click',function(e){if(e.target.closest('button,.cmc-bar'))return;openSheet('sheet-music');_pwListDraw()});return card;
 }
-function _musicSyncCardsM(){var g=convEl('cv-msgs');if(!g)return;var cards=Array.from(g.querySelectorAll('.chat-music-card')),live=cards.length?cards[cards.length-1]:null;cards.forEach(function(c){var tr=_musicTrackByIdM(c.dataset.track),isLive=c===live&&_pw.idx>=0&&_pw.list[_pw.idx]&&_pw.list[_pw.idx].id===c.dataset.track,a=_pw.a,sec=isLive&&a?(a.currentTime||0):Number(c.dataset.at||0),du=isLive&&a&&isFinite(a.duration)?a.duration:Number(c.dataset.dur||0),fill=c.querySelector('.cmc-bar i'),tm=c.querySelector('.cmc-time'),btn=c.querySelector('.cmc-play'),st=c.querySelector('.cmc-status'),art=c.querySelector('.cmc-art');if(fill)fill.style.width=(du>0?Math.max(0,Math.min(100,sec/du*100)):0)+'%';if(tm)tm.textContent=IBMusicCore.fmt(sec)+(du>0?' / '+IBMusicCore.fmt(du):'');if(btn){var playing=!!(isLive&&a&&!a.paused);btn.innerHTML=_musicSvgM(playing);btn.classList.toggle('playing',playing)}if(st)st.textContent=isLive?'Listening Together':'Shared from listening';if(tr&&tr.cover&&art&&!art.querySelector('img')){art.innerHTML='';var im=document.createElement('img');im.src=tr.cover;im.alt='';art.appendChild(im)}})}
-var _oldRenderAiBodyM=renderAiBody;renderAiBody=function(host,msgEl,m){_oldRenderAiBodyM(host,msgEl,m);if(m&&m.musicCard&&!host.querySelector(':scope>.chat-music-card'))host.appendChild(_musicBuildCardM(m.musicCard));setTimeout(_musicSyncCardsM,0)};
-var _oldSaveAiM=saveAi;saveAi=async function(cfg,content,thinking,aiEl,ctx){var am=await _oldSaveAiM(cfg,content,thinking,aiEl,ctx);try{if(am&&!/<ws_music\b/i.test(String(content||''))){await loadMP();var ma=(_mp&&_mp.musicAi)||{},rec=(_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null,a=_pw.a;if(ma.share&&rec&&a&&!a.paused){var key=(am.friendId||'')+'|'+(am.threadId||'')+'|'+rec.id;if(!_ibMusicMSeen[key]||_musicRelatedM(content,rec)){_ibMusicMSeen[key]=1;am.musicCard=IBMusicCore.snapshot(rec,a.currentTime||0,isFinite(a.duration)?a.duration:(rec.analysis&&rec.analysis.duration));await dbPut('chatMessages',am);redrawMsg(am);_musicEnsureM(rec,true)}}}}catch(e){}return am};
-var _oldProcIbOpsM=procIbOps;procIbOps=async function(cfg,m){var raw=String(m&&m.content||''),has=/<ws_music\b/i.test(raw),oldN=(m&&m.ibOps&&m.ibOps.length)||0;await _oldProcIbOpsM(cfg,m);if(!has||!m)return;try{await new Promise(function(r){setTimeout(r,90)});var labs={播放器:1,播放歌曲:1,播放:1,继续播放:1,暂停播放:1,暂停:1,下一首:1,上一首:1};var _mr=null;if(Array.isArray(m.ibOps)){for(var _k=oldN;_k<m.ibOps.length;_k++){if(m.ibOps[_k]&&m.ibOps[_k].music){_mr=m.ibOps[_k];break}}}if(!_mr||_mr.ok!==true)return;if(Array.isArray(m.ibOps)){var kept=[],removed=false;m.ibOps.forEach(function(x,i){if(i>=oldN&&!removed&&x&&x.music&&x.ok===true&&labs[x.label]){removed=true;return}kept.push(x)});m.ibOps=kept}var rec=(_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null,a=_pw.a;if(rec){m.musicCard=IBMusicCore.snapshot(rec,a?(a.currentTime||0):0,a&&isFinite(a.duration)?a.duration:(rec.analysis&&rec.analysis.duration));await dbPut('chatMessages',m);redrawMsg(m);_musicSyncCardsM()}}catch(e){}};
+var _musicSyncQ=0;function _musicSyncSoonM(){if(_musicSyncQ)return;_musicSyncQ=setTimeout(function(){_musicSyncQ=0;_musicSyncCardsM()},0)}/* 手机端 v755：一次画好几条消息时只排一次同步（原来画一条排一次） */
+function _musicSyncCardsM(){
+  var g=convEl('cv-msgs');if(!g)return;
+  var cards=Array.from(g.querySelectorAll('.chat-music-card')),live=cards.length?cards[cards.length-1]:null;
+  cards.forEach(function(c){var tr=_musicTrackByIdM(c.dataset.track),isLive=c===live&&_pw.idx>=0&&_pw.list[_pw.idx]&&_pw.list[_pw.idx].id===c.dataset.track,a=_pw.a,sec=isLive&&a?(a.currentTime||0):Number(c.dataset.at||0),du=isLive&&a&&isFinite(a.duration)?a.duration:Number(c.dataset.dur||0),fill=c.querySelector('.cmc-bar i'),tm=c.querySelector('.cmc-time'),btn=c.querySelector('.cmc-play'),st=c.querySelector('.cmc-status'),art=c.querySelector('.cmc-art');
+    var w9=(du>0?Math.max(0,Math.min(100,sec/du*100)):0)+'%';if(fill&&fill._ibW!==w9){fill._ibW=w9;fill.style.width=w9}
+    var t9=IBMusicCore.fmt(sec)+(du>0?' / '+IBMusicCore.fmt(du):'');if(tm&&tm._ibT!==t9){tm._ibT=t9;tm.textContent=t9}
+    if(btn){var playing=!!(isLive&&a&&!a.paused);if(btn._ibOn!==playing){btn._ibOn=playing;btn.innerHTML=_musicSvgM(playing);btn.classList.toggle('playing',playing)}}
+    var s9=isLive?'Listening Together':'Shared from listening';if(st&&st._ibS!==s9){st._ibS=s9;st.textContent=s9}
+    if(tr&&tr.cover&&art&&!art.querySelector('img')){art.innerHTML='';var im=document.createElement('img');im.src=_musicCovM(tr);im.alt='';art.appendChild(im)}})}
+function _musicCardInM(am){
+  try{var d=document.querySelector('#cv-msgs .m[data-id="'+am.id+'"]');if(!d)return;if(d._sndOp||/<ws_score\b/i.test(String(am.content||''))){redrawMsg(am);return}/* 带夜曲谱的那条照旧整条重画：页面外多搭一份会把谱卡的进度和播放键接到那一份上 */var host=d.querySelector('.m-text'),fresh=buildMsgEl(am),fh=fresh&&fresh.querySelector('.m-text'),card=fh&&fh.querySelector(':scope>.chat-music-card');
+    if(host&&card&&!host.querySelector(':scope>.chat-music-card')&&fh.children.length===host.children.length+1&&fh.childNodes.length===host.childNodes.length+1){var ix=Array.prototype.indexOf.call(fh.childNodes,card);host.insertBefore(card,host.childNodes[ix]||null);_musicSyncCardsM();return}
+    redrawMsg(am)}catch(e){try{redrawMsg(am)}catch(e2){}}}
+var _oldRenderAiBodyM=renderAiBody;renderAiBody=function(host,msgEl,m){_oldRenderAiBodyM(host,msgEl,m);if(m&&m.musicCard&&!host.querySelector(':scope>.chat-music-card'))host.appendChild(_musicBuildCardM(m.musicCard));_musicSyncSoonM()};
+var _oldSaveAiM=saveAi;saveAi=async function(cfg,content,thinking,aiEl,ctx){var am=await _oldSaveAiM(cfg,content,thinking,aiEl,ctx);try{if(am&&!/<ws_music\b/i.test(String(content||''))){await loadMP();var ma=(_mp&&_mp.musicAi)||{},rec=(_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null,a=_pw.a;if(ma.share&&rec&&a&&!a.paused){var key=(am.friendId||'')+'|'+(am.threadId||'')+'|'+rec.id;if(!_ibMusicMSeen[key]||_musicRelatedM(content,rec)){_ibMusicMSeen[key]=1;am.musicCard=IBMusicCore.snapshot(rec,a.currentTime||0,isFinite(a.duration)?a.duration:(rec.analysis&&rec.analysis.duration));await dbPut('chatMessages',am);_musicCardInM(am);_musicEnsureM(rec,true)}}}}catch(e){}return am};
+var _oldProcIbOpsM=procIbOps;procIbOps=async function(cfg,m){var raw=String(m&&m.content||''),has=/<ws_music\b/i.test(raw),oldN=(m&&m.ibOps&&m.ibOps.length)||0;await _oldProcIbOpsM(cfg,m);if(!has||!m)return;try{await new Promise(function(r){setTimeout(r,90)});var labs={播放器:1,播放歌曲:1,播放:1,继续播放:1,暂停播放:1,暂停:1,下一首:1,上一首:1};var _mr=null;if(Array.isArray(m.ibOps)){for(var _k=oldN;_k<m.ibOps.length;_k++){if(m.ibOps[_k]&&m.ibOps[_k].music){_mr=m.ibOps[_k];break}}}if(!_mr||_mr.ok!==true)return;if(/暂停/.test(String(_mr.label||'')))return;/* 手机端 v755：暂停成功的回执卡留着，不再换成一张「Listening Together」的听歌卡 */if(Array.isArray(m.ibOps)){var kept=[],removed=false;m.ibOps.forEach(function(x,i){if(i>=oldN&&!removed&&x&&x.music&&x.ok===true&&labs[x.label]){removed=true;return}kept.push(x)});m.ibOps=kept}var rec=(_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null,a=_pw.a;if(rec){m.musicCard=IBMusicCore.snapshot(rec,a?(a.currentTime||0):0,a&&isFinite(a.duration)?a.duration:(rec.analysis&&rec.analysis.duration));await dbPut('chatMessages',m);redrawMsg(m);_musicSyncCardsM()}}catch(e){}};
 (function(){try{var f=$('pw-file');if(f)f.setAttribute('accept','audio/*,.mp3,.m4a,.aac,.wav,.flac,.ogg,.oga,.opus,.webm,.mp4,.mpeg,.mpga,.3gp,.3gpp,.amr,.caf,.aif,.aiff,.lrc,.srt,.vtt');var s=$('music-share');if(s)s.addEventListener('click',function(){setTimeout(async function(){try{await loadMP();if(_mp.musicAi&&_mp.musicAi.share&&_pw.idx>=0&&_pw.list[_pw.idx])_musicEnsureM(_pw.list[_pw.idx],true)}catch(e){}},80)});var a=_pwA();['timeupdate','play','pause','loadedmetadata','ended'].forEach(function(ev){a.addEventListener(ev,_musicSyncCardsM)})}catch(e){}})();
 
 (function(){
@@ -35659,10 +35775,10 @@ _pwPlayIdx=async function(i){await _pwLoad();if(!on())return _pwPlayIdx1(i);
   if(!(_pw.list[0]&&_pw.list[0].ncm))return _pwPlayIdx1(i);
   i=((i%_pw.list.length)+_pw.list.length)%_pw.list.length;_pw.idx=i;var rec=_pw.list[i],a=_pwA();var tok=++playTok;_pwPaint();_pwListDraw();
   var url='';rec._err='';try{url=await songUrl(rec)}catch(e){rec._err=String((e&&e.message)||e);T(rec._err)}
-  if(tok!==playTok||!on())return;
+  if(tok!==playTok||!on())return 'superseded';
   try{if(_pw.url){URL.revokeObjectURL(_pw.url);_pw.url=''}}catch(e){}
   a.src=url;ensure(rec);
-  try{await a.play();failN=0;if(rec._trial)T('VIP 曲目，当前账号只有试听片段');else if(rec._lowered)T('这一档音质没有权限，已降到'+(LVN[rec._lv]||rec._lv)+'')}catch(e){if(tok!==playTok||!on())return;failN++;T('播放失败'+(rec._outer?'（未取到播放地址）':''));if(failN>=3){failN=0;T('连续 3 首都放不出来，已停下——检查网络或账号');return false}if(_pw.list.length>1&&_pw.mode!=='one')setTimeout(function(){if(tok===playTok&&on())_pwPlayIdx(i+1)},700);return false}
+  try{await a.play();failN=0;if(rec._trial)T('VIP 曲目，当前账号只有试听片段');else if(rec._lowered)T('这一档音质没有权限，已降到'+(LVN[rec._lv]||rec._lv)+'')}catch(e){if(tok!==playTok||!on())return 'superseded';failN++;T('播放失败'+(rec._outer?'（未取到播放地址）':''));if(failN>=3){failN=0;T('连续 3 首都放不出来，已停下——检查网络或账号');return false}if(_ibAiPlayM.has(rec))return false;/* 手机端 v758：TA 发起的那首放不出来不自己跳到下一首（由点歌那边回到原来那首） */if(_pw.list.length>1&&_pw.mode!=='one')setTimeout(function(){if(tok===playTok&&on())_pwPlayIdx(i+1)},700);return false}
   _pwPaint();_pwListDraw();try{_musicSyncCardsM()}catch(e){}return true
 };
 var jobs={};
@@ -35705,10 +35821,11 @@ function fuzzy(list,key,q,noRev){q=String(q||'').trim().toLowerCase();if(!q)retu
 function cur(){return (_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null}
 async function findPl(q,w){var pls=await playlists();var ex=exactPl(pls,q);var i=ex?pls.indexOf(ex):-1;if(i<0){if(w){var k=nq(q),c=[];pls.forEach(function(p,j){if(k&&nq(p.name).indexOf(k)>=0)c.push(j)});if(c.length===1)i=c[0]}else i=fuzzy(pls,'name',q)}if(i>=0&&w&&!pls[i].mine)throw new Error('「'+pls[i].name+'」是收藏的歌单，只能操作自己创建的');if(i<0)throw new Error('用户的歌单里没有「'+q+'」。可用歌单：'+pls.slice(0,20).map(function(p){return p.name}).join(' / '));return pls[i]}
 async function pickSong(q){if(!q){var c=cur();if(!c)throw new Error('没有正在播放的歌，也没有指定歌名');return c}var k=nq(q),Lq=_pw.list||[];for(var i=0;i<Lq.length;i++){var x=Lq[i];if(nq(x.title)===k||nq((x.title||'')+(x.artist||''))===k||nq((x.artist||'')+(x.title||''))===k)return x}var rs=await search(q,3);if(!rs.length)throw new Error('网易云搜不到「'+q+'」');return rs[0]}
+async function aiBack(o,drop){/* 手机端 v758：为 TA 插进队列、放不出来的那首拿掉，再回到原来那首 */try{if(drop){var k=S.q.indexOf(drop);if(k>=0){S.q.splice(k,1);save();if(_pw.list===S.q&&_pw.idx>k)_pw.idx--}_pw.list=S.q}}catch(e){}return await _pwAiBackM(o)}
 async function exec(op,q,ext){ext=ext||{};var ai=S.ai||{};
   if(!logged())return{ok:false,label:'网易云',detail:'用户还没登录网易云'};
   try{
-    if(op==='search'){if(!ai.search)return{ok:false,label:'点歌',detail:'用户未开放「点歌」'};var rs=await search(q,5);if(!rs.length)return{ok:false,label:'点歌',detail:'网易云搜不到「'+q+'」'};var r=rs[0];var j=S.q.findIndex(function(x){return x.nid===r.nid});if(j<0){var at=_pw.idx>=0?_pw.idx+1:S.q.length;S.q.splice(at,0,r);save();_pw.list=S.q;j=at}var pr=await _pwPlayIdx(j);var rr=S.q[j]||r;if(pr===false)return{ok:false,label:'点歌',detail:(rr._outer?'《'+rr.title+'》放不出来，未取到播放地址':'《'+rr.title+'》放不出来')};return{ok:true,label:'点歌',detail:'《'+r.title+'》'+(r.artist?' · '+r.artist:'')+(rr._trial?'（VIP 曲目，只有试听片段）':'')}}
+    if(op==='search'){if(!ai.search)return{ok:false,label:'点歌',detail:'用户未开放「点歌」'};var rs=await search(q,5);if(!rs.length)return{ok:false,label:'点歌',detail:'网易云搜不到「'+q+'」'};var r=rs[0];var j=S.q.findIndex(function(x){return x.nid===r.nid}),ins9=j<0;if(j<0){var at=_pw.idx>=0?_pw.idx+1:S.q.length;S.q.splice(at,0,r);save();_pw.list=S.q;j=at}var o9=_pwAiSnapM(),r9=S.q[j],pr;_ibAiPlayM.add(r9);try{pr=await _pwPlayIdx(j)}finally{_ibAiPlayM.delete(r9)}var rr=S.q[j]||r;if(pr==='superseded')return _pwAiGoneM('点歌',rr.title);if(pr===false){var bk9=await aiBack(o9,ins9?r9:null);return{ok:false,label:'点歌',detail:(rr._outer?'《'+rr.title+'》放不出来，未取到播放地址':'《'+rr.title+'》放不出来')+_pwAiTailM(bk9,'点歌',rr.title)}}return{ok:true,label:'点歌',detail:'《'+r.title+'》'+(r.artist?' · '+r.artist:'')+(rr._trial?'（VIP 曲目，只有试听片段）':'')}}
     if(op==='playlist'){if(!ai.playlist)return{ok:false,label:'切歌单',detail:'用户未开放「切换歌单」'};var qn=nq(q),pls0=await playlists(),hit=exactPl(pls0,q);
       if(!hit){
         if(/^(每日推荐|今日推荐|每日歌曲推荐|日推|daily)$/.test(qn)){var d=await daily();if(!d.length)return{ok:false,label:'每日推荐',detail:'今天没有推荐'};setQueue(d,{id:'daily',name:'每日推荐'});return{ok:true,label:'每日推荐',detail:d.length+' 首，已从第一首开始'}}
@@ -35926,11 +36043,11 @@ _pwPlayIdx=async function(i){if(!on())return _pwPlayIdx2(i);await _pwLoad();
   if(!(_pw.list[0]&&_pw.list[0].qqm))return _pwPlayIdx2(i);
   i=((i%_pw.list.length)+_pw.list.length)%_pw.list.length;_pw.idx=i;var rec=_pw.list[i],a=_pwA();var tok=++playTok;_pwPaint();_pwListDraw();
   var url='';rec._err='';try{url=await songUrl(rec)}catch(e){rec._err=String((e&&e.message)||e);T(rec._err)}
-  if(tok!==playTok||!on())return;
+  if(tok!==playTok||!on())return 'superseded';
   try{if(_pw.url){URL.revokeObjectURL(_pw.url);_pw.url=''}}catch(e){}
-  if(!url){try{a.pause();a.removeAttribute('src');a.load()}catch(e){}failN++;if(failN>=3){failN=0;T('连续 3 首都取不到地址，已停下——检查账号或网络');return false}if(_pw.list.length>1&&_pw.mode!=='one')setTimeout(function(){if(tok===playTok&&on())_pwPlayIdx(i+1)},700);return false}
+  if(!url){try{a.pause();a.removeAttribute('src');a.load()}catch(e){}failN++;if(failN>=3){failN=0;T('连续 3 首都取不到地址，已停下——检查账号或网络');return false}if(_ibAiPlayM.has(rec))return false;/* 手机端 v758：TA 发起的那首放不出来不自己跳到下一首（由点歌那边回到原来那首） */if(_pw.list.length>1&&_pw.mode!=='one')setTimeout(function(){if(tok===playTok&&on())_pwPlayIdx(i+1)},700);return false}
   a.src=url;ensure(rec);
-  try{await a.play();failN=0;if(rec._lowered)T('这一档音质没有权限，已降到'+({sq:'无损',hq:'高品质',std:'标准',low:'流畅'}[rec._lv]||rec._lv))}catch(e){if(tok!==playTok||!on())return;failN++;T('播放失败');if(failN>=3){failN=0;T('连续 3 首都放不出来，已停下——检查网络或账号');return false}if(_pw.list.length>1&&_pw.mode!=='one')setTimeout(function(){if(tok===playTok&&on())_pwPlayIdx(i+1)},700);return false}
+  try{await a.play();failN=0;if(rec._lowered)T('这一档音质没有权限，已降到'+({sq:'无损',hq:'高品质',std:'标准',low:'流畅'}[rec._lv]||rec._lv))}catch(e){if(tok!==playTok||!on())return 'superseded';failN++;T('播放失败');if(failN>=3){failN=0;T('连续 3 首都放不出来，已停下——检查网络或账号');return false}if(_ibAiPlayM.has(rec))return false;/* 手机端 v758：TA 发起的那首放不出来不自己跳到下一首（由点歌那边回到原来那首） */if(_pw.list.length>1&&_pw.mode!=='one')setTimeout(function(){if(tok===playTok&&on())_pwPlayIdx(i+1)},700);return false}
   _pwPaint();_pwListDraw();try{_musicSyncCardsM()}catch(e){}return true
 };
 var jobs={};
@@ -35969,10 +36086,11 @@ function fuzzy(list,key,q,noRev){q=String(q||'').trim().toLowerCase();if(!q)retu
 function cur(){return (_pw.idx>=0&&_pw.list)?_pw.list[_pw.idx]:null}
 async function findPl(q,mineOnly){var all=await playlists(),pls=all.filter(function(p){return !mineOnly||p.mine});var ex=exactPl(pls,q);var i=ex?pls.indexOf(ex):-1;if(i<0){if(mineOnly){var k=nq(q),c=[];pls.forEach(function(p,j){if(k&&nq(p.name).indexOf(k)>=0)c.push(j)});if(c.length===1)i=c[0];else{var fx=exactPl(all,q);if(fx&&!fx.mine)throw new Error('「'+fx.name+'」是收藏的歌单，只能操作自己创建的')}}else i=fuzzy(pls,'name',q)}if(i<0)throw new Error('用户的歌单里没有「'+q+'」。可用歌单：'+pls.slice(0,20).map(function(p){return p.name}).join(' / '));return pls[i]}
 async function pickSong(q){if(!q){var c=cur();if(!c)throw new Error('没有正在播放的歌，也没有指定歌名');return c}var k=nq(q),Lq=_pw.list||[];for(var i=0;i<Lq.length;i++){var x=Lq[i];if(nq(x.title)===k||nq((x.title||'')+(x.artist||''))===k||nq((x.artist||'')+(x.title||''))===k)return x}var rs=await search(q,3);if(!rs.length)throw new Error('QQ 音乐搜不到「'+q+'」');return rs[0]}
+async function aiBack(o,drop){/* 手机端 v758：为 TA 插进队列、放不出来的那首拿掉，再回到原来那首 */try{if(drop){var k=S.q.indexOf(drop);if(k>=0){S.q.splice(k,1);save();if(_pw.list===S.q&&_pw.idx>k)_pw.idx--}_pw.list=S.q}}catch(e){}return await _pwAiBackM(o)}
 async function exec(op,q,ext){ext=ext||{};var ai=S.ai||{};
   if(!logged())return{ok:false,label:'QQ 音乐',detail:'用户还没登录 QQ 音乐'};
   try{
-    if(op==='search'){if(!ai.search)return{ok:false,label:'点歌',detail:'用户未开放「点歌」'};var rs=await search(q,5);if(!rs.length)return{ok:false,label:'点歌',detail:'QQ 音乐搜不到「'+q+'」'};var r=rs[0];var j=S.q.findIndex(function(x){return x.qmid===r.qmid});if(j<0){var at=_pw.idx>=0?_pw.idx+1:S.q.length;S.q.splice(at,0,r);save();_pw.list=S.q;j=at}var pr=await _pwPlayIdx(j);var rr=S.q[j]||r;if(pr===false)return{ok:false,label:'点歌',detail:(rr._err?'《'+rr.title+'》放不出来，'+rr._err+'':'《'+rr.title+'》放不出来')};return{ok:true,label:'点歌',detail:'《'+r.title+'》'+(r.artist?' · '+r.artist:'')+(r.fee?'（VIP 曲目，按用户账号权限播放）':'')}}
+    if(op==='search'){if(!ai.search)return{ok:false,label:'点歌',detail:'用户未开放「点歌」'};var rs=await search(q,5);if(!rs.length)return{ok:false,label:'点歌',detail:'QQ 音乐搜不到「'+q+'」'};var r=rs[0];var j=S.q.findIndex(function(x){return x.qmid===r.qmid}),ins9=j<0;if(j<0){var at=_pw.idx>=0?_pw.idx+1:S.q.length;S.q.splice(at,0,r);save();_pw.list=S.q;j=at}var o9=_pwAiSnapM(),r9=S.q[j],pr;_ibAiPlayM.add(r9);try{pr=await _pwPlayIdx(j)}finally{_ibAiPlayM.delete(r9)}var rr=S.q[j]||r;if(pr==='superseded')return _pwAiGoneM('点歌',rr.title);if(pr===false){var bk9=await aiBack(o9,ins9?r9:null);return{ok:false,label:'点歌',detail:(rr._err?'《'+rr.title+'》放不出来，'+rr._err+'':'《'+rr.title+'》放不出来')+_pwAiTailM(bk9,'点歌',rr.title)}}return{ok:true,label:'点歌',detail:'《'+r.title+'》'+(r.artist?' · '+r.artist:'')+(r.fee?'（VIP 曲目，按用户账号权限播放）':'')}}
     if(op==='playlist'){if(!ai.playlist)return{ok:false,label:'切歌单',detail:'用户未开放「切换歌单」'};var qn=nq(q),pls0=await playlists(),hit=exactPl(pls0,q);
       if(!hit){
         if(/^(猜你喜欢|个性电台|私人电台|私人fm|电台|fm|radio)$/.test(qn)){var d=await radio();if(!d.length)return{ok:false,label:'猜你喜欢',detail:'电台没有返回歌曲'};setQueue(d,{id:'radio',dirid:0,name:'猜你喜欢'});return{ok:true,label:'猜你喜欢',detail:d.length+' 首，已从第一首开始'}}
@@ -36108,8 +36226,8 @@ function escT(x){return String(x).replace(/[&<>"']/g,function(c){return{'&':'&am
 function setTx(el,txt,speed){txt=String(txt||'');if(!el)return;if(el._mqT===txt)return;el._mqT=txt;el.classList.remove('mq');el.style.removeProperty('--mqw');el.style.removeProperty('--mqd');el.textContent=txt;if(!txt||document.body.classList.contains('ib-reduce'))return;var w=el.scrollWidth,cw=el.clientWidth;if(!cw||w-cw<=2)return;var gap=28;el.innerHTML='<span class="mq-tr"><span>'+escT(txt)+'</span><span aria-hidden="true">'+escT(txt)+'</span></span>';el.style.setProperty('--mqw',(w+gap)+'px');el.style.setProperty('--mqd',Math.max(5,Math.round((w+gap)/(speed||24)))+'s');el.classList.add('mq')}/* v206-p：超长就整段滚动循环（文字 + 28px 空隙接着再来一遍，线性匀速）；减少动效下保持省略号 */
 function line(rec,sec){var L=rec&&rec.lyrics,segs=L&&L.segments;if(!segs||!segs.length)return '';var t='';for(var i=0;i<segs.length;i++){var st=segs[i]&&segs[i].start;if(st==null)break;if(st<=sec)t=segs[i].text||'';else break}return String(t||'').replace(/\s+/g,' ').trim()}
 function musicOpen(){var m=document.getElementById('music-app');return !!(m&&m.classList.contains('open'))}
-function locked(){var lk=document.getElementById('lockscr');return !!(lk&&lk.offsetParent!==null)}
-function paint(){var b=el();if(!b)return;var onn=isOn();if(onn&&!tmr)start();var rec=cur();var vis=onn&&!!rec&&!musicOpen()&&!locked();
+function locked(){var lk=document.getElementById('lockscr');return !!(lk&&!lk.hidden&&lk.style.display!=='none'&&!lk.classList.contains('lk-out'))}
+function paint(){var b=el();if(!b)return;if(document.hidden)return;/* 手机端 v755：切到后台不画 */var onn=isOn();if(onn&&!tmr)start();var rec=cur();var vis=onn&&!!rec&&!musicOpen()&&!locked();
   var bt=btn();if(bt)bt.classList.toggle('on',isOn());
   if(!vis){if(!b.hidden)b.hidden=true;return}
   if(b.hidden)b.hidden=false;
@@ -36117,7 +36235,7 @@ function paint(){var b=el();if(!b)return;var onn=isOn();if(onn&&!tmr)start();var
   var t=document.getElementById('mpw-t'),s=document.getElementById('mpw-s'),l=document.getElementById('mpw-l');
   var tt=String(rec.title||rec.name||'—'),ss=String(rec.artist||rec.album||'');
   setTx(t,tt);setTx(s,ss);
-  var cv=b.querySelector('.mpw-disc b');if(cv){var c=String(rec.cover||'');if(cv.getAttribute('data-c')!==c){cv.setAttribute('data-c',c);cv.style.backgroundImage=c?('url("'+c.replace(/"/g,'%22')+'")'):'';b.classList.toggle('cov',!!c)}}
+  var cv=b.querySelector('.mpw-disc b');if(cv){var c=String(_musicCovM(rec)||'');/* 手机端 v757：小黑胶用缩略图 */if(cv.getAttribute('data-c')!==c){cv.setAttribute('data-c',c);cv.style.backgroundImage=c?('url("'+c.replace(/"/g,'%22')+'")'):'';b.classList.toggle('cov',!!c)}}
   var ly=line(rec,(a&&a.currentTime)||0);if(l&&l._mqT!==ly){setTx(l,ly,36);l.classList.toggle('none',!ly)}
 }
 function start(){if(tmr)return;tmr=setInterval(paint,600)}
@@ -45665,7 +45783,7 @@ window.IBGardenHTML = '<div id="stage">\n  <div id="world">\n    <div id="floor3
   function dark() { return document.body.classList.contains('theme-infernal'); }
   function cover() { var sp = document.getElementById('ib-splash'), pv = document.getElementById('lk-preveil'), lk = document.getElementById('lockscr'); if ((sp && !sp.classList.contains('leaving') && !sp.classList.contains('done')) || (pv && !pv.classList.contains('off')) || (lk && !lk.classList.contains('lk-out'))) return 2; return (sp || pv || lk) ? 1 : 0; }  
   function want() { var b = document.body; return gOn() && b.classList.contains('on-desk') && !b.classList.contains('ib-sub') && !document.hidden; } /* v409-p：盖着也开机（预建），见 sync */ 
-  function under() { var b = document.body; return b.classList.contains('ib-appov') || b.classList.contains('sheet-on'); } 
+  function under() { var b = document.body; return b.classList.contains('ib-appov') || b.classList.contains('sheet-on') || b.classList.contains('ib-cvov'); } 
   function lowEnd() { try { var c = navigator.hardwareConcurrency || 0, m = navigator.deviceMemory || 0; return (c > 0 && c <= 4) || (m > 0 && m <= 4); } catch (e) { return false; } } /* 手机端 v604：低端机判定（核数 ≤4 或内存 ≤4G，同 IB 自己那条 _lowEndM 的线） */
   function fxOf() { var b = document.body; return b.classList.contains('ib-reduce') ? 'low' : (b.classList.contains('ib-fx-mid') || lowEnd()) ? 'mid' : 'auto'; } /* 手机端 v604：低端机上回廊至少走中档，不等手动降（自动档里回廊自己只在内存 ≤3G 时才降） */
   function hideList() { var h = []; Object.keys(MAP).forEach(function (id) { if (!document.querySelector('#sec-profile-cal [data-dk="' + MAP[id] + '"]')) h.push(id); }); return h; }
